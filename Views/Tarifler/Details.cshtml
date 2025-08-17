@@ -1,0 +1,504 @@
+﻿
+@model List<MyGoldenFood.Models.Recipe>
+
+@{
+    ViewData["Title"] = "Donuk Gıda Tarif Detayları | Dondurulmuş Gıda ile Lezzetli Tarifler | My Golden Food";
+    Layout = "_Layout";
+}
+
+<!-- SEO Meta Etiketleri -->
+<head>
+    <meta name="description" content="Donuk gıda tarif detayları ve dondurulmuş gıda ile hazırlanan lezzetli tarifler. Flash freezing teknolojisi ile korunan besin değeri ile sağlıklı tarifler. 350 gram paketlerde sunulan ürünlerimizle pratik yemek tarifleri.">
+    <meta name="keywords" content="donuk gıda tarif detayları, dondurulmuş gıda tarifleri, flash freezing tarifleri, 350 gram paket tarifleri, pratik yemek tarifleri, sağlıklı donuk gıda tarifleri">
+    <meta name="author" content="My Golden Food">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Donuk Gıda Tarif Detayları | Dondurulmuş Gıda ile Lezzetli Tarifler">
+    <meta property="og:description" content="Donuk gıda tarif detayları ve dondurulmuş gıda ile hazırlanan lezzetli tarifler. Flash freezing teknolojisi ile korunan besin değeri.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mygoldenfood.com/Tarifler/Details">
+    <meta property="og:image" content="https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png">
+    <link rel="canonical" href="https://mygoldenfood.com/Tarifler/Details" />
+    
+    <!-- Schema Markup - Recipe Collection -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "ItemList",
+        "name": "Donuk Gıda Tarif Detayları Koleksiyonu",
+        "description": "Dondurulmuş gıda ile hazırlanan lezzetli tariflerin detayları",
+        "url": "https://mygoldenfood.com/Tarifler/Details",
+        "numberOfItems": "@Model.Count",
+        "itemListElement": [
+            @{
+                for (int i = 0; i < Model.Count; i++)
+                {
+                    var recipe = Model[i];
+                    <text>
+                    {
+                        "@@type": "ListItem",
+                        "position": @(i + 1),
+                        "item": {
+                            "@@type": "Recipe",
+                            "name": "@recipe.Name",
+                            "description": "@recipe.Content",
+                            "image": "@recipe.ImagePath",
+                            "recipeCategory": "Donuk Gıda Tarifleri",
+                            "recipeCuisine": "Türk Mutfağı",
+                            "recipeInstructions": "@recipe.Content",
+                            "author": {
+                                "@@type": "Organization",
+                                "name": "My Golden Food"
+                            },
+                            "publisher": {
+                                "@@type": "Organization",
+                                "name": "My Golden Food",
+                                "logo": {
+                                    "@@type": "ImageObject",
+                                    "url": "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png"
+                                }
+                            }
+                        }
+                    }@(i < Model.Count - 1 ? "," : "")
+                    </text>
+                }
+            }
+        ]
+    }
+    </script>
+    
+    <!-- Schema Markup - Organization -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "Organization",
+        "name": "My Golden Food",
+        "description": "Donuk gıda tarif detayları ve dondurulmuş gıda ürünleri tedarikçisi",
+        "url": "https://mygoldenfood.com",
+        "logo": "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png",
+        "contactPoint": {
+            "@@type": "ContactPoint",
+            "telephone": "+90 533 635 24 58",
+            "contactType": "Customer Service",
+            "areaServed": "TR",
+            "availableLanguage": ["Türkçe", "English"]
+        }
+    }
+    </script>
+</head>
+
+<!-- Ana H1 Başlık - SEO için kritik -->
+<h1 class="seo-main-title" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+    Donuk Gıda Tarif Detayları | Dondurulmuş Gıda ile Lezzetli ve Pratik Yemek Tarifleri | Flash Freezing Teknolojisi
+</h1>
+
+<!-- Donuk Gıda Tarif Detayları SEO Açıklaması (Gizli) -->
+<div class="seo-recipe-details-info" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+    <h2>Donuk Gıda ile Hazırlanan Tarif Detayları</h2>
+    <p>
+        <strong>Donuk gıda</strong> ile hazırlanan lezzetli tariflerin detaylarını keşfedin. 
+        <strong>Flash Freezing Teknolojisi</strong> ile korunan dondurulmuş meyve, sebze ve hazır gıdalarımız, 
+        mutfakta zaman kazanmanızı sağlarken besin değerini de korur. 
+        <strong>350 gram paketlerde</strong> sunulan ürünlerimizle pratik ve lezzetli tarifler hazırlayabilirsiniz.
+    </p>
+    <h3>Donuk Gıda Tarif Detaylarının Avantajları</h3>
+    <p>
+        Dondurulmuş gıdalar ile hazırlanan tarif detayları, taze malzemeler kadar lezzetli ve besleyicidir. 
+        <strong>Flash freezing</strong> sayesinde vitamin ve mineraller korunur, 
+        mevsim dışında da taze lezzetler elde edebilirsiniz.
+    </p>
+</div>
+
+<div class="margin mt-5">
+    <div class="container mt-5">
+        <h2 class="text-center text-white mb-4">@Html.T("DeliciousRecipes")</h2> <!-- SEO için H2 Kullanıldı -->
+
+        @if (!string.IsNullOrEmpty(ViewBag.Message))
+        {
+            <div class="alert alert-success text-center text-black" role="alert">
+                @ViewBag.Message
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                @foreach (var recipe in Model)
+                {
+                    <div class="col-lg-3 col-md-4 col-sm-6 text-center mb-4">
+                        <div class="recipe-card"
+                             data-name="@recipe.Name"
+                             data-content="@recipe.Content">
+                            <div class="image-container">
+                                <img src="@recipe.ImagePath" 
+                                     alt="@recipe.Name | Donuk Gıda Tarifi | Dondurulmuş Gıda ile Hazırlanan Tarif" 
+                                     class="recipe-image" 
+                                     title="@recipe.Name - Donuk Gıda Tarifi" />
+                            </div>
+                            <h3 class="mt-3 text-white">@recipe.Name</h3> <!-- SEO İçin H3 Kullanıldı -->
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="detailsModalLabel"></h4> <!-- SEO için H4 Kullanıldı -->
+            </div>
+            <div class="modal-body">
+                <h5 class="modal-title-with-line">@Html.T("RecipeDetails")</h5> <!-- SEO için H5 Kullanıldı -->
+                <p id="detailsModalDescription"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Schema Markup (Google SEO için) -->
+<script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "Recipe",
+        "name": "My Golden Food Tarifleri",
+        "description": "My Golden Food'un sunduğu en lezzetli dondurulmuş gıda tarifleri burada! Tatlı ve yemek tariflerini keşfet.",
+        "image": "https://mygoldenfood.com/images/tarifler.jpg",
+        "author": {
+            "@@type": "Organization",
+            "name": "My Golden Food"
+        },
+        "publisher": {
+            "@@type": "Organization",
+            "name": "My Golden Food",
+            "logo": {
+                "@@type": "ImageObject",
+                "url": "https://res.cloudinary.com/dbhogeepn/image/upload/v1738688048/logo-moonlife1_ulf0n3.png"
+            }
+        },
+        "mainEntityOfPage": {
+            "@@type": "WebPage",
+            "@@id": "https://mygoldenfood.com/Tarifler/Details"
+        }
+    }
+</script>
+
+
+<style>
+    /* Grid Layout */
+    .recipe-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive */
+        gap: 20px;
+    }
+
+    /* Kart Tasarımı */
+    .recipe-card {
+        overflow: hidden;
+        text-align: center;
+        border-radius: 15px;
+        background-color: rgba(0, 0, 0, 0);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+
+        .recipe-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+    /* Görsel Kapsayıcı */
+    .image-container {
+        width: 100%;
+        height: 250px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000;
+        overflow: hidden;
+        border-radius: 15px;
+    }
+
+    /* Görseller */
+    .recipe-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+        transition: transform 0.3s ease;
+    }
+
+    .image-container:hover .recipe-image {
+        transform: scale(1.1);
+    }
+
+    /* Tarif Adı */
+    .recipe-name-container {
+        padding: 15px;
+        background-color: rgba(0, 0, 0, 0);
+        border-radius: 0 0 15px 15px;
+        color: #fff;
+    }
+
+    .recipe-name {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #fff;
+    }
+
+    .content {
+        flex: 1;
+        padding-top: 5%;
+    }
+
+    /* 📌 Modal İçeriği (Scale-Up Efekti) */
+    .modal-content {
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        transform: scale(0.7);
+        transition: transform 0.3s ease-out;
+    }
+
+    .modal.show .modal-content {
+        transform: scale(1);
+    }
+
+    /* 📌 Modal Başlığı */
+    .modal-title-with-line {
+        position: relative;
+        display: inline-block;
+        padding-bottom: 10px;
+        font-size: 1.2rem;
+        color: #FFD700; /* Altın Sarısı */
+        margin-bottom: 15px;
+    }
+
+        .modal-title-with-line::after {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: white;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+    /* 📌 Mobilde Tek Ürün Sol Tarafa Yaslansın */
+    @@media (max-width: 768px) {
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start; /* Sol hizalı olacak */
+        }
+
+        .col-md-4 {
+            flex: 0 0 50%; /* Mobilde 2 sütun olacak */
+            max-width: 50%;
+            padding: 5px;
+        }
+
+            .col-md-4:nth-last-child(1):nth-child(odd) {
+                flex: 0 0 100%; /* Eğer tek bir ürün kalırsa tam genişlikte olmasın */
+                max-width: 50%;
+                margin-left: 0;
+            }
+
+        .image-container {
+            height: 180px; /* Mobilde daha küçük resimler */
+            overflow-x: hidden;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+        }
+
+        container .text-center {
+            margin-top: 55%;
+        }
+
+        h1 {
+            margin-top: 7pc;
+        }
+    }
+    /* Masaüstünde 4 sütun */
+    @@media (min-width: 992px) {
+        .col-lg-3
+
+    {
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+    }
+
+    .modal-body p {
+        white-space: pre-line; /* Yeni satırları korur */
+        font-size: 1rem; /* Daha iyi okunabilirlik için */
+        line-height: 1.6; /* Satır aralarını aç */
+        text-align: left; /* Sola hizala */
+        margin-bottom: 10px; /* Alt boşluk ekleyerek sıkışıklığı önle */
+    }
+
+    .modal-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 15px; /* Başlık ile açıklama arasındaki boşluğu artır */
+    }
+    @@media (max-width: 768px) {
+        .row
+
+    {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; /* Mobilde ortalanmış görünüm */
+    }
+
+    .col-md-4 {
+        flex: 0 0 50%; /* Mobilde 2 sütun olacak */
+        max-width: 50%;
+        padding: 5px;
+    }
+
+        .col-md-4:nth-last-child(1):nth-child(odd) {
+            flex: 0 0 100%; /* Eğer tek bir ürün kalırsa tam genişlikte olmasın */
+            max-width: 50%;
+            margin-left: 0;
+        }
+
+    .image-container {
+        height: 180px; /* Mobilde daha küçük resimler */
+    }
+
+    h3 {
+        font-size: 1.1rem;
+    }
+
+    h1 {
+        margin-top: 7pc;
+    }
+
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".recipe-card").forEach(item => {
+            item.addEventListener("click", function () {
+                let name = this.getAttribute("data-name");
+                let content = this.getAttribute("data-content");
+
+                console.log("Tarif Adı:", name);
+                console.log("Tarif İçeriği:", content);
+
+                if (!name || !content) {
+                    alert("Tarif detayları eksik!");
+                    return;
+                }
+
+                document.getElementById('detailsModalLabel').textContent = name;
+                document.getElementById('detailsModalDescription').textContent = content;
+
+                var modal = new bootstrap.Modal(document.getElementById('detailsModal'));
+                modal.show();
+            });
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".recipe-card").forEach(item => {
+            item.addEventListener("click", function () {
+                let name = this.getAttribute("data-name");
+                let content = this.getAttribute("data-content");
+
+                console.log("Tarif Adı:", name);
+                console.log("Tarif İçeriği:", content);
+
+                if (!name || !content) {
+                    alert("Tarif detayları eksik!");
+                    return;
+                }
+
+                document.getElementById('detailsModalLabel').textContent = name;
+                document.getElementById('detailsModalDescription').innerHTML = content.replace(/\n/g, "<br>"); // Satır sonlarını koru
+
+                var modal = new bootstrap.Modal(document.getElementById('detailsModal'));
+                modal.show();
+            });
+        });
+    });
+
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+<script>
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/tariflerHub")
+        .build();
+
+    connection.on("TarifUpdated", function () {
+        console.log("Tarif güncellemesi alındı, sayfa yenileniyor...");
+        location.reload();
+    });
+
+    connection.start().then(() => {
+        console.log("SignalR Tarifler bağlantısı kuruldu.");
+    }).catch(function (err) {
+        return console.error(err.toString());
+    });
+</script>
+
+<!-- Ek Donuk Gıda Tarif Detayları SEO İçerikleri (Gizli) -->
+<div class="seo-recipe-details-categories" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+    <h4>Donuk Gıda Tarif Detay Kategorileri</h4>
+    <p>
+        <strong>Donuk gıda</strong> ile hazırlanan tarif detaylarımız çeşitli kategorilerde sunulmaktadır. 
+        Dondurulmuş meyve, sebze ve hazır gıdalarımızla pratik ve lezzetli yemek tarifleri hazırlayabilirsiniz.
+    </p>
+    
+    <h5>Dondurulmuş Meyve Tarif Detayları</h5>
+    <p>
+        <strong>Flash Freezing Teknolojisi</strong> ile korunan dondurulmuş meyvelerimiz, 
+        tatlı ve içecek tariflerinde mükemmel sonuçlar verir. Çilek, böğürtlen, ahududu gibi 
+        meyvelerle lezzetli tarif detayları hazırlayabilirsiniz.
+    </p>
+    
+    <h5>Dondurulmuş Sebze Tarif Detayları</h5>
+    <p>
+        Dondurulmuş sebzelerimiz ile sağlıklı ve lezzetli yemek tarif detayları hazırlayabilirsiniz. 
+        Brokoli, mantar ve diğer sebzeler <strong>350 gram paketlerde</strong> sunulmaktadır.
+    </p>
+    
+    <h5>Hazır Gıda Tarif Detayları</h5>
+    <p>
+        Dondurulmuş hazır gıdalarımız ile hızlı ve pratik tarif detayları hazırlayabilirsiniz. 
+        <strong>Donuk gıda</strong> sektöründe kaliteli ürünlerimizle mutfağınızda zaman kazanın.
+    </p>
+</div>
+
+<!-- Donuk Gıda Tarif Detay İpuçları (Gizli) -->
+<div class="seo-recipe-details-tips" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+    <h4>Donuk Gıda ile Tarif Detay Hazırlama İpuçları</h4>
+    <p>
+        <strong>Donuk gıda</strong> ile tarif detay hazırlarken dikkat edilmesi gereken önemli noktalar bulunmaktadır. 
+        <strong>Flash Freezing Teknolojisi</strong> ile korunan ürünlerimiz, 
+        doğru kullanıldığında taze malzemeler kadar lezzetli sonuçlar verir.
+    </p>
+    
+    <h5>Donuk Gıda Çözme Teknikleri</h5>
+    <p>
+        Dondurulmuş gıdaları çözerken besin değerini korumak için doğru yöntemleri kullanın. 
+        <strong>Donuk gıda</strong> ürünlerimiz özel ambalajlarda korunmaktadır.
+    </p>
+    
+    <h5>Donuk Gıda Tarif Detaylarında Püf Noktaları</h5>
+    <p>
+        <strong>Dondurulmuş gıda</strong> ile tarif detay hazırlarken pişirme sürelerini ayarlayın. 
+        Flash freezing ile korunan ürünlerimiz, geleneksel yöntemlerle hazırlanan tarif detaylarında 
+        mükemmel sonuçlar verir.
+    </p>
+</div>
+

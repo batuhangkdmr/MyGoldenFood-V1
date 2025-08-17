@@ -1,0 +1,125 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<MvcRazorCompileOnPublish>true</MvcRazorCompileOnPublish>
+		<EnableDefaultContentItems>false</EnableDefaultContentItems>
+		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+		<PublishSingleFile>false</PublishSingleFile>
+		<SelfContained>false</SelfContained>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CloudinaryDotNet" Version="1.20.0" />
+		<PackageReference Include="MailKit" Version="2.15.0" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.1.32" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.32" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.32">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.32" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.32" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.32">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Localization" Version="3.1.32" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Views -->
+		<Content Include="Views\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+		
+		<!-- wwwroot -->
+		<Content Include="wwwroot\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+		
+		<!-- Configuration Files -->
+		<Content Include="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+		<Content Include="appsettings.Development.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+		
+		<!-- Models -->
+		<Content Include="Models\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+		
+		<!-- Controllers -->
+		<Content Include="Controllers\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+		
+		<!-- Services -->
+		<Content Include="Services\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+		
+		<!-- Hubs -->
+		<Content Include="Hub\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+		
+		<!-- ApplicationDbContext -->
+		<Content Include="ApplicationDbContext\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+		
+		<!-- Migrations -->
+		<Content Include="Migrations\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+		
+		<!-- Program.cs -->
+		<Content Include="Program.cs">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+
+	<!-- Resource Files -->
+	<!-- KALDIRILDI: Resource dosyaları artık kullanılmıyor -->
+
+	<!-- Exclude publish folders from build -->
+	<ItemGroup>
+		<Compile Remove="publish-folder\**\*.*" />
+		<Content Remove="publish-folder\**\*.*" />
+		<EmbeddedResource Remove="publish-folder\**\*.*" />
+		<Compile Remove="publish-folder-new\**\*.*" />
+		<Content Remove="publish-folder-new\**\*.*" />
+		<EmbeddedResource Remove="publish-folder-new\**\*.*" />
+		<Compile Remove="publish-final\**\*.*" />
+		<Content Remove="publish-final\**\*.*" />
+		<EmbeddedResource Remove="publish-final\**\*.*" />
+		<Compile Remove="publish-final-v2\**\*.*" />
+		<Content Remove="publish-final-v2\**\*.*" />
+		<EmbeddedResource Remove="publish-final-v2\**\*.*" />
+		<Compile Remove="publish-final-v3\**\*.*" />
+		<Content Remove="publish-final-v3\**\*.*" />
+		<EmbeddedResource Remove="publish-final-v3\**\*.*" />
+		<Compile Remove="publish-final-v4\**\*.*" />
+		<Content Remove="publish-final-v4\**\*.*" />
+		<EmbeddedResource Remove="publish-final-v4\**\*.*" />
+		<Compile Remove="publish-final-v6\**\*.*" />
+		<Content Remove="publish-final-v6\**\*.*" />
+		<EmbeddedResource Remove="publish-final-v6\**\*.*" />
+	</ItemGroup>
+
+</Project>

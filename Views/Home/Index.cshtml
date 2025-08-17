@@ -1,0 +1,404 @@
+﻿@using MyGoldenFood.Services
+
+@{
+    ViewData["Title"] = "My Golden Food - Dondurulmuş Gıda Sektöründe Kalite ve Tazelik | Donuk Gıda Tedarikçisi";
+}
+
+<!-- SEO Meta Etiketleri -->
+<head>
+    <meta name="description" content="My Golden Food - Türkiye'nin önde gelen dondurulmuş gıda tedarikçisi. Dondurulmuş meyve, sebze ve hazır gıdalar. Ankara'da kaliteli donuk gıda ürünleri. Flash freezing teknolojisi ile tazelik garantisi.">
+    <meta name="keywords" content="donuk gıda, dondurulmuş gıda, dondurulmuş meyve, dondurulmuş sebze, my golden food, ankara donuk gıda, türkiye dondurulmuş gıda, flash freezing, dondurulmuş çilek, dondurulmuş böğürtlen, dondurulmuş mantar, dondurulmuş brokoli">
+    <meta name="author" content="My Golden Food">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="My Golden Food - Dondurulmuş Gıda Sektöründe Kalite ve Tazelik">
+    <meta property="og:description" content="Türkiye'nin önde gelen dondurulmuş gıda tedarikçisi. Flash freezing teknolojisi ile tazelik garantisi.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mygoldenfood.com">
+    <meta property="og:image" content="https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png">
+    <link rel="canonical" href="https://mygoldenfood.com">
+    
+    <!-- Schema Markup - Organization -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "Organization",
+        "name": "My Golden Food",
+        "description": "Türkiye'nin önde gelen dondurulmuş gıda tedarikçisi",
+        "url": "https://mygoldenfood.com",
+        "logo": "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png",
+        "contactPoint": {
+                "@@type": "ContactPoint",
+            "telephone": "+90 533 635 24 58",
+            "contactType": "Customer Service",
+            "areaServed": "TR",
+            "availableLanguage": ["Türkçe", "English"]
+        },
+        "address": {
+                "@@type": "PostalAddress",
+            "addressLocality": "Ankara",
+            "addressCountry": "TR"
+        },
+        "sameAs": [
+            "https://mygoldenfood.com"
+        ]
+    }
+    </script>
+    
+    <!-- Schema Markup - LocalBusiness -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "LocalBusiness",
+        "name": "My Golden Food",
+        "description": "Ankara'da dondurulmuş gıda tedarikçisi",
+        "url": "https://mygoldenfood.com",
+        "telephone": "+90 533 635 24 58",
+        "address": {
+            "@@type": "PostalAddress",
+            "addressLocality": "Ankara",
+            "addressCountry": "TR"
+        },
+        "geo": {
+            "@@type": "GeoCoordinates",
+            "latitude": "39.9334",
+            "longitude": "32.8597"
+        },
+        "openingHours": "Mo-Fr 09:00-18:00",
+        "priceRange": "$$"
+    }
+    </script>
+</head>
+
+<!-- Ana H1 Başlık - SEO için kritik -->
+<h1 class="seo-main-title" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+    My Golden Food - Türkiye'nin Önde Gelen Dondurulmuş Gıda Tedarikçisi | Donuk Gıda Ürünleri
+</h1>
+
+<!-- Ana İçerik Başlangıcı -->
+<div id="index" class="capa">
+    <span class="ro-text">
+        <img src="https://res.cloudinary.com/dbhogeepn/image/upload/v1738684104/paylasilamayan-lezzet_s42zgv.png" alt="My Golden Food - Paylaşılamayan Lezzet | Dondurulmuş Gıda Kalitesi">
+    </span>
+    <span class="fixed-icon">
+        <a href="#urunler">
+            <img src="https://res.cloudinary.com/dbhogeepn/image/upload/v1738684150/ok_fl4goj.png" alt="Dondurulmuş Gıda Ürünlerimizi Keşfedin - Aşağı Ok İkonu">
+        </a>
+    </span>
+</div>
+
+<div id="index" class="capa">
+    <span class="ro-text">
+        <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_600/paylasilamayan-lezzet_s42zgv.png"
+             alt="My Golden Food - Paylaşılamayan Lezzet | Dondurulmuş Gıda Sektöründe Kalite"
+             loading="lazy"
+             width="600" height="auto">
+    </span>
+    <span class="fixed-icon">
+        <a href="#urunler">
+            <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_100/ok_fl4goj.png"
+                 alt="Dondurulmuş Gıda Ürünlerimizi Keşfedin - Aşağı Ok İkonu"
+                 loading="lazy"
+                 width="100" height="auto">
+        </a>
+    </span>
+</div>
+
+<section class="section-1">
+    <div class="metin-1 animate__animated animate__fadeInDown animate__slow animate__delay-1s">
+        <p>@Html.T("WelcomeMessage")</p>
+        <p>@Html.T("WelcomeDescription")</p>
+        <p>@Html.T("LearnMore")</p>
+    </div>
+
+    <div class="kahve-1 animate__animated animate__fadeInUp animate__slow">
+        <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_400/v1738684197/img-507_y6sjv2.png" 
+             alt="Dondurulmuş Mantar Ürünleri | My Golden Food Kalitesi"
+             loading="lazy"
+             width="600" height="auto" />
+    </div>
+    <div class="yaprak-1 animate__animated animate__fadeInDown animate__slow">
+        <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_400/v1738684255/moon9_w9pw6h.png" 
+             alt="Dondurulmuş Kiraz Ürünleri | Taze ve Kaliteli Donuk Gıda"
+             loading="lazy"
+             width="400" height="auto" />
+    </div>
+    <div class="pasta-1 animate__animated animate__rotateIn animate__slow">
+        <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_400/v1743859767/mygolden_foood_a25y69.png" 
+             alt="My Golden Food Logo | Dondurulmuş Gıda Sektöründe Güvenilir Marka"
+             loading="lazy"
+             width="400" height="auto" />
+    </div>
+    <div class="pasta-3 animate__animated animate__fadeInUp animate__slow">
+        <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_400/v1743854645/img-514-min_11zon_lbahma.png" 
+             alt="Dondurulmuş Böğürtlen Ürünleri | Flash Freezing Teknolojisi ile Tazelik"
+             loading="lazy"
+             width="400" height="auto" />
+    </div>
+    <div class="pasta-4">
+        <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_400/v1738684924/baton-bogurtlen1_pkmsfc.png" 
+             alt="Dondurulmuş Böğürtlen Baton | My Golden Food Kalitesi"
+             loading="lazy"
+             width="400" height="auto" />
+    </div>
+    <div class="pasta-5 animate__animated animate__rotateIn animate__slow">
+        <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_400/v1738684957/img-500_mpnue3.png" 
+             alt="Dondurulmuş Gıda Pastaları | Taze ve Lezzetli Donuk Gıda Ürünleri"
+             loading="lazy"
+             width="400" height="auto" />
+    </div>
+</section>
+
+<section class="section-2">
+    <div class="space-holder">
+        <div class="sticky">
+            <div class="horizontal-section">
+                <section role="feed" class="slide-section">
+
+                    <!-- Slide 1 -->
+                    <article id="slide-1" class="slide">
+                        <img class="kup"
+                             src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_600/bogurtlen-2_yzdoxd.png"
+                             alt="Dondurulmuş Böğürtlen Ürünleri | My Golden Food Kalitesi"
+                             loading="lazy"
+                             width="600" height="auto">
+                        <span class="kup-baslik">@Html.T("OurProducts")</span>
+                        <span class="kup-icerik"></span>
+
+                        <!-- Yaprak Görselleri -->
+                        <div class="yaprak1 yaprak-img">
+                            <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_300/bogurtlen12_p0ydgh.png"
+                                 alt="Dondurulmuş Ahududu Ürünleri | Taze ve Kaliteli Donuk Gıda"
+                                 loading="lazy"
+                                 width="300" height="auto">
+                        </div>
+                        <div class="yaprak2 yaprak-img">
+                            <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_300/bogurtlen12_p0ydgh.png"
+                                 alt="Dondurulmuş Ahududu Ürünleri | Flash Freezing ile Tazelik Korunur"
+                                 loading="lazy"
+                                 width="300" height="auto">
+                        </div>
+                    </article>
+
+                    <!-- Slide 2 -->
+                    <article id="slide-2" class="slide">
+                        <img class="kup"
+                             src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_600/strawberry-1_tcnfcy.png"
+                             alt="Dondurulmuş Çilek Ürünleri | My Golden Food Kalitesi"
+                             loading="lazy"
+                             width="600" height="auto">
+                        <span class="kup-baslik">@Html.T("OurRecipes")</span>
+                    </article>
+
+                </section>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-4">
+    <div class="metin-3">
+        <p>MOON LIFE</p>
+        <p>ICE LIVE</p>
+    </div>
+
+    <div class="pasta-1">
+        <div class="pasta">
+            <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_600/meyveli-pasta_d6u4ye.png"
+                 alt="Dondurulmuş Meyveli Pasta | Taze ve Lezzetli Donuk Gıda Ürünleri"
+                 loading="lazy"
+                 width="600" height="auto">
+        </div>
+        <div class="baslik">
+            <p>@Html.T("OurProducts")</p>
+            <p>@Html.T("OurRecipes")</p>
+            <p>@Html.T("OurBenefits")</p>
+            <p>@Html.T("ContactUs")</p>
+        </div>
+    </div>
+
+    <div class="pasta-2">
+        <div class="pasta">
+            <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_600/meyveli-turta_ekskkb.png"
+                 alt="Dondurulmuş Meyveli Turta | Kaliteli ve Taze Donuk Gıda Ürünleri"
+                 loading="lazy"
+                 width="600" height="auto">
+        </div>
+        <div class="baslik">
+            <p>@Html.T("ViewProducts")</p>
+            <p>@Html.T("ViewRecipes")</p>
+        </div>
+    </div>
+
+    <div class="metin-4">
+        <p>@Html.T("Fresh")</p>
+        <p>@Html.T("Useful")</p>
+        <p>@Html.T("Reliable")</p>
+    </div>
+</section>
+
+<section id="urunler" class="section-5">
+    <div class="space-holder">
+        <div class="sticky">
+            <div class="horizontal">
+                <section role="feed" class="cards">
+
+                    <article class="sample-card">
+                        <h2>@Html.T("GreenFromNature")</h2>
+                        <div class="kategori-gorsel">
+                            <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_500/img-512_qctdaz.png"
+                                 width="250" height="400"
+                                 loading="lazy"
+                                 alt="Dondurulmuş Tazelik Garantisi | Flash Freezing Teknolojisi ile Korunan Doğal Ürünler">
+                        </div>
+                        <div class="kategori-urunler">
+                            <ul>
+                                <li>@Html.T("FlashFreezingPreserves")</li>
+                                <li>@Html.T("PerfectChoiceForEnergy")</li>
+                                <li>@Html.T("AdditiveFreeNatural")</li>
+                                <li>@Html.T("FeelFreshnessEverySip")</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <article class="sample-card">
+                        <h2>@Html.T("ForSweetCelebrations")</h2>
+                        <div class="kategori-gorsel">
+                            <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_500/moon6-min-min_q9napq.png"
+                                 width="250" height="400"
+                                 loading="lazy"
+                                 alt="Dondurulmuş Meyvelerle Limonlu Kek | Taze ve Lezzetli Donuk Gıda Tarifleri">
+                        </div>
+                        <div class="kategori-urunler">
+                            <ul>
+                                <li>@Html.T("HappinessInEverySlice")</li>
+                                <li>@Html.T("FlashFreezingPreserves")</li>
+                                <li>@Html.T("CherryCreamFavorite")</li>
+                                <li>@Html.T("BeTheStarOfCake")</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <article class="sample-card">
+                        <h2>@Html.T("ColorsFromNature")</h2>
+                        <div class="kategori-gorsel">
+                            <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_500/img16_upc2dg.png"
+                                 width="250" height="400"
+                                 loading="lazy"
+                                 alt="Dondurulmuş Meyveyle Zenginleştirilmiş Ekler | Doğal Renkler ve Lezzetler">
+                        </div>
+                        <div class="kategori-urunler">
+                            <ul>
+                                <li>
+                                    @Html.T("NaturesColorsComing")
+                                </li>
+                                <li>@Html.T("FlashFreezingPreserves")</li>
+                                <li>@Html.T("AestheticPresentations")</li>
+                                <li>@Html.T("AddFlavorAndColor")</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <article class="sample-card">
+                        <h2>
+                            @Html.T("ForMostSpecialDays")
+                        </h2>
+                        <div class="kategori-gorsel">
+                            <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_500/pasta-1551-min_csmro1.png"
+                                 width="250" height="400"
+                                 loading="lazy"
+                                 alt="Dondurulmuş Meyvelerle Çikolata Pastası | Özel Günler İçin Kaliteli Donuk Gıda">
+                        </div>
+                        <div class="kategori-urunler">
+                            <ul>
+                                <li> @Html.T("AddFreshFlavorToMoments")
+                                </li>
+                                <li>@Html.T("PreparedWithNaturalFruits")</li>
+                                <li>@Html.T("FlashFreezingPreserves")</li>
+                                <li>@Html.T("RomanticAppearance")</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <article class="sample-card">
+                        <h2>@Html.T("FrozenTropical")</h2>
+                        <div class="kategori-gorsel">
+                            <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_500/v1743861743/ananas_saydam_yx0uq7.png"
+                                 width="250" height="400"
+                                 loading="lazy"
+                                 alt="Dondurulmuş Ananas Ürünleri | Tropikal Meyve Lezzeti | Flash Freezing Teknolojisi">
+                        </div>
+                        <div class="kategori-urunler">
+                            <ul>
+                                <li>
+                                    @Html.T("PineapplesHarvestedDelicious")
+                                </li>
+                                <li>@Html.T("TropicalTasteNoSeason")</li>
+                                <li>@Html.T("IdealForSmoothies")</li>
+                                <li>@Html.T("AdditiveFreePineapples")</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <article class="sample-card">
+                        <h2>@Html.T("EnergyFilledFlavors")</h2>
+                        <div class="kategori-gorsel">
+                            <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_500/img-513_lxxbvk.jpg"
+                                 width="250" height="400"
+                                 loading="lazy"
+                                 alt="Dondurulmuş Meyvelerle Çikolata Keyfi | Enerji Dolu Lezzetler | My Golden Food Kalitesi">
+                        </div>
+                        <div class="kategori-urunler">
+                            <ul>
+                                <li>@Html.T("MostLovedFrozenFruits")</li>
+                                <li>@Html.T("FlashFreezingPreserves")</li>
+                                <li>@Html.T("PerfectBaseForSmoothies")</li>
+                            </ul>
+                        </div>
+                    </article>
+                    
+                    <article class="sample-card">
+                        <h2>@Html.T("FrozenMushroom")</h2>
+                        <div class="kategori-gorsel">
+                            <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_500/v1743862249/mashroom2_11zon_jcmeaw.png"
+                                 width="250" height="400"
+                                 loading="lazy"
+                                 alt="Dondurulmuş Mantar Ürünleri | Taze ve Kaliteli Donuk Gıda | My Golden Food">
+                        </div>
+                        <div class="kategori-urunler">
+                            <ul>
+                                <li>
+                                    @Html.T("FreshestMushroomsCollected")
+                                </li>
+                                <li>@Html.T("ReadyForEveryRecipe")</li>
+                                <li>@Html.T("EasyToPrepare")</li>
+                                <li>@Html.T("AddDifferenceToMeals")</li>
+                            </ul>
+                        </div>
+                    </article>
+                    
+                    <article class="sample-card">
+                        <h2>
+                            @Html.T("FreshPowerOfBroccoli")
+                        </h2>
+                        <div class="kategori-gorsel">
+                            <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_500/v1743862232/brokoli_1_bua9zd.png"
+                                 width="250" height="400"
+                                 loading="lazy"
+                                 alt="Dondurulmuş Brokoli Ürünleri | Taze Güç ve Sağlık | Flash Freezing ile Korunan Besin Değeri">
+                        </div>
+                        <div class="kategori-urunler">
+                            <ul>
+                                <li>@Html.T("FlashFreezingPreserves")</li>
+                                <li>@Html.T("ImmuneFriendlyFiber")</li>
+                                <li>@Html.T("SteamedBakedSauteed")</li>
+                                <li>
+                                    @Html.T("FreshPowerInEveryPackage")
+                                </li>
+                            </ul>
+                        </div>
+                    </article>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>

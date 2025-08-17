@@ -1,0 +1,684 @@
+﻿
+@model IEnumerable<MyGoldenFood.Models.Product>
+
+@{
+    ViewData["Title"] = "Dondurulmuş Gıda Ürünlerimiz | Donuk Gıda Kataloğu | My Golden Food";
+}
+
+<!-- SEO Meta Etiketleri -->
+<head>
+    <meta name="description" content="My Golden Food dondurulmuş gıda ürün kataloğu. Dondurulmuş meyve, sebze ve hazır gıdalar. 350 gram paketlerde taze donuk gıda ürünleri. Flash freezing teknolojisi ile korunan besin değeri. Ankara'da kaliteli dondurulmuş gıda tedarikçisi.">
+    <meta name="keywords" content="dondurulmuş gıda ürünleri, donuk gıda kataloğu, dondurulmuş meyve, dondurulmuş sebze, my golden food ürünleri, 350 gram paket, flash freezing, ankara dondurulmuş gıda, türkiye donuk gıda tedarikçisi">
+    <meta name="author" content="My Golden Food">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Dondurulmuş Gıda Ürünlerimiz | Donuk Gıda Kataloğu">
+    <meta property="og:description" content="My Golden Food dondurulmuş gıda ürün kataloğu. 350 gram paketlerde taze ve kaliteli donuk gıda ürünleri.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mygoldenfood.com/Home/Products">
+    <meta property="og:image" content="https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png">
+    <link rel="canonical" href="https://mygoldenfood.com/Home/Products">
+    
+    <!-- Schema Markup - Product Collection -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "ItemList",
+        "name": "My Golden Food Dondurulmuş Gıda Ürünleri",
+        "description": "Dondurulmuş meyve, sebze ve hazır gıda ürünleri kataloğu",
+        "url": "https://mygoldenfood.com/Home/Products",
+        "numberOfItems": "@Model.Count()",
+        "itemListElement": [
+            @foreach (var product in Model.Select((item, index) => new { item, index }))
+            {
+                <text>
+                {
+                    "@@type": "ListItem",
+                    "position": @(product.index + 1),
+                    "item": {
+                        "@@type": "Product",
+                        "name": "@product.item.Name",
+                        "description": "@product.item.Description",
+                        "image": "@product.item.ImagePath",
+                        "category": "Dondurulmuş Gıda",
+                        "brand": {
+                            "@@type": "Brand",
+                            "name": "My Golden Food"
+                        },
+                        "offers": {
+                            "@@type": "Offer",
+                            "availability": "https://schema.org/InStock",
+                            "priceCurrency": "TRY",
+                            "seller": {
+                                "@@type": "Organization",
+                                "name": "My Golden Food"
+                            }
+                        }
+                    }
+                }@(product.index < Model.Count() - 1 ? "," : "")
+                </text>
+            }
+        ]
+    }
+    </script>
+    
+    <!-- Schema Markup - Organization -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "Organization",
+        "name": "My Golden Food",
+        "description": "Dondurulmuş gıda ürünleri tedarikçisi",
+        "url": "https://mygoldenfood.com",
+        "logo": "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png",
+        "contactPoint": {
+            "@@type": "ContactPoint",
+            "telephone": "+90 533 635 24 58",
+            "contactType": "Customer Service",
+            "areaServed": "TR",
+            "availableLanguage": ["Türkçe", "English"]
+        }
+    }
+    </script>
+</head>
+
+<!-- Ana H1 Başlık - SEO için kritik -->
+<h1 class="seo-main-title" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+    My Golden Food Dondurulmuş Gıda Ürünleri | Donuk Gıda Kataloğu | 350 Gram Paketlerde Taze Ürünler
+</h1>
+
+<!-- Ürün Kategorisi Açıklaması - SEO için önemli (Gizli) -->
+<div class="seo-description" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+    <h2>Dondurulmuş Gıda Ürünlerimiz</h2>
+    <p>
+        <strong>Flash Freezing Teknolojisi</strong> ile korunan taze ve kaliteli dondurulmuş gıda ürünlerimizi keşfedin. 
+        Dondurulmuş meyve, sebze ve hazır gıdalarımız <strong>350 gram paketlerde</strong> sunulmaktadır. 
+        Ankara'da <strong>donuk gıda</strong> sektöründe güvenilir ve kaliteli ürünler için My Golden Food'u tercih edin.
+    </p>
+</div>
+
+<div class="container">
+    <div class="title-container">
+        <h2 class="text-center text-white">@Html.T("OurProducts")</h2>
+    </div>
+
+    <div class="product-grid" id="productGrid">
+        @foreach (var product in Model)
+        {
+            <div class="product-card">
+                <div class="image-container"
+                     data-name="@product.Name"
+                     data-description="@product.Description">
+                    <img src="@product.ImagePath" 
+                         alt="@product.Name | Dondurulmuş Gıda Ürünü | My Golden Food Kalitesi | 350 Gram Paket" 
+                         class="product-image"
+                         title="@product.Name - Dondurulmuş Gıda Ürünü">
+                </div>
+                <div class="product-name-container">
+                    <h3 class="product-name">@product.Name</h3>
+                </div>
+                <div class="product-info-box" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; background: rgba(255, 215, 0, 0.1); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <h4 style="color: #FFD700; font-size: 1rem; margin-bottom: 10px;">Ürün Bilgileri</h4>
+                    <ul style="color: white; margin: 0; padding-left: 20px;">
+                        <li><strong>Paket Boyutu:</strong> 350 Gram</li>
+                        <li><strong>Koruma Yöntemi:</strong> Flash Freezing Teknolojisi</li>
+                        <li><strong>Kategori:</strong> Dondurulmuş Gıda</li>
+                        <li><strong>Marka:</strong> My Golden Food</li>
+                    </ul>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Ürün Kategorileri Açıklaması - SEO için ek içerik (Gizli) -->
+<div class="product-categories-info" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+    <h3>Dondurulmuş Gıda Kategorilerimiz</h3>
+    <div class="row">
+        <div class="col-md-4 text-center mb-3">
+            <h4>🍓 Dondurulmuş Meyveler</h4>
+            <p>Çilek, böğürtlen, ahududu, kiraz ve tropikal meyveler. Flash freezing ile tazelik korunur.</p>
+        </div>
+        <div class="col-md-4 text-center mb-3">
+            <h4>🥦 Dondurulmuş Sebzeler</h4>
+            <p>Brokoli, mantar ve diğer sebzeler. Besin değeri korunarak dondurulur.</p>
+        </div>
+        <div class="col-md-4 text-center mb-3">
+            <h4>🍰 Hazır Gıdalar</h4>
+            <p>Dondurulmuş meyvelerle zenginleştirilmiş pasta ve tatlılar.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Sayfalama Butonları -->
+<div class="pagination">
+    <button id="prevPage" class="btn btn-primary" disabled>@Html.T("Back")</button>
+    <span id="pageNumber">@Html.T("Page")</span>
+    <button id="nextPage" class="btn btn-primary">@Html.T("Next")</button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="detailsModalLabel"></h2>
+            </div>
+            <div class="modal-body">
+                <h3 class="modal-title-with-line">@Html.T("ProductDetails")</h3>
+                <p id="detailsModalDescription" class="modal-text"></p>
+                <div class="product-info-box" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; background: rgba(255, 215, 0, 0.1); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <h4 style="color: #FFD700; font-size: 1rem; margin-bottom: 10px;">Ürün Bilgileri</h4>
+                    <ul style="color: white; margin: 0; padding-left: 20px;">
+                        <li><strong>Paket Boyutu:</strong> 350 Gram</li>
+                        <li><strong>Koruma Yöntemi:</strong> Flash Freezing Teknolojisi</li>
+                        <li><strong>Kategori:</strong> Dondurulmuş Gıda</li>
+                        <li><strong>Marka:</strong> My Golden Food</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .content {
+        flex: 1;
+        padding-top: 6%;
+    }
+
+    /* SEO Açıklama Stilleri */
+    .seo-description h2 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .seo-description p {
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+
+    /* Ürün Kategorileri Bilgi Kutusu */
+    .product-categories-info h3 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .product-categories-info h4 {
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .product-categories-info p {
+        line-height: 1.5;
+    }
+
+    .product-grid {
+        min-height: 600px; /* 12 ürün için gereken yükseklik */
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        justify-content: flex-start;
+        align-items: start;
+    }
+    /* Placeholder ürünler için şeffaf bir görünüm */
+    .product-placeholder {
+        visibility: hidden; /* Görünmez olacak */
+        height: 250px;
+    }
+
+        /* Eğer ürün sayısı 3'ten azsa, ortalama yap */
+        .product-grid:has(.product-card:nth-child(1):nth-last-child(1)),
+        .product-grid:has(.product-card:nth-child(1):nth-last-child(2)) {
+            display: flex;
+            justify-content: start;
+            gap: 20px;
+        }
+
+
+    .title-container {
+        margin-top: 30px;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+
+
+    /* Kart Tasarımı */
+    .product-card {
+        overflow: hidden;
+        text-align: center;
+        border-radius: 15px;
+        background-color: rgba(0, 0, 0, 0);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+    /* Görseller */
+    .image-container {
+        width: 100%;
+        height: 250px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000;
+        overflow: hidden;
+        border-radius: 15px;
+    }
+
+    .product-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+        transition: transform 0.3s ease;
+    }
+
+    .image-container:hover .product-image {
+        transform: scale(1.1);
+    }
+
+    /* Ürün Adı */
+    .product-name-container {
+        padding: 15px;
+        background-color: rgba(0, 0, 0, 0);
+        border-radius: 0 0 15px 15px;
+        color: #fff;
+    }
+
+    .product-name {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #fff;
+    }
+
+    /* Sayfalama Butonları - Şık Tasarım */
+    .pagination {
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        padding: 20px 0;
+    }
+
+    .pagination button {
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 215, 0, 0.3);
+        color: #FFD700;
+        padding: 12px 24px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .pagination button:hover:not(:disabled) {
+        background: rgba(255, 215, 0, 0.2);
+        border-color: #FFD700;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+    }
+
+    .pagination button:active:not(:disabled) {
+        transform: translateY(0);
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    }
+
+    .pagination button:disabled {
+        background: rgba(128, 128, 128, 0.2);
+        border-color: rgba(128, 128, 128, 0.3);
+        color: rgba(128, 128, 128, 0.7);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .pagination button:disabled:hover {
+        background: rgba(128, 128, 128, 0.2);
+        border-color: rgba(128, 128, 128, 0.3);
+        color: rgba(128, 128, 128, 0.7);
+        transform: none;
+        box-shadow: none;
+    }
+
+    .pagination #pageNumber {
+            color: #fbdb66;
+        font-weight: 600;
+        font-size: 16px;
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        backdrop-filter: blur(5px);
+        min-width: 100px;
+        text-align: center;
+    }
+
+    /* 🔥 Scale-Up Modal Efekti */
+    .modal-content {
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        transform: scale(0.7);
+        transition: transform 0.3s ease-out;
+    }
+
+    .modal.show .modal-content {
+        transform: scale(1);
+    }
+
+    /* Ürün Detayı Başlığı */
+    .modal-title-with-line {
+        position: relative;
+        display: inline-block;
+        padding-bottom: 10px;
+        font-size: 1.2rem;
+        color: #FFD700;
+        margin-bottom: 15px;
+    }
+
+        .modal-title-with-line::after {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: white;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+    /* Mobilde 2 sütun */
+    @@media (max-width: 950px) {
+        .product-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .title-container {
+            margin-top: 30%;
+            margin-bottom: 10px;
+        }
+
+        h2.text-center {
+            font-size: 3rem;
+        }
+
+        /* Mobilde pagination butonları */
+        .pagination {
+            margin-top: 20px;
+            gap: 10px;
+            padding: 15px 0;
+        }
+
+        .pagination button {
+            padding: 10px 18px;
+            font-size: 12px;
+            border-radius: 20px;
+        }
+
+        .pagination #pageNumber {
+            padding: 8px 15px;
+            font-size: 14px;
+            min-width: 80px;
+        }
+    }
+
+    /* Küçük mobil cihazlar için */
+    @@media (max-width: 480px) {
+        .pagination {
+            flex-direction: row; /* Yan yana kalması için */
+            gap: 8px;
+            flex-wrap: wrap; /* Gerekirse alt satıra geçer */
+            justify-content: center;
+        }
+
+        .pagination button {
+            padding: 8px 16px;
+            font-size: 11px;
+            min-width: 60px; /* Minimum genişlik */
+        }
+
+        .pagination #pageNumber {
+            padding: 6px 12px;
+            font-size: 13px;
+            min-width: 70px;
+            order: 2; /* Sayfa numarası ortada kalsın */
+        }
+
+        .pagination #prevPage {
+            order: 1; /* Geri butonu solda */
+        }
+
+        .pagination #nextPage {
+            order: 3; /* İleri butonu sağda */
+        }
+    }
+
+    /* Çok küçük ekranlar için (320px ve altı) */
+    @@media (max-width: 320px) {
+        .pagination {
+            gap: 5px;
+        }
+
+        .pagination button {
+            padding: 6px 12px;
+            font-size: 10px;
+            min-width: 50px;
+        }
+
+        .pagination #pageNumber {
+            padding: 5px 10px;
+            font-size: 12px;
+            min-width: 60px;
+        }
+    }
+        /* Ürün görsellerinin düzgün oranlarda olması için */
+        .image-container {
+            width: 100%;
+            height: 180px; /* Daha dengeli bir yükseklik */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        /* Resimlerin daha düzgün ve ölçeklenmiş görünmesi için */
+        .product-image {
+            width: 100%;
+            height: 100%;
+            max-height: 180px; /* Görselin fazla uzamasını önler */
+            object-fit: contain; /* Görsellerin kırpılmasını sağlar, orantıyı bozmadan doldurur */
+            object-position: center; /* Görselin ortalanmasını sağlar */
+            transition: transform 0.3s ease;
+        }
+        /* Hover (Masaüstü için) */
+        .image-container:hover .product-image {
+            transform: scale(1.1);
+        }
+        /* Mobil için tıklanınca büyüme */
+        .image-container.active .product-image {
+            transform: scale(1.1);
+        }
+        /* Ürün adını resme yaklaştır */
+        .product-name-container {
+            padding: 8px; /* Daha küçük padding */
+            margin-top: -5px; /* Üst boşluğu azaltarak resme yaklaştır */
+            background-color: transparent; /* Arka plan olmadan */
+            text-align: center;
+        }
+        /* Ürün adı yazı tipi ve boyutu */
+        .product-name {
+            margin: 13px;
+            font-size: 1.1rem; /* Fontu biraz küçült */
+            font-weight: bold;
+            color: #fff;
+            line-height: 1.2; /* Satır yüksekliğini sıkılaştır */
+        }
+    }
+
+    .modal-body p {
+        font-size: 1rem;
+        line-height: 1.6;
+        text-align: left;
+        white-space: pre-line;
+        margin-bottom: 10px;
+    }
+
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const allProducts = document.querySelectorAll(".product-card");
+        const pageSize = 12;
+        let currentPage = 1;
+
+        function showPage(page) {
+            allProducts.forEach((product, index) => {
+                product.style.display = (index >= (page - 1) * pageSize && index < page * pageSize) ? "block" : "none";
+            });
+
+            document.getElementById("pageNumber").textContent = `@Html.T("Page") ${page}`;
+            document.getElementById("prevPage").disabled = (page === 1);
+            document.getElementById("nextPage").disabled = (page * pageSize >= allProducts.length);
+        }
+
+        document.getElementById("prevPage").addEventListener("click", function () {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        });
+
+        document.getElementById("nextPage").addEventListener("click", function () {
+            if (currentPage * pageSize < allProducts.length) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        });
+
+        showPage(currentPage);
+
+        // Modal Açma
+        document.querySelectorAll(".image-container").forEach(item => {
+            item.addEventListener("click", function () {
+                let name = this.getAttribute("data-name");
+                let description = this.getAttribute("data-description");
+
+                if (!name || !description) {
+                    alert("Ürün detayları eksik!");
+                    return;
+                }
+
+                document.getElementById('detailsModalLabel').textContent = name;
+               document.getElementById('detailsModalDescription').innerHTML = description.replace(/\n/g, "<br>");
+
+                var modal = new bootstrap.Modal(document.getElementById('detailsModal'));
+                modal.show();
+            });
+        });
+    });
+        function showPage(page) {
+        let totalProducts = allProducts.length;
+        let start = (page - 1) * pageSize;
+        let end = page * pageSize;
+        let visibleProducts = [];
+
+        // Mevcut ürünleri göster
+        allProducts.forEach((product, index) => {
+            if (index >= start && index < end) {
+                product.style.display = "block";
+                visibleProducts.push(product);
+            } else {
+                product.style.display = "none";
+            }
+        });
+
+        // Eksik ürünleri placeholder ile tamamla
+        let missingCount = pageSize - visibleProducts.length;
+        document.querySelectorAll(".product-placeholder").forEach(e => e.remove()); // Önceki placeholder'ları temizle
+
+        for (let i = 0; i < missingCount; i++) {
+            let placeholder = document.createElement("div");
+            placeholder.classList.add("product-card", "product-placeholder");
+            productGrid.appendChild(placeholder);
+        }
+
+        // Sayfa numarasını güncelle
+        document.getElementById("pageNumber").textContent = `@Html.T("Page") ${page}`;
+        document.getElementById("prevPage").disabled = (page === 1);
+        document.getElementById("nextPage").disabled = (page * pageSize >= totalProducts);
+    }
+
+        document.addEventListener("DOMContentLoaded", function () {
+        const imageContainers = document.querySelectorAll(".image-container");
+
+        imageContainers.forEach(container => {
+            container.addEventListener("click", function () {
+                // Önce tüm aktif sınıfları kaldır
+                imageContainers.forEach(img => img.classList.remove("active"));
+
+                // Sadece tıklanan öğeyi büyüt
+                this.classList.add("active");
+
+                // 1 saniye sonra tekrar küçült (isteğe bağlı)
+                setTimeout(() => {
+                    this.classList.remove("active");
+                }, 1000);
+            });
+        });
+    });
+
+        document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".image-container").forEach(item => {
+            item.addEventListener("click", function () {
+                let name = this.getAttribute("data-name");
+                let description = this.getAttribute("data-description");
+
+                if (!name || !description) {
+                    alert("Ürün detayları eksik!");
+                    return;
+                }
+
+                document.getElementById('detailsModalLabel').textContent = name;
+                document.getElementById('detailsModalDescription').innerHTML = description.replace(/\n/g, "<br>"); // Yeni satırları koru
+
+                var modal = new bootstrap.Modal(document.getElementById('detailsModal'));
+                modal.show();
+            });
+        });
+    });
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+
+<script>
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/productHub")
+        .build();
+
+    connection.start().then(() => {
+        console.log("✅ SignalR bağlantısı başarılı (Product Sayfası)");
+    }).catch(err => console.error("SignalR bağlantı hatası:", err));
+
+    // Admin ekleyince tetiklenecek
+    connection.on("ProductUpdated", function () {
+        console.log("🟢 Ürün listesi güncellendi. Sayfa yenileniyor...");
+        location.reload(); // Otomatik olarak ürünleri günceller
+    });
+</script>

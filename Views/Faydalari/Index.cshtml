@@ -1,0 +1,367 @@
+﻿@using Microsoft.Extensions.Localization
+@model IEnumerable<MyGoldenFood.Models.Benefit>
+
+@{
+    ViewData["Title"] = "Donuk Gıda Faydaları | Dondurulmuş Gıda Sağlık Avantajları | My Golden Food";
+    Layout = "_Layout";
+}
+
+<!-- SEO Meta Etiketleri -->
+<head>
+    <meta name="description" content="Donuk gıda faydaları ve dondurulmuş gıdaların sağlık üzerindeki avantajları. Flash freezing teknolojisi ile korunan besin değeri, vitamin ve mineral korunumu. My Golden Food kalitesi ile sağlıklı beslenme.">
+    <meta name="keywords" content="donuk gıda faydaları, dondurulmuş gıda sağlık avantajları, flash freezing teknolojisi, dondurulmuş meyve faydaları, dondurulmuş sebze faydaları, besin değeri korunumu, vitamin mineral korunumu">
+    <meta name="author" content="My Golden Food">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Donuk Gıda Faydaları | Dondurulmuş Gıda Sağlık Avantajları">
+    <meta property="og:description" content="Donuk gıda faydaları ve dondurulmuş gıdaların sağlık üzerindeki avantajları. Flash freezing teknolojisi ile korunan besin değeri.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mygoldenfood.com/Faydalari/Index">
+    <meta property="og:image" content="https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png">
+    <link rel="canonical" href="https://mygoldenfood.com/Faydalari/Index" />
+    
+    <!-- Schema Markup - Benefits Collection -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "ItemList",
+        "name": "Donuk Gıda Faydaları Koleksiyonu",
+        "description": "Dondurulmuş gıdaların sağlık üzerindeki faydaları ve avantajları",
+        "url": "https://mygoldenfood.com/Faydalari/Index",
+        "numberOfItems": "@Model.Count()",
+        "itemListElement": [
+            @{
+                for (int i = 0; i < Model.Count(); i++)
+                {
+                    var benefit = Model.ElementAt(i);
+                    <text>
+                    {
+                        "@@type": "ListItem",
+                        "position": @(i + 1),
+                        "item": {
+                            "@@type": "Article",
+                            "name": "@benefit.Name",
+                            "description": "@benefit.Content",
+                            "image": "@benefit.ImagePath",
+                            "articleSection": "Donuk Gıda Faydaları",
+                            "author": {
+                                "@@type": "Organization",
+                                "name": "My Golden Food"
+                            }
+                        }
+                    }@(i < Model.Count() - 1 ? "," : "")
+                    </text>
+                }
+            }
+        ]
+    }
+    </script>
+    
+    <!-- Schema Markup - Organization -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "Organization",
+        "name": "My Golden Food",
+        "description": "Donuk gıda faydaları ve dondurulmuş gıda ürünleri tedarikçisi",
+        "url": "https://mygoldenfood.com",
+        "logo": "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png",
+        "contactPoint": {
+            "@@type": "ContactPoint",
+            "telephone": "+90 533 635 24 58",
+            "contactType": "Customer Service",
+            "areaServed": "TR",
+            "availableLanguage": ["Türkçe", "English"]
+        }
+    }
+    </script>
+</head>
+
+<!-- Ana H1 Başlık - SEO için kritik -->
+<h1 class="seo-main-title" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+    Donuk Gıda Faydaları | Dondurulmuş Gıdaların Sağlık Avantajları | Flash Freezing Teknolojisi ile Besin Değeri Korunumu
+</h1>
+
+<!-- Donuk Gıda Faydaları SEO Açıklaması (Gizli) -->
+<div class="seo-benefits-info" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+    <h2>Donuk Gıda Faydaları ve Sağlık Avantajları</h2>
+    <p>
+        <strong>Donuk gıda</strong> ürünlerimizin sağlık üzerindeki faydalarını keşfedin. 
+        <strong>Flash Freezing Teknolojisi</strong> ile korunan dondurulmuş meyve, sebze ve hazır gıdalarımız, 
+        besin değerini maksimum seviyede korur. <strong>350 gram paketlerde</strong> sunulan ürünlerimizle 
+        sağlıklı ve besleyici beslenme sağlayabilirsiniz.
+    </p>
+    <h3>Flash Freezing Teknolojisinin Faydaları</h3>
+    <p>
+        <strong>Flash freezing</strong> teknolojisi sayesinde vitamin ve mineraller korunur, 
+        mevsim dışında da taze lezzetler elde edebilirsiniz. Dondurulmuş gıdalar, 
+        taze malzemeler kadar besleyici ve lezzetlidir.
+    </p>
+</div>
+
+<!-- Ana İçerik -->
+<div class="container">
+    <div class="title-container">
+        <h2 class="text-center text-white">@Html.T("OurBenefits")</h2> <!-- SEO için H2 Kullanıldı -->
+    </div>
+
+    <div class="benefit-grid">
+        @foreach (var benefit in Model)
+        {
+            <div class="benefit-card" data-name="@benefit.Name" data-description="@benefit.Content">
+                <div class="image-container">
+                    <img src="@benefit.ImagePath" 
+                         alt="@benefit.Name | Donuk Gıda Faydaları | Dondurulmuş Gıda Sağlık Avantajları" 
+                         class="benefit-image" 
+                         loading="lazy"
+                         title="@benefit.Name - Donuk Gıda Faydaları">
+                </div>
+                <div class="benefit-name-container">
+                    <h3 class="benefit-name">@benefit.Name</h3> <!-- SEO İçin H3 Başlığı Kullanıldı -->
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="detailsModalLabel"></h3> <!-- SEO için H3 Kullanıldı -->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;"></button>
+            </div>
+            <div class="modal-body">
+                                    <h3 class="modal-title-with-line">@Html.T("BenefitDetails")</h3> <!-- SEO için H3 Kullanıldı -->
+                <p id="detailsModalDescription"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .content {
+        flex: 1;
+        padding-top: 5%;
+    }
+
+    /* Grid Yapısı */
+    .benefit-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    /* Başlık Konumu */
+    .title-container {
+        margin-top: 30px;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    /* Kart Tasarımı */
+    .benefit-card {
+        overflow: hidden;
+        text-align: center;
+        border-radius: 15px;
+        background-color: rgba(0, 0, 0, 0);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+    /* Görseller */
+    .image-container {
+        width: 100%;
+        height: 250px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000;
+        overflow: hidden;
+        border-radius: 15px;
+    }
+
+    .benefit-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+        transition: transform 0.3s ease;
+    }
+
+    .image-container:hover .benefit-image {
+        transform: scale(1.1);
+    }
+
+    /* Fayda Adı */
+    .benefit-name-container {
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0);
+        border-radius: 0 0 15px 15px;
+        color: #fff;
+    }
+
+    .benefit-name {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #fff;
+    }
+
+    /* 🔥 Modal Yapısı (Açılır Pencere) */
+    .modal-content {
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        transform: scale(0.7);
+        transition: transform 0.3s ease-out;
+    }
+
+    .modal.show .modal-content {
+        transform: scale(1);
+    }
+
+    /* Başlık Stili */
+    .modal-title-with-line {
+        position: relative;
+        display: inline-block;
+        padding-bottom: 10px;
+        font-size: 1.2rem;
+        color: #FFD700;
+        margin-bottom: 15px;
+    }
+
+        .modal-title-with-line::after {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: white;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+    /* 📌 Mobil Görünüm İyileştirmesi */
+    @@media (max-width: 768px) {
+        .title-container
+
+    {
+        margin-top: 7pc;
+    }
+
+    h2.text-center {
+        font-size: 2rem;
+    }
+
+    .benefit-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .image-container {
+        height: 180px;
+    }
+
+    .modal-body p {
+        font-size: 1rem;
+        line-height: 1.6;
+        text-align: left;
+        white-space: pre-line;
+        margin-bottom: 10px;
+    }
+
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".benefit-card").forEach(card => {
+            card.addEventListener("click", function () {
+                let name = this.getAttribute("data-name");
+                let description = this.getAttribute("data-description");
+
+                if (!name || !description) {
+                    alert("Fayda detayları eksik!");
+                    return;
+                }
+
+                document.getElementById('detailsModalLabel').textContent = name;
+                document.getElementById('detailsModalDescription').innerHTML = description.replace(/\n/g, "<br>");
+
+                var modal = new bootstrap.Modal(document.getElementById('detailsModal'));
+                modal.show();
+            });
+        });
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+<script>
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/faydalariHub")
+        .build();
+
+    connection.start().then(() => {
+        console.log("✔ FaydalariHub bağlantısı başarılı");
+    }).catch(err => console.error("Bağlantı hatası:", err));
+
+    connection.on("BenefitUpdated", function () {
+        console.log("🔄 BenefitUpdated tetiklendi, sayfa yenileniyor...");
+        location.reload(); // ✅ Otomatik yenile
+    });
+</script>
+
+<!-- Ek Donuk Gıda Faydaları SEO İçerikleri (Gizli) -->
+<div class="seo-benefits-categories" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+    <h4>Donuk Gıda Fayda Kategorileri</h4>
+    <p>
+        <strong>Donuk gıda</strong> ürünlerimizin faydaları çeşitli kategorilerde sunulmaktadır. 
+        Dondurulmuş meyve, sebze ve hazır gıdalarımızın sağlık üzerindeki avantajlarını keşfedin.
+    </p>
+    
+    <h5>Dondurulmuş Meyve Faydaları</h5>
+    <p>
+        <strong>Flash Freezing Teknolojisi</strong> ile korunan dondurulmuş meyvelerimiz, 
+        vitamin ve mineral açısından zengindir. Çilek, böğürtlen, ahududu gibi 
+        meyveler antioksidan özellikleri ile sağlığınızı destekler.
+    </p>
+    
+    <h5>Dondurulmuş Sebze Faydaları</h5>
+    <p>
+        Dondurulmuş sebzelerimiz ile sağlıklı ve besleyici beslenme sağlayabilirsiniz. 
+        Brokoli, mantar ve diğer sebzeler <strong>350 gram paketlerde</strong> sunulmaktadır.
+    </p>
+    
+    <h5>Hazır Gıda Faydaları</h5>
+    <p>
+        Dondurulmuş hazır gıdalarımız ile hızlı ve pratik beslenme sağlayabilirsiniz. 
+        <strong>Donuk gıda</strong> sektöründe kaliteli ürünlerimizle sağlığınızı koruyun.
+    </p>
+</div>
+
+<!-- Donuk Gıda Sağlık Avantajları (Gizli) -->
+<div class="seo-health-benefits" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+    <h4>Donuk Gıda ile Sağlıklı Beslenme</h4>
+    <p>
+        <strong>Donuk gıda</strong> ile sağlıklı beslenme mümkündür. 
+        <strong>Flash Freezing Teknolojisi</strong> ile korunan ürünlerimiz, 
+        doğru kullanıldığında taze malzemeler kadar besleyici ve sağlıklıdır.
+    </p>
+    
+    <h5>Besin Değeri Korunumu</h5>
+    <p>
+        Dondurulmuş gıdalarda besin değeri korunur, vitamin ve mineraller kaybolmaz. 
+        <strong>Donuk gıda</strong> ürünlerimiz özel ambalajlarda korunmaktadır.
+    </p>
+    
+    <h5>Mevsim Dışı Beslenme</h5>
+    <p>
+        <strong>Dondurulmuş gıda</strong> ile mevsim dışında da taze lezzetler elde edebilirsiniz. 
+        Flash freezing ile korunan ürünlerimiz, yıl boyunca sağlıklı beslenme imkanı sunar.
+    </p>
+</div>

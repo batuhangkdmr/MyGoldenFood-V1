@@ -1,0 +1,290 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  
+  <!-- About sayfası için -->
+  <data name="About_BizKimiz" xml:space="preserve">
+    <value>Biz Kimiz?</value>
+  </data>
+  <data name="About_DondurulmusGidaSektoru" xml:space="preserve">
+    <value>Dondurulmuş gıda sektöründe kaliteli ve lezzetli ürünler sunan öncü bir markadır.</value>
+  </data>
+  <data name="About_MusterilerimizeEnIyiHizmet" xml:space="preserve">
+    <value>Müşterilerimize en iyi hizmeti sağlamak için sürekli yenilikçi çözümler üretmekteyiz.</value>
+  </data>
+  <data name="About_Vizyonumuz" xml:space="preserve">
+    <value>Vizyonumuz</value>
+  </data>
+  <data name="About_DunyaCapindaLezzetimiziTanitmak" xml:space="preserve">
+    <value>Dünya çapında lezzetimizi tanıtmak ve sürdürülebilir üretim anlayışıyla herkese sağlıklı ve lezzetli ürünler sunmaktır.</value>
+  </data>
+
+  <!-- Faydalari sayfası için -->
+  <data name="Faydalari_UrunlerinFaydalari" xml:space="preserve">
+    <value>Ürünlerin Faydaları</value>
+  </data>
+  <data name="Faydalari_FaydaDetayi" xml:space="preserve">
+    <value>Fayda Detayı:</value>
+  </data>
+
+  <!-- Footer için -->
+  <data name="Footer_Adres" xml:space="preserve">
+    <value>Adres</value>
+  </data>
+
+  <!-- Home sayfası için -->
+  <data name="Home_Sitemiz" xml:space="preserve">
+    <value>SİTEMİZ</value>
+  </data>
+  <data name="Home_Yapim" xml:space="preserve">
+    <value>YAPIM</value>
+  </data>
+  <data name="Home_Asamasindadir" xml:space="preserve">
+    <value>AŞAMASINDADIR</value>
+  </data>
+  <data name="Home_Bogurtlen" xml:space="preserve">
+    <value>Böğürtlen</value>
+  </data>
+  <data name="Home_Cilek" xml:space="preserve">
+    <value>Çilek</value>
+  </data>
+  <data name="Home_Ahududu" xml:space="preserve">
+    <value>Ahududu</value>
+  </data>
+  <data name="Home_YabanMersini" xml:space="preserve">
+    <value>Yaban Mersini</value>
+  </data>
+  <data name="Home_LimonluTart" xml:space="preserve">
+    <value>Limonlu Tart</value>
+  </data>
+  <data name="Home_AhududuVeBogurtlen" xml:space="preserve">
+    <value>Ahududu ve Böğürtlen</value>
+  </data>
+  <data name="Home_Taze" xml:space="preserve">
+    <value>TAZE</value>
+  </data>
+  <data name="Home_Kullanisli" xml:space="preserve">
+    <value>KULLANIŞLI</value>
+  </data>
+  <data name="Home_Guvenilir" xml:space="preserve">
+    <value>GÜVENİLİR</value>
+  </data>
+
+  <!-- İletişim sayfası için -->
+  <data name="Iletisim_BizimleIletisimeGecin" xml:space="preserve">
+    <value>Bizimle İletişime Geçin</value>
+  </data>
+  <data name="Iletisim_AdinizSoyadiniz" xml:space="preserve">
+    <value>Adınız Soyadınız</value>
+  </data>
+  <data name="Iletisim_EPostaAdresiniz" xml:space="preserve">
+    <value>E-Posta Adresiniz</value>
+  </data>
+  <data name="Iletisim_Konu" xml:space="preserve">
+    <value>Konu</value>
+  </data>
+  <data name="Iletisim_Mesajiniz" xml:space="preserve">
+    <value>Mesajınız</value>
+  </data>
+  <data name="Iletisim_Gonder" xml:space="preserve">
+    <value>Gönder</value>
+  </data>
+  <data name="Iletisim_Adres" xml:space="preserve">
+    <value>Adres:</value>
+  </data>
+  <data name="Iletisim_Telefon" xml:space="preserve">
+    <value>Telefon:</value>
+  </data>
+  <data name="Iletisim_Email" xml:space="preserve">
+    <value>Email:</value>
+  </data>
+  <data name="Iletisim_Iletisim" xml:space="preserve">
+    <value>İletişim</value>
+  </data>
+  <data name="Iletisim_IletisimBilgilerimiz" xml:space="preserve">
+    <value>İletişim Bilgilerimiz</value>
+  </data>
+
+  <!-- Navbar için -->
+  <data name="Navbar_Anasayfa" xml:space="preserve">
+    <value>Anasayfa</value>
+  </data>
+  <data name="Navbar_Company" xml:space="preserve">
+    <value>Şirket</value>
+  </data>
+  <data name="Navbar_About" xml:space="preserve">
+    <value>Hakkımızda</value>
+  </data>
+  <data name="Navbar_Products" xml:space="preserve">
+    <value>Ürünler</value>
+  </data>
+  <data name="Navbar_Recipes" xml:space="preserve">
+    <value>Tarifler ve Faydaları</value>
+  </data>
+  <data name="Navbar_Contact" xml:space="preserve">
+    <value>İletişim</value>
+  </data>
+  <data name="Navbar_Language" xml:space="preserve">
+    <value>🌐 Dil</value>
+  </data>
+
+  <!-- Ürünler sayfası için -->
+  <data name="Product_Urunlerimiz" xml:space="preserve">
+    <value>Ürünlerimiz</value>
+  </data>
+  <data name="Product_Onceki" xml:space="preserve">
+    <value>Önceki</value>
+  </data>
+  <data name="Product_Sonraki" xml:space="preserve">
+    <value>Sonraki</value>
+  </data>
+  <data name="Product_Sayfa" xml:space="preserve">
+    <value>Sayfa</value>
+  </data>
+  <data name="Product_UrunDetayi" xml:space="preserve">
+    <value>Ürün Detayı:</value>
+  </data>
+
+  <!-- Tarifler sayfası için -->
+  <data name="Tarifler_TarifKategorileri" xml:space="preserve">
+    <value>Tarif Kategorileri</value>
+  </data>
+  <data name="Tarifler_BuKategoriyeAitTarifBulunmamaktadir" xml:space="preserve">
+    <value>Bu kategoriye ait tarif bulunmamaktadır.</value>
+  </data>
+
+  <!-- Tarifler Details sayfası için -->
+  <data name="TariflerDetails_LezzetliTarifler" xml:space="preserve">
+    <value>Lezzetli Tarifler</value>
+  </data>
+  <data name="TariflerDetails_TarifDetayi" xml:space="preserve">
+    <value>Tarif Detayı:</value>
+  </data>
+
+  <!-- Tarifler ve Faydaları sayfası için -->
+  <data name="Tariflervefaydalari_TariflerVeFaydalari" xml:space="preserve">
+    <value>Tarifler ve Faydaları</value>
+  </data>
+  <data name="Tariflervefaydalari_Tarifler" xml:space="preserve">
+    <value>Tarifler</value>
+  </data>
+  <data name="Tariflervefaydalari_Faydalari" xml:space="preserve">
+    <value>Faydaları</value>
+  </data>
+</root>

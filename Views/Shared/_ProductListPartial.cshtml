@@ -1,0 +1,77 @@
+﻿@using System.Globalization
+@inject MyGoldenFood.Services.TranslationService translationService
+@model IEnumerable<MyGoldenFood.Models.Product>
+
+@{
+    var currentLang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Ürün Adı</th>
+            <th>Açıklama</th>
+            <th>Resim</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>
+                    @if (currentLang == "tr")
+                    {
+                        @product.Name
+                    }
+                    else
+                    {
+                        @await translationService.GetTranslationAsync(product.Id, "Product", "Name", currentLang)
+                    }
+                </td>
+                <td>
+                    @if (currentLang == "tr")
+                    {
+                        @product.Description
+                    }
+                    else
+                    {
+                        @await translationService.GetTranslationAsync(product.Id, "Product", "Description", currentLang)
+                    }
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(product.ImagePath))
+                    {
+                        <img src="@product.ImagePath" alt="Ürün Resmi" style="max-width: 100px; max-height: 100px;" />
+                    }
+                    else
+                    {
+                        <span>Resim Yok</span>
+                    }
+                </td>
+                <td>
+                    <button class="btn btn-warning" onclick="loadEditForm('/Product/Edit?id=@product.Id')">Düzenle</button>
+                    <button class="btn btn-danger" onclick="deleteItem('/Product/Delete', @product.Id, '/Product/ProductList', '#productList')">Sil</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- ✅ SignalR Bağlantısı -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+<script>
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/productHub")
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+
+    connection.start().then(() => {
+        console.log("✅ SignalR bağlantısı kuruldu!");
+    }).catch(err => console.error("❌ SignalR bağlantı hatası:", err));
+
+    connection.on("ProductUpdated", function () {
+        console.log("🟢 Ürün güncellemesi alındı, tablo yenileniyor...");
+        location.reload();
+    });
+</script>

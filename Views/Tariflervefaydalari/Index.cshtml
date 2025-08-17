@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewData["Title"] = "Dondurulmuş Gıdalar: Tarifler ve Faydaları | My Golden Food";
+    Layout = "_Layout";
+}
+
+<!-- SEO Meta Etiketleri -->
+<meta name="description" content="Dondurulmuş meyve ve tatlı tarifleri ile sağlıklı beslenme rehberinizi keşfedin. Pratik tarifler ve besleyici faydalar hakkında bilgi alın.">
+<meta name="keywords" content="dondurulmuş meyve tarifleri, sağlıklı beslenme, tatlı tarifleri, faydalı gıdalar, dondurulmuş gıdalar">
+<meta name="author" content="My Golden Food">
+<meta property="og:title" content="Dondurulmuş Gıdalar: Tarifler ve Faydaları | My Golden Food">
+<meta property="og:description" content="Dondurulmuş gıdalar ile sağlıklı ve lezzetli tarifler hazırlayın. Besin değerlerini koruyarak keyifli yemekler yapın.">
+<meta property="og:image" content="https://res.cloudinary.com/dbhogeepn/image/upload/v1738687039/yas-pasta_wyaqh5.jpg">
+<meta property="og:url" content="https://mygoldenfood.com/Tariflervefaydalari/Index">
+<meta name="robots" content="index, follow">
+
+<div class="container text-center mt-5">
+            <h1 class="mb-5 colorrenk">@Html.T("RecipesAndBenefits")</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-sm-12">
+            <a href="/Tarifler/Index">
+                <img src="~/images/tarifler.jpg" alt="Dondurulmuş Gıda Tarifleri" class="img-fluid img-responsive" />
+                <h3 class="title-spacing text-white"><br/></h3>
+            </a>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <a href="/Faydalari/Index">
+                <img src="~/images/faydalar.jpg" alt="Dondurulmuş Gıdaların Faydaları" class="img-fluid img-responsive" />
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .content {
+        flex: 1;
+        padding-top: 0;
+    }
+
+    htmş, body {
+        background-color: black;
+        overflow-x: hidden;
+    }
+
+    /* İçerik ile footer arasına geniş boşluk bırak */
+    .container {
+        overflow-x: hidden;
+        padding-top: 10%;
+        padding-bottom: 250px; /* Masaüstü için geniş boşluk */
+    }
+    /* h3 başlıklarının arasına boşluk ekle */
+    .title-spacing {
+        margin-top: 20px;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        color: white;
+    }
+
+    img {
+        max-width: 250px;
+        transition: transform 0.3s;
+    }
+
+        img:hover {
+            transform: scale(1.1);
+        }
+
+    /* 🌟 Mobilde Yan Yana Getirme */
+    @@media (max-width: 1000px) {
+        .row
+
+    {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        overflow: hidden;
+    }
+    h1{
+       font-size: 33px;
+    }
+
+    .col-sm-6 {
+        width: 50%; /* Mobilde ikiye bölerek yan yana getir */
+        padding: 10px;
+    }
+
+    img {
+        max-width: 90%; /* Küçük ekranlarda daha iyi sığması için */
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+        .container {
+            padding-bottom: 100px; /* Mobilde daha az boşluk */
+            padding-top: 20%;
+        }
+
+        .title-spacing {
+            margin-top: 10px; /* Başlıkları biraz daha yaklaştır */
+        }
+
+    }
+</style>
