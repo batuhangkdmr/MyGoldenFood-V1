@@ -1,0 +1,208 @@
+@model MyGoldenFood.Models.Blog
+@{
+    ViewData["Title"] = $"Blog Yazısını Sil: {Model.Title} | Admin Panel | My Golden Food";
+    Layout = "_Layout";
+}
+
+<!-- SEO Meta Etiketleri -->
+<head>
+    <meta name="description" content="Blog yazısı silme onay sayfası. Donuk gıda blog yazısı silme işlemi.">
+    <meta name="keywords" content="blog yazısı silme, blog silme onayı, donuk gıda blog silme">
+    <meta name="author" content="My Golden Food">
+    <meta name="robots" content="noindex, nofollow">
+    <meta property="og:title" content="Blog Yazısını Sil | Admin Panel">
+    <meta property="og:description" content="Blog yazısı silme onay sayfası">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mygoldenfood.com/Blog/Delete/@Model.Id">
+    <link rel="canonical" href="https://mygoldenfood.com/Blog/Delete/@Model.Id">
+</head>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Blog Yazısını Sil</h2>
+                <a href="@Url.Action("Admin", "Blog")" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Blog Yönetimine Dön
+                </a>
+            </div>
+
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Dikkat: Blog Yazısı Silinecek!
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h6><i class="fas fa-exclamation-circle me-2"></i>Bu işlem geri alınamaz!</h6>
+                        <p class="mb-0">Blog yazısını sildiğinizde, tüm veriler kalıcı olarak silinecektir.</p>
+                    </div>
+
+                    <!-- Blog Bilgileri -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            @if (!string.IsNullOrEmpty(Model.ImagePath))
+                            {
+                                <img src="@Model.ImagePath" class="img-fluid rounded" alt="@Model.Title - Blog Yazısı" />
+                            }
+                            else
+                            {
+                                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 200px;">
+                                    <i class="fas fa-image fa-3x text-muted"></i>
+                                </div>
+                            }
+                        </div>
+                        <div class="col-md-8">
+                            <h4>@Model.Title</h4>
+                            @if (!string.IsNullOrEmpty(Model.Summary))
+                            {
+                                <p class="text-muted">@Model.Summary</p>
+                            }
+                            <div class="row">
+                                <div class="col-6">
+                                    <small class="text-muted"><strong>Kategori:</strong></small><br>
+                                    @if (!string.IsNullOrEmpty(Model.Category))
+                                    {
+                                        <span class="badge bg-info">@Model.Category</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Kategori Yok</span>
+                                    }
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted"><strong>Yazar:</strong></small><br>
+                                    <span>@Model.Author</span>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                    <small class="text-muted"><strong>Oluşturulma:</strong></small><br>
+                                    <span>@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</span>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted"><strong>Görüntülenme:</strong></small><br>
+                                    <span>@Model.ViewCount</span>
+                                </div>
+                            </div>
+                            @if (Model.UpdatedDate.HasValue)
+                            {
+                                <div class="row mt-2">
+                                    <div class="col-6">
+                                        <small class="text-muted"><strong>Son Güncelleme:</strong></small><br>
+                                        <span>@Model.UpdatedDate.Value.ToString("dd.MM.yyyy HH:mm")</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- İçerik Önizleme -->
+                    @if (!string.IsNullOrEmpty(Model.Content))
+                    {
+                        <div class="mb-4">
+                            <h5>İçerik Önizleme:</h5>
+                            <div class="border rounded p-3 bg-light" style="max-height: 200px; overflow-y: auto;">
+                                @Html.Raw(Model.Content.Length > 500 ? Model.Content.Substring(0, 500) + "..." : Model.Content)
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Etiketler -->
+                    @if (!string.IsNullOrEmpty(Model.Tags))
+                    {
+                        <div class="mb-4">
+                            <h5>Etiketler:</h5>
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach (var tag in Model.Tags.Split(','))
+                                {
+                                    <span class="badge bg-secondary">@tag.Trim()</span>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <!-- SEO Bilgileri -->
+                    <div class="mb-4">
+                        <h5>SEO Bilgileri:</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <small class="text-muted"><strong>SEO Başlık:</strong></small><br>
+                                <span>@(string.IsNullOrEmpty(Model.SeoTitle) ? "Kullanılmıyor" : Model.SeoTitle)</span>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted"><strong>SEO Açıklama:</strong></small><br>
+                                <span>@(string.IsNullOrEmpty(Model.SeoDescription) ? "Kullanılmıyor" : Model.SeoDescription)</span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <small class="text-muted"><strong>SEO Anahtar Kelimeler:</strong></small><br>
+                                <span>@(string.IsNullOrEmpty(Model.SeoKeywords) ? "Kullanılmıyor" : Model.SeoKeywords)</span>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted"><strong>SEO URL:</strong></small><br>
+                                <span>@(string.IsNullOrEmpty(Model.SeoUrl) ? "Kullanılmıyor" : Model.SeoUrl)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Silme Onayı -->
+                    <div class="alert alert-danger">
+                        <h6><i class="fas fa-question-circle me-2"></i>Bu blog yazısını silmek istediğinizden emin misiniz?</h6>
+                        <p class="mb-0">Bu işlem geri alınamaz ve tüm veriler kalıcı olarak silinecektir.</p>
+                    </div>
+
+                    <!-- Butonlar -->
+                    <div class="d-flex justify-content-between">
+                        <form asp-action="Delete" method="post" style="display: inline;">
+                            <input type="hidden" asp-for="Id" />
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Son kez onaylıyor musunuz? Bu işlem geri alınamaz!')">
+                                <i class="fas fa-trash me-2"></i>Evet, Blog Yazısını Sil
+                            </button>
+                        </form>
+                        <div>
+                            <a href="@Url.Action("Details", "Blog", new { id = Model.Id })" 
+                               class="btn btn-info me-2" target="_blank">
+                                <i class="fas fa-eye me-2"></i>Önizle
+                            </a>
+                            <a href="@Url.Action("Edit", "Blog", new { id = Model.Id })" 
+                               class="btn btn-warning me-2">
+                                <i class="fas fa-edit me-2"></i>Düzenle
+                            </a>
+                            <a href="@Url.Action("Admin", "Blog")" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>İptal
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alternatif Öneriler -->
+            <div class="card mt-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-lightbulb me-2"></i>Alternatif Öneriler</h5>
+                </div>
+                <div class="card-body">
+                    <p>Blog yazısını silmek yerine şu alternatifleri değerlendirebilirsiniz:</p>
+                    <ul class="mb-0">
+                        <li><strong>Yayından Kaldır:</strong> Blog yazısını gizleyin ama verileri koruyun</li>
+                        <li><strong>Düzenle:</strong> İçeriği güncelleyerek yeniden yayınlayın</li>
+                        <li><strong>Arşivle:</strong> Eski içeriği arşiv kategorisine taşıyın</li>
+                        <li><strong>Yeniden Yaz:</strong> Aynı konuyu farklı açıdan ele alın</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Blog Silme SEO Açıklaması (Gizli) -->
+<div class="seo-blog-delete-info" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+    <h2>Blog Yazısı Silme Onay Sayfası</h2>
+    <p>
+        <strong>Donuk gıda</strong> sektörü hakkında blog yazısını silme işlemi için onay sayfası. 
+        Silme işlemi geri alınamaz ve tüm veriler kalıcı olarak silinir.
+    </p>
+</div>

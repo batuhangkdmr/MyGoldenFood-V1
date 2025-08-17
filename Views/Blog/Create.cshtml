@@ -1,0 +1,231 @@
+@model MyGoldenFood.Models.Blog
+@{
+    ViewData["Title"] = "Yeni Blog Yazısı | Admin Panel | My Golden Food";
+    Layout = "_Layout";
+}
+
+<!-- SEO Meta Etiketleri -->
+<head>
+    <meta name="description" content="Yeni blog yazısı oluşturma formu. Donuk gıda blog yazısı ekleme.">
+    <meta name="keywords" content="blog yazısı oluşturma, yeni blog, donuk gıda blog ekleme">
+    <meta name="author" content="My Golden Food">
+    <meta name="robots" content="noindex, nofollow">
+    <meta property="og:title" content="Yeni Blog Yazısı | Admin Panel">
+    <meta property="og:description" content="Yeni blog yazısı oluşturma formu">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mygoldenfood.com/Blog/Create">
+    <link rel="canonical" href="https://mygoldenfood.com/Blog/Create">
+</head>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Yeni Blog Yazısı Oluştur</h2>
+                <a href="@Url.Action("Admin", "Blog")" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Blog Yönetimine Dön
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <!-- Başlık -->
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label">
+                                <strong>Başlık *</strong>
+                            </label>
+                            <input asp-for="Title" class="form-control" placeholder="Blog yazısı başlığı giriniz..." />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                            <div class="form-text">SEO için önemli: Donuk gıda anahtar kelimelerini içermeli</div>
+                        </div>
+
+                        <!-- Özet -->
+                        <div class="mb-3">
+                            <label asp-for="Summary" class="form-label">
+                                <strong>Özet</strong>
+                            </label>
+                            <textarea asp-for="Summary" class="form-control" rows="3" 
+                                      placeholder="Blog yazısının kısa özeti (500 karakter max)..."></textarea>
+                            <span asp-validation-for="Summary" class="text-danger"></span>
+                            <div class="form-text">Google arama sonuçlarında görünecek kısa açıklama</div>
+                        </div>
+
+                        <!-- İçerik -->
+                        <div class="mb-3">
+                            <label asp-for="Content" class="form-label">
+                                <strong>İçerik *</strong>
+                            </label>
+                            <textarea asp-for="Content" class="form-control" rows="10" 
+                                      placeholder="Blog yazısının detaylı içeriği..."></textarea>
+                            <span asp-validation-for="Content" class="text-danger"></span>
+                            <div class="form-text">HTML formatında yazabilirsiniz. Donuk gıda anahtar kelimelerini doğal şekilde kullanın.</div>
+                        </div>
+
+                        <!-- Resim Yükleme -->
+                        <div class="mb-3">
+                            <label for="imageFile" class="form-label">
+                                <strong>Blog Resmi</strong>
+                            </label>
+                            <input type="file" id="imageFile" name="imageFile" class="form-control" 
+                                   accept="image/*" />
+                            <div class="form-text">Blog yazısı için resim yükleyin (JPG, PNG, GIF). Cloudinary'ye otomatik yüklenecek.</div>
+                        </div>
+
+                        <!-- Kategori -->
+                        <div class="mb-3">
+                            <label asp-for="Category" class="form-label">
+                                <strong>Kategori</strong>
+                            </label>
+                            <select asp-for="Category" class="form-select">
+                                <option value="">Kategori Seçiniz</option>
+                                <option value="Flash Freezing Teknolojisi">Flash Freezing Teknolojisi</option>
+                                <option value="Dondurulmuş Gıda Sağlık Faydaları">Dondurulmuş Gıda Sağlık Faydaları</option>
+                                <option value="350 Gram Paket Avantajları">350 Gram Paket Avantajları</option>
+                                <option value="Donuk Gıda Kullanım Rehberi">Donuk Gıda Kullanım Rehberi</option>
+                                <option value="Sektör Güncellemeleri">Sektör Güncellemeleri</option>
+                                <option value="Üretim Süreçleri">Üretim Süreçleri</option>
+                                <option value="Kalite Kontrol">Kalite Kontrol</option>
+                                <option value="Müşteri Deneyimleri">Müşteri Deneyimleri</option>
+                            </select>
+                            <span asp-validation-for="Category" class="text-danger"></span>
+                            <div class="form-text">Blog yazısının kategorisi (SEO için önemli)</div>
+                        </div>
+
+                        <!-- Etiketler -->
+                        <div class="mb-3">
+                            <label asp-for="Tags" class="form-label">
+                                <strong>Etiketler</strong>
+                            </label>
+                            <input asp-for="Tags" class="form-control" 
+                                   placeholder="donuk gıda, flash freezing, dondurulmuş meyve, dondurulmuş sebze" />
+                            <span asp-validation-for="Tags" class="text-danger"></span>
+                            <div class="form-text">Virgülle ayırarak etiketleri giriniz</div>
+                        </div>
+
+                        <!-- SEO Başlık -->
+                        <div class="mb-3">
+                            <label asp-for="SeoTitle" class="form-label">
+                                <strong>SEO Başlık</strong>
+                            </label>
+                            <input asp-for="SeoTitle" class="form-control" 
+                                   placeholder="Google arama sonuçlarında görünecek başlık..." />
+                            <span asp-validation-for="SeoTitle" class="text-danger"></span>
+                            <div class="form-text">Boş bırakılırsa normal başlık kullanılır</div>
+                        </div>
+
+                        <!-- SEO Açıklama -->
+                        <div class="mb-3">
+                            <label asp-for="SeoDescription" class="form-label">
+                                <strong>SEO Açıklama</strong>
+                            </label>
+                            <textarea asp-for="SeoDescription" class="form-control" rows="2" 
+                                      placeholder="Google arama sonuçlarında görünecek açıklama (500 karakter max)..."></textarea>
+                            <span asp-validation-for="SeoDescription" class="text-danger"></span>
+                            <div class="form-text">Boş bırakılırsa özet kullanılır</div>
+                        </div>
+
+                        <!-- SEO Anahtar Kelimeler -->
+                        <div class="mb-3">
+                            <label asp-for="SeoKeywords" class="form-label">
+                                <strong>SEO Anahtar Kelimeler</strong>
+                            </label>
+                            <input asp-for="SeoKeywords" class="form-control" 
+                                   placeholder="donuk gıda, dondurulmuş gıda, flash freezing, 350 gram paket" />
+                            <span asp-validation-for="SeoKeywords" class="text-danger"></span>
+                            <div class="form-text">Virgülle ayırarak anahtar kelimeleri giriniz</div>
+                        </div>
+
+                        <!-- SEO URL -->
+                        <div class="mb-3">
+                            <label asp-for="SeoUrl" class="form-label">
+                                <strong>SEO URL</strong>
+                            </label>
+                            <input asp-for="SeoUrl" class="form-control" 
+                                   placeholder="donuk-gida-flash-freezing-teknolojisi" />
+                            <span asp-validation-for="SeoUrl" class="text-danger"></span>
+                            <div class="form-text">Boş bırakılırsa başlıktan otomatik oluşturulur</div>
+                        </div>
+
+                        <!-- Butonlar -->
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save me-2"></i>Blog Yazısını Kaydet
+                            </button>
+                            <a href="@Url.Action("Admin", "Blog")" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>İptal
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- SEO İpuçları -->
+            <div class="card mt-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-lightbulb me-2"></i>SEO İpuçları</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="mb-0">
+                        <li><strong>Başlık:</strong> "Donuk Gıda", "Flash Freezing", "Dondurulmuş Gıda" gibi anahtar kelimeleri içermeli</li>
+                        <li><strong>İçerik:</strong> En az 300 kelime olmalı, anahtar kelimeleri doğal şekilde kullanın</li>
+                        <li><strong>Kategori:</strong> Blog yazısının konusuna uygun kategori seçin</li>
+                        <li><strong>Etiketler:</strong> İlgili anahtar kelimeleri virgülle ayırarak ekleyin</li>
+                        <li><strong>Resim:</strong> Alt text'te anahtar kelimeleri kullanın</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Blog Oluşturma SEO Açıklaması (Gizli) -->
+<div class="seo-blog-create-info" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+    <h2>Blog Yazısı Oluşturma Formu</h2>
+    <p>
+        <strong>Donuk gıda</strong> sektörü hakkında yeni blog yazıları oluşturmak için kullanılan form. 
+        SEO optimizasyonu için gerekli tüm alanlar mevcuttur.
+    </p>
+</div>
+
+@section Scripts {
+    <script>
+        // Form validation için
+        $(document).ready(function() {
+            // Başlık değiştiğinde SEO URL'i otomatik oluştur
+            $('#Title').on('input', function() {
+                var title = $(this).val();
+                var seoUrl = title.toLowerCase()
+                    .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+                    .replace(/[^a-z0-9\s]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-')
+                    .trim('-');
+                
+                if (seoUrl) {
+                    $('#SeoUrl').val(seoUrl);
+                }
+            });
+
+            // Karakter sayacı
+            $('#Summary').on('input', function() {
+                var maxLength = 500;
+                var currentLength = $(this).val().length;
+                var remaining = maxLength - currentLength;
+                
+                if (remaining < 0) {
+                    $(this).val($(this).val().substring(0, maxLength));
+                    remaining = 0;
+                }
+                
+                // Karakter sayacı göster
+                if (!$(this).next('.char-counter').length) {
+                    $(this).after('<small class="char-counter text-muted"></small>');
+                }
+                $(this).next('.char-counter').text(remaining + ' karakter kaldı');
+            });
+        });
+    </script>
+}

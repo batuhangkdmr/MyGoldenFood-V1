@@ -21,6 +21,9 @@
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="benefits-tab" data-bs-toggle="tab" data-bs-target="#benefits" type="button" role="tab" aria-controls="benefits" aria-selected="false">Faydalar</button>
         </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="blogs-tab" data-bs-toggle="tab" data-bs-target="#blogs" type="button" role="tab" aria-controls="blogs" aria-selected="false">Blog Yazıları</button>
+        </li>
     </ul>
 
     <div class="tab-content mt-4" id="adminTabsContent">
@@ -50,6 +53,15 @@
             </div>
             <div id="benefitList" class="mt-4"></div>
         </div>
+
+        <!-- Blog Yazıları Tab -->
+        <div class="tab-pane fade" id="blogs" role="tabpanel" aria-labelledby="blogs-tab">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>Blog Yazı Yönetimi</h2>
+                <button class="btn btn-primary" onclick="loadCreateForm('/Blog/Create')">Yeni Blog Yazısı Ekle</button>
+            </div>
+            <div id="blogList" class="mt-4"></div>
+        </div>
     </div>
 </div>
 
@@ -67,6 +79,12 @@
             loadList('/Product/ProductList', '#productList');
             loadList('/Tarifler/RecipeList', '#recipeList');
             loadList('/Faydalari/BenefitList', '#benefitList');
+            loadList('/Blog/AdminList', '#blogList');
+            
+            // Tab click event'leri
+            $('#blogs-tab').on('click', function() {
+                loadList('/Blog/AdminList', '#blogList');
+            });
         });
 
         function loadList(url, containerId) {
