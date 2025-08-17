@@ -1,0 +1,419 @@
+@model IEnumerable<MyGoldenFood.Models.Blog>
+@{
+    ViewData["Title"] = "Blog | Donuk Gıda ve Dondurulmuş Gıda Hakkında Bilgiler | My Golden Food";
+    Layout = "_Layout";
+}
+
+<!-- SEO Meta Etiketleri -->
+<head>
+    <meta name="description" content="Donuk gıda, dondurulmuş gıda, flash freezing teknolojisi hakkında bilgilendirici blog yazıları. My Golden Food kalitesi ile dondurulmuş gıda sektörü hakkında güncel bilgiler.">
+    <meta name="keywords" content="donuk gıda blog, dondurulmuş gıda bilgileri, flash freezing teknolojisi, dondurulmuş meyve sebze, donuk gıda sektörü, my golden food blog">
+    <meta name="author" content="My Golden Food">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Blog | Donuk Gıda ve Dondurulmuş Gıda Hakkında Bilgiler">
+    <meta property="og:description" content="Donuk gıda, dondurulmuş gıda, flash freezing teknolojisi hakkında bilgilendirici blog yazıları.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mygoldenfood.com/Blog">
+    <meta property="og:image" content="https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png">
+    <link rel="canonical" href="https://mygoldenfood.com/Blog">
+    
+    <!-- Schema Markup - Blog Collection -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "ItemList",
+        "name": "My Golden Food Blog Yazıları",
+        "description": "Donuk gıda ve dondurulmuş gıda sektörü hakkında bilgilendirici blog yazıları",
+        "url": "https://mygoldenfood.com/Blog",
+        "numberOfItems": "@Model.Count()",
+        "itemListElement": [
+            @{
+                for (int i = 0; i < Model.Count(); i++)
+                {
+                    var blog = Model.ElementAt(i);
+                    <text>
+                    {
+                        "@@type": "ListItem",
+                        "position": @(i + 1),
+                        "item": {
+                            "@@type": "Article",
+                            "name": "@blog.Title",
+                            "description": "@blog.Summary",
+                            "image": "@blog.ImagePath",
+                            "articleSection": "Donuk Gıda Blog",
+                            "author": {
+                                "@@type": "Organization",
+                                "name": "My Golden Food"
+                            },
+                            "publisher": {
+                                "@@type": "Organization",
+                                "name": "My Golden Food",
+                                "logo": {
+                                    "@@type": "ImageObject",
+                                    "url": "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png"
+                                }
+                            },
+                            "datePublished": "@blog.CreatedDate.ToString("yyyy-MM-dd")",
+                            "dateModified": "@(blog.UpdatedDate?.ToString("yyyy-MM-dd") ?? blog.CreatedDate.ToString("yyyy-MM-dd"))"
+                        }
+                    }@(i < Model.Count() - 1 ? "," : "")
+                    </text>
+                }
+            }
+        ]
+    }
+    </script>
+    
+    <!-- Schema Markup - Organization -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "Organization",
+        "name": "My Golden Food",
+        "description": "Donuk gıda blog yazıları ve dondurulmuş gıda ürünleri tedarikçisi",
+        "url": "https://mygoldenfood.com",
+        "logo": "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png",
+        "contactPoint": {
+            "@@type": "ContactPoint",
+            "telephone": "+90 533 635 24 58",
+            "contactType": "Customer Service",
+            "areaServed": "TR",
+            "availableLanguage": ["Türkçe", "English"]
+        }
+    }
+    </script>
+</head>
+
+<!-- Ana H1 Başlık - SEO için kritik -->
+<h1 class="seo-main-title" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+    My Golden Food Blog | Donuk Gıda ve Dondurulmuş Gıda Sektörü Hakkında Bilgilendirici Yazılar | Flash Freezing Teknolojisi
+</h1>
+
+<!-- Donuk Gıda Blog SEO Açıklaması (Gizli) -->
+<div class="seo-blog-info" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+    <h2>Donuk Gıda Sektörü Hakkında Bilgilendirici Blog Yazıları</h2>
+    <p>
+        <strong>Donuk gıda</strong> sektörü hakkında güncel bilgiler, <strong>Flash Freezing Teknolojisi</strong> 
+        ve dondurulmuş gıda ürünleri ile ilgili detaylı blog yazılarımızı keşfedin. 
+        <strong>350 gram paketlerde</strong> sunulan ürünlerimiz hakkında bilgilendirici içerikler.
+    </p>
+    <h3>Blog Kategorileri</h3>
+    <p>
+        Donuk gıda teknolojisi, sağlık faydaları, kullanım rehberleri ve sektör güncellemeleri 
+        hakkında kapsamlı blog yazılarımız ile donuk gıda sektöründe bilgi sahibi olun.
+    </p>
+</div>
+
+<!-- Blog Ana Sayfa İçeriği -->
+<div class="container" style="margin-top: 100px;">
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center mb-5">
+                <h1 class="blog-main-title display-4 fw-bold mb-3">Blog</h1>
+                <p class="blog-description lead">Donuk gıda ve dondurulmuş gıda sektörü hakkında bilgilendirici yazılarımızı keşfedin</p>
+                <div class="border-bottom border-primary mx-auto" style="width: 100px; height: 3px;"></div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="row g-4">
+            @foreach (var blog in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <article class="blog-card h-100">
+                        <div class="blog-card__image">
+                            @if (!string.IsNullOrEmpty(blog.ImagePath))
+                            {
+                                <img src="@blog.ImagePath" alt="@blog.Title - Donuk Gıda Blog Yazısı" loading="lazy">
+                            }
+                            else
+                            {
+                                <div class="blog-card__placeholder">
+                                    <i class="fas fa-image fa-3x text-muted"></i>
+                                </div>
+                            }
+                            <div class="blog-card__category">
+                                <span class="badge">@blog.Category</span>
+                            </div>
+                        </div>
+                        
+                        <div class="blog-card__content">
+                            <div class="blog-card__meta">
+                                <span class="blog-card__date">
+                                    <i class="fas fa-calendar-alt me-1"></i>
+                                    @blog.CreatedDate.ToString("dd MMM yyyy")
+                                </span>
+                                <span class="blog-card__views">
+                                    <i class="fas fa-eye me-1"></i>
+                                    @blog.ViewCount
+                                </span>
+                            </div>
+                            
+                            <h3 class="blog-card__title">@blog.Title</h3>
+                            
+                            @if (!string.IsNullOrEmpty(blog.Summary))
+                            {
+                                <p class="blog-card__summary">@blog.Summary</p>
+                            }
+                            
+                            <div class="blog-card__footer">
+                                <a href="@Url.Action("Details", "Blog", new { id = blog.Id })" class="blog-card__button">
+                                    Devamını Oku
+                                    <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="empty-state">
+                    <div class="empty-state__icon">
+                        <i class="fas fa-newspaper fa-4x text-muted"></i>
+                    </div>
+                    <h3 class="empty-state__title">Henüz blog yazısı bulunmuyor</h3>
+                    <p class="empty-state__description">Yakında donuk gıda sektörü hakkında bilgilendirici blog yazılarımız yayınlanacak.</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Blog Kategorileri SEO Açıklaması (Gizli) -->
+<div class="seo-blog-categories" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+    <h2>Blog Kategorileri ve Konuları</h2>
+    <p>
+        <strong>Donuk gıda</strong> blog yazılarımızda şu kategorilerde içerik bulabilirsiniz: 
+        Flash Freezing Teknolojisi, Dondurulmuş Gıda Sağlık Faydaları, 
+        350 Gram Paket Avantajları, Donuk Gıda Kullanım Rehberi ve Sektör Güncellemeleri.
+    </p>
+</div>
+
+<!-- Modern Blog Card CSS -->
+<style>
+.blog-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.blog-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.blog-card__image {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+}
+
+.blog-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.blog-card:hover .blog-card__image img {
+    transform: scale(1.1);
+}
+
+.blog-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.blog-card__category {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.blog-card__category .badge {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+.blog-card__content {
+    padding: 25px;
+}
+
+.blog-card__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.blog-card__date, .blog-card__views {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.blog-card__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.blog-card__summary {
+    color: #6c757d;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.blog-card__footer {
+    text-align: center;
+}
+
+.blog-card__button {
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+.blog-card__button:hover {
+    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+    text-decoration: none;
+}
+
+.empty-state {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.empty-state__icon {
+    margin-bottom: 20px;
+    opacity: 0.6;
+}
+
+.empty-state__title {
+    color: #6c757d;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.empty-state__description {
+    color: #adb5bd;
+    font-size: 1.1rem;
+}
+
+/* Responsive Design */
+@@media (max-width: 768px) {
+    .blog-card__content {
+        padding: 20px;
+    }
+    
+    .blog-card__title {
+        font-size: 1.1rem;
+    }
+    
+    .blog-card__image {
+        height: 200px;
+    }
+}
+
+@@media (max-width: 576px) {
+    .blog-card__meta {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    
+    .blog-card__button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Blog Ana Başlık Stili */
+.blog-main-title {
+    color: #FFF;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+/* Blog Açıklama Stili */
+.blog-description {
+    color: #FFF !important;
+    font-weight: 500;
+}
+
+/* Blog Kartları Arası Dikey Boşluk */
+.blog-card {
+    margin-bottom: 40px;
+}
+
+/* Col'lara da ekstra padding ekleyelim */
+.col-md-6, .col-lg-4 {
+    padding-bottom: 20px;
+}
+
+/* Animation for cards */
+@@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.blog-card {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.blog-card:nth-child(1) { animation-delay: 0.1s; }
+.blog-card:nth-child(2) { animation-delay: 0.2s; }
+.blog-card:nth-child(3) { animation-delay: 0.3s; }
+.blog-card:nth-child(4) { animation-delay: 0.4s; }
+.blog-card:nth-child(5) { animation-delay: 0.5s; }
+.blog-card:nth-child(6) { animation-delay: 0.6s; }
+</style>

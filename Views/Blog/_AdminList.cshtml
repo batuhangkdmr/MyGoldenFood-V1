@@ -1,0 +1,146 @@
+@model IEnumerable<MyGoldenFood.Models.Blog>
+
+@{
+    // Anti-forgery token için
+    var token = Html.AntiForgeryToken();
+}
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Başlık</th>
+                <th>Kategori</th>
+                <th>Yazar</th>
+                <th>Oluşturulma Tarihi</th>
+                <th>Yayın Durumu</th>
+                <th>Görüntülenme</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Any())
+            {
+                @foreach (var blog in Model)
+                {
+                    <tr>
+                        <td>@blog.Id</td>
+                        <td>
+                            <strong>@blog.Title</strong>
+                            @if (!string.IsNullOrEmpty(blog.Summary))
+                            {
+                                <br><small class="text-muted">@(blog.Summary.Length > 50 ? blog.Summary.Substring(0, 50) + "..." : blog.Summary)</small>
+                            }
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(blog.Category))
+                            {
+                                <span class="badge bg-info">@blog.Category</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">-</span>
+                            }
+                        </td>
+                        <td>@blog.Author</td>
+                        <td>@blog.CreatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>
+                            @if (blog.IsPublished)
+                            {
+                                <span class="badge bg-success">Yayında</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning">Taslak</span>
+                            }
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary">@blog.ViewCount görüntülenme</span>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="/Blog/Details/@blog.Id" target="_blank" class="btn btn-sm btn-outline-info" title="Görüntüle">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <button onclick="loadEditForm('/Blog/Edit/@blog.Id')" class="btn btn-sm btn-outline-warning" title="Düzenle">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="toggleBlogPublish(@blog.Id)" class="btn btn-sm @(blog.IsPublished ? "btn-outline-warning" : "btn-outline-success")" title="@(blog.IsPublished ? "Yayından Kaldır" : "Yayınla")">
+                                    <i class="fas @(blog.IsPublished ? "fa-eye-slash" : "fa-eye")"></i>
+                                </button>
+                                <button onclick="deleteBlog(@blog.Id)" class="btn btn-sm btn-outline-danger" title="Sil">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" class="text-center text-muted">
+                        <i class="fas fa-info-circle"></i> Henüz blog yazısı eklenmemiş.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function toggleBlogPublish(id) {
+        Swal.fire({
+            title: 'Yayın Durumu Değiştir',
+            text: 'Bu blog yazısının yayın durumunu değiştirmek istediğinizden emin misiniz?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Evet, Değiştir!',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var token = $('input[name="__RequestVerificationToken"]').val();
+                $.post('/Blog/TogglePublish/' + id, { __RequestVerificationToken: token }, function (response) {
+                    if (response.success) {
+                        Swal.fire('Başarılı!', 'Blog yazısının yayın durumu değiştirildi.', 'success');
+                        loadList('/Blog/AdminList', '#blogList');
+                    } else {
+                        Swal.fire('Hata!', 'Yayın durumu değiştirilemedi.', 'error');
+                    }
+                }).fail(function () {
+                    Swal.fire('Hata!', 'İşlem sırasında bir hata oluştu.', 'error');
+                });
+            }
+        });
+    }
+
+    function deleteBlog(id) {
+        Swal.fire({
+            title: 'Emin misiniz?',
+            text: 'Bu blog yazısını kalıcı olarak silmek istediğinizden emin misiniz?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Evet, Sil!',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var token = $('input[name="__RequestVerificationToken"]').val();
+                $.post('/Blog/DeleteConfirmed/' + id, { __RequestVerificationToken: token }, function (response) {
+                    if (response.success) {
+                        Swal.fire('Silindi!', 'Blog yazısı başarıyla silindi.', 'success');
+                        loadList('/Blog/AdminList', '#blogList');
+                    } else {
+                        Swal.fire('Hata!', 'Blog yazısı silinemedi.', 'error');
+                    }
+                }).fail(function () {
+                    Swal.fire('Hata!', 'İşlem sırasında bir hata oluştu.', 'error');
+                });
+            }
+        });
+    }
+</script>
