@@ -16,63 +16,6 @@
     <meta property="og:url" content="https://mygoldenfood.com/Tarifler/Index">
     <meta property="og:image" content="https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png">
     <link rel="canonical" href="https://mygoldenfood.com/Tarifler/Index">
-    
-    <!-- Schema Markup - Recipe Collection -->
-    <script type="application/ld+json">
-    {
-        "@@context": "https://schema.org",
-        "@@type": "ItemList",
-        "name": "Donuk Gıda Tarifleri Koleksiyonu",
-        "description": "Dondurulmuş gıda ile hazırlanan lezzetli ve pratik tarifler",
-        "url": "https://mygoldenfood.com/Tarifler/Index",
-        "numberOfItems": "@Model.Count",
-        "itemListElement": [
-            @{
-                for (int i = 0; i < Model.Count; i++)
-                {
-                    var category = Model[i];
-                    <text>
-                    {
-                        "@@type": "ListItem",
-                        "position": @(i + 1),
-                        "item": {
-                            "@@type": "Recipe",
-                            "name": "@category.Name",
-                            "description": "Donuk gıda ile hazırlanan lezzetli tarif",
-                            "image": "@category.ImagePath",
-                            "recipeCategory": "Donuk Gıda Tarifleri",
-                            "recipeCuisine": "Türk Mutfağı",
-                            "author": {
-                                "@@type": "Organization",
-                                "name": "My Golden Food"
-                            }
-                        }
-                    }@(i < Model.Count - 1 ? "," : "")
-                    </text>
-                }
-            }
-        ]
-    }
-    </script>
-    
-    <!-- Schema Markup - Organization -->
-    <script type="application/ld+json">
-    {
-        "@@context": "https://schema.org",
-        "@@type": "Organization",
-        "name": "My Golden Food",
-        "description": "Donuk gıda tarifleri ve dondurulmuş gıda ürünleri tedarikçisi",
-        "url": "https://mygoldenfood.com",
-        "logo": "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png",
-        "contactPoint": {
-            "@@type": "ContactPoint",
-            "telephone": "+90 533 635 24 58",
-            "contactType": "Customer Service",
-            "areaServed": "TR",
-            "availableLanguage": ["Türkçe", "English"]
-        }
-    }
-    </script>
 </head>
 
 <!-- Ana H1 Başlık - SEO için kritik -->
@@ -80,40 +23,24 @@
     Donuk Gıda Tarifleri | Dondurulmuş Gıda ile Lezzetli ve Pratik Yemek Tarifleri | Flash Freezing Teknolojisi
 </h1>
 
-<!-- Donuk Gıda Tarifleri SEO Açıklaması (Gizli) -->
-<div class="seo-recipe-info" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
-    <h2>Donuk Gıda ile Hazırlanan Tarifler</h2>
-    <p>
-        <strong>Donuk gıda</strong> ile hazırlanan lezzetli tariflerimizi keşfedin. 
-        <strong>Flash Freezing Teknolojisi</strong> ile korunan dondurulmuş meyve, sebze ve hazır gıdalarımız, 
-        mutfakta zaman kazanmanızı sağlarken besin değerini de korur. 
-        <strong>350 gram paketlerde</strong> sunulan ürünlerimizle pratik ve lezzetli tarifler hazırlayabilirsiniz.
-    </p>
-    <h3>Donuk Gıda Tariflerinin Avantajları</h3>
-    <p>
-        Dondurulmuş gıdalar ile hazırlanan tarifler, taze malzemeler kadar lezzetli ve besleyicidir. 
-        <strong>Flash freezing</strong> sayesinde vitamin ve mineraller korunur, 
-        mevsim dışında da taze lezzetler elde edebilirsiniz.
-    </p>
-</div>
-
-<div class="container mt-5">
+<div class="container" style="margin-top: 100px;">
     <h2 class="text-center text-white mb-4">@Html.T("RecipeCategories")</h2>
-    <div class="row">
+    
+    <!-- Kategoriler -->
+    <div class="row" id="categoriesSection">
         @foreach (var category in Model)
         {
             <div class="col-md-4 col-6 text-center mb-4">
-                <a href="/Tarifler/Details/@category.Id" class="text-decoration-none text-white">
-                    <div class="category-card">
-                        <div class="image-container">
-                            <img src="@category.ImagePath" 
-                                 alt="@category.Name | Donuk Gıda Tarifi | Dondurulmuş Gıda ile Hazırlanan Tarif" 
-                                 class="category-image" 
-                                 title="@category.Name - Donuk Gıda Tarifi" />
-                        </div>
-                        <h3 class="mt-3">@category.Name</h3>
+                <div class="category-card" onclick="goToDetails(@category.Id)" style="cursor: pointer;">
+                    <div class="image-container">
+                        <img src="@category.ImagePath" 
+                             alt="@category.Name | Donuk Gıda Tarifi | Dondurulmuş Gıda ile Hazırlanan Tarif" 
+                             class="category-image" 
+                             title="@category.Name - Donuk Gıda Tarifi" />
                     </div>
-                </a>
+                    <h3 class="mt-3">@category.Name</h3>
+                    <p class="text-muted">@category.Recipes.Count tarif</p>
+                </div>
             </div>
         }
     </div>
@@ -146,115 +73,41 @@
         padding: 10px;
         background-color: #121928;
         border-radius: 10px;
-        height: 100%; /* 📌 Tüm kartları eşit yükseklikte tut */
+        height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
     }
 
-        .category-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+    .category-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+    }
+
+    /* 🌟 📱 Mobil Görünüm */
+    @@media (max-width: 768px) {
+        .col-6 {
+            width: 50%;
+            padding: 5px;
         }
 
-    /* 🌟 Hover sırasında görsel büyümesini engelle */
-    .category-image:hover {
-        transform: none;
-    }
+        .image-container {
+            height: 180px;
+        }
 
-    .content {
-        flex: 1;
-        padding-top: 90px;
-    }
-
-    /* 🌟 📱 Mobil Görünüm için Resim ve Kartları Eşitleme */
-    @@media (max-width: 768px) {
-        .row
-
-    {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .col-6 {
-        width: 50%;
-        padding: 5px;
-    }
-
-    .category-card {
-        padding: 5px;
-        height: 100%; /* 📌 Tüm kartları eşit yükseklikte tut */
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    /* 🌟 Tüm resimleri eşit boyut yap */
-    .image-container {
-        height: 180px; /* Mobilde sabit yükseklik */
-    }
-
-    .category-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* Resimleri kesmeden boyuta uyum sağlar */
-    }
-
-    h3 {
-        font-size: 1.1rem;
-    }
-
+        h3 {
+            font-size: 1.1rem;
+        }
     }
 </style>
 
-<!-- Ek Donuk Gıda Tarifleri SEO İçerikleri (Gizli) -->
-<div class="seo-recipe-categories" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
-    <h4>Donuk Gıda Tarif Kategorileri</h4>
-    <p>
-        <strong>Donuk gıda</strong> ile hazırlanan tariflerimiz çeşitli kategorilerde sunulmaktadır. 
-        Dondurulmuş meyve, sebze ve hazır gıdalarımızla pratik ve lezzetli yemekler hazırlayabilirsiniz.
-    </p>
-    
-    <h5>Dondurulmuş Meyve Tarifleri</h5>
-    <p>
-        <strong>Flash Freezing Teknolojisi</strong> ile korunan dondurulmuş meyvelerimiz, 
-        tatlı ve içecek tariflerinde mükemmel sonuçlar verir. Çilek, böğürtlen, ahududu gibi 
-        meyvelerle lezzetli tarifler hazırlayabilirsiniz.
-    </p>
-    
-    <h5>Dondurulmuş Sebze Tarifleri</h5>
-    <p>
-        Dondurulmuş sebzelerimiz ile sağlıklı ve lezzetli yemek tarifleri hazırlayabilirsiniz. 
-        Brokoli, mantar ve diğer sebzeler <strong>350 gram paketlerde</strong> sunulmaktadır.
-    </p>
-    
-    <h5>Hazır Gıda Tarifleri</h5>
-    <p>
-        Dondurulmuş hazır gıdalarımız ile hızlı ve pratik tarifler hazırlayabilirsiniz. 
-        <strong>Donuk gıda</strong> sektöründe kaliteli ürünlerimizle mutfağınızda zaman kazanın.
-    </p>
-</div>
+<script>
+    function goToDetails(categoryId) {
+        // Details sayfasına yönlendir
+        window.location.href = '/Tarifler/Details/' + categoryId;
+    }
+</script>
 
-<!-- Donuk Gıda Tarif İpuçları (Gizli) -->
-<div class="seo-recipe-tips" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
-    <h4>Donuk Gıda ile Tarif Hazırlama İpuçları</h4>
-    <p>
-        <strong>Donuk gıda</strong> ile tarif hazırlarken dikkat edilmesi gereken önemli noktalar bulunmaktadır. 
-        <strong>Flash Freezing Teknolojisi</strong> ile korunan ürünlerimiz, 
-        doğru kullanıldığında taze malzemeler kadar lezzetli sonuçlar verir.
-    </p>
-    
-    <h5>Donuk Gıda Çözme Teknikleri</h5>
-    <p>
-        Dondurulmuş gıdaları çözerken besin değerini korumak için doğru yöntemleri kullanın. 
-        <strong>Donuk gıda</strong> ürünlerimiz özel ambalajlarda korunmaktadır.
-    </p>
-    
-    <h5>Donuk Gıda Tariflerinde Püf Noktaları</h5>
-    <p>
-        <strong>Dondurulmuş gıda</strong> ile tarif hazırlarken pişirme sürelerini ayarlayın. 
-        Flash freezing ile korunan ürünlerimiz, geleneksel yöntemlerle hazırlanan tariflerde 
-        mükemmel sonuçlar verir.
-    </p>
-</div>
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+}

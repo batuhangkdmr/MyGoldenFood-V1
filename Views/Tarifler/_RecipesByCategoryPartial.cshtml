@@ -1,0 +1,52 @@
+@model IEnumerable<MyGoldenFood.Models.Recipe>
+
+@if (Model != null && Model.Any())
+{
+    <div class="row">
+        @foreach (var recipe in Model)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="recipe-card">
+                    @if (!string.IsNullOrEmpty(recipe.ImagePath))
+                    {
+                        <img src="@recipe.ImagePath" alt="@recipe.Name" class="recipe-image" />
+                    }
+                    else
+                    {
+                        <div class="bg-secondary text-white d-flex align-items-center justify-content-center recipe-image">
+                            <i class="fas fa-utensils fa-3x"></i>
+                        </div>
+                    }
+                    
+                    <h4 class="text-white mb-3">@recipe.Name</h4>
+                    
+                    <p class="text-muted mb-3">
+                        @if (!string.IsNullOrEmpty(recipe.Content) && recipe.Content.Length > 100)
+                        {
+                            @(recipe.Content.Substring(0, 100) + "...")
+                        }
+                        else
+                        {
+                            @recipe.Content
+                        }
+                    </p>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-primary">@recipe.RecipeCategory?.Name</span>
+                        <a href="/Tarifler/Details/@recipe.Id" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-eye"></i> Detaylar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="text-center text-muted py-5">
+        <i class="fas fa-info-circle fa-3x mb-3"></i>
+        <h4>Bu kategoride henüz tarif bulunmuyor</h4>
+        <p>Yakında lezzetli tarifler eklenecek!</p>
+    </div>
+}

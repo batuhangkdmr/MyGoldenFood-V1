@@ -40,6 +40,21 @@ namespace MyGoldenFood.ApplicationDbContext
                 .HasForeignKey(rct => rct.RecipeCategoryId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // 📌 BenefitCategoryTranslation ile BenefitCategory ilişkisi
+            modelBuilder.Entity<BenefitCategoryTranslation>()
+                .ToTable("BenefitCategoryTranslations")
+                .HasOne(bct => bct.BenefitCategory)
+                .WithMany(bc => bc.Translations)
+                .HasForeignKey(bct => bct.BenefitCategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // 📌 Benefit ile BenefitCategory ilişkisi
+            modelBuilder.Entity<Benefit>()
+                .HasOne(b => b.BenefitCategory)
+                .WithMany(bc => bc.Benefits)
+                .HasForeignKey(b => b.BenefitCategoryId)
+                .OnDelete(DeleteBehavior.SetNull); // Kategori silinirse fayda kategorisiz kalsın
+
             // 📌 Tabloları Ayarla
             modelBuilder.Entity<Product>().ToTable("Products");
             modelBuilder.Entity<User>().ToTable("Users");
@@ -50,6 +65,8 @@ namespace MyGoldenFood.ApplicationDbContext
             modelBuilder.Entity<RecipeTranslation>().ToTable("RecipeTranslations");
             modelBuilder.Entity<BenefitTranslation>().ToTable("BenefitTranslations");
             modelBuilder.Entity<RecipeCategory>().ToTable("RecipeCategories"); // Tarif kategorileri tablosu
+            modelBuilder.Entity<BenefitCategory>().ToTable("BenefitCategories"); // Fayda kategorileri tablosu
+            modelBuilder.Entity<BenefitCategoryTranslation>().ToTable("BenefitCategoryTranslations"); // Fayda kategori çevirileri tablosu
 
             base.OnModelCreating(modelBuilder);
         }
@@ -60,6 +77,8 @@ namespace MyGoldenFood.ApplicationDbContext
         public DbSet<RecipeCategory> RecipeCategories { get; set; } // Tarif kategorileri
         public DbSet<RecipeCategoryTranslation> RecipeCategoryTranslations { get; set; } // Tarif kategori çevirileri
         public DbSet<Recipe> Recipes { get; set; } // Tarifler
+        public DbSet<BenefitCategory> BenefitCategories { get; set; } // Fayda kategorileri
+        public DbSet<BenefitCategoryTranslation> BenefitCategoryTranslations { get; set; } // Fayda kategori çevirileri
         public DbSet<Benefit> Benefits { get; set; } // Faydalar
         public DbSet<Blog> Blogs { get; set; } // Blog yazıları
         public DbSet<ProductTranslation> ProductTranslations { get; set; }

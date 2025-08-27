@@ -1,0 +1,71 @@
+@model MyGoldenFood.Models.Benefit
+
+<div class="modal-header">
+    <h5 class="modal-title">Yeni Fayda Ekle</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form id="createBenefitForm" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="Name" class="form-label">Fayda Adı *</label>
+            <input type="text" class="form-control" id="Name" name="Name" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="Content" class="form-label">Fayda İçeriği *</label>
+            <textarea class="form-control" id="Content" name="Content" rows="5" required></textarea>
+        </div>
+        
+        <div class="mb-3">
+            <label for="BenefitCategoryId" class="form-label">Kategori</label>
+            <select class="form-control" id="BenefitCategoryId" name="BenefitCategoryId">
+                <option value="">Kategori Seçin</option>
+                @foreach (var category in ViewBag.Categories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label for="ImageFile" class="form-label">Fayda Görseli</label>
+            <input type="file" class="form-control" id="ImageFile" name="ImageFile" accept="image/*">
+            <small class="form-text text-muted">Desteklenen formatlar: JPG, PNG, GIF. Maksimum boyut: 5MB</small>
+        </div>
+        
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#createBenefitForm').on('submit', function(e) {
+            e.preventDefault();
+            
+            var formData = new FormData(this);
+            
+            $.ajax({
+                url: '/Faydalari/Create',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire('Başarılı!', response.message, 'success');
+                        $('#modal').modal('hide');
+                        location.reload();
+                    } else {
+                        Swal.fire('Hata!', response.message, 'error');
+                    }
+                },
+                error: function() {
+                    Swal.fire('Hata!', 'Bir hata oluştu!', 'error');
+                }
+            });
+        });
+    });
+</script>

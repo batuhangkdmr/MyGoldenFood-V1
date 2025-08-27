@@ -41,6 +41,7 @@ namespace MyGoldenFood.Controllers
 
             var categories = await _context.RecipeCategories
                 .Include(c => c.Translations)
+                .Include(c => c.Recipes)
                 .ToListAsync();
 
             foreach (var category in categories)
@@ -58,8 +59,10 @@ namespace MyGoldenFood.Controllers
         [HttpGet]
         public async Task<IActionResult> RecipeCategoryList()
         {
-            var categories = await _context.RecipeCategories.ToListAsync();
-            return PartialView("_RecipeListPartial", categories);
+            var categories = await _context.RecipeCategories
+                .Include(c => c.Translations)
+                .ToListAsync();
+            return PartialView("_RecipeCategoryListPartial", categories);
         }
 
         [HttpGet]
@@ -113,6 +116,150 @@ namespace MyGoldenFood.Controllers
 
             ViewBag.Categories = _context.RecipeCategories.ToList();
             return PartialView("_CreateRecipePartial", model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CreateCategory()
+        {
+            return PartialView("_CreateRecipeCategoryPartial");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCategory(RecipeCategory model, IFormFile ImageFile, [FromServices] DeepLTranslationService translationService)
+        {
+            if (ModelState.IsValid)
+            {
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    var uploadResult = await _cloudinaryService.UploadImageAsync(ImageFile, "recipe-categories");
+                    if (uploadResult != null)
+                    {
+                        model.ImagePath = uploadResult;
+                    }
+                }
+
+                _context.RecipeCategories.Add(model);
+                await _context.SaveChangesAsync();
+
+                string[] languages = { "en", "de", "fr", "ru", "ja", "ko", "ar" };
+
+                foreach (var lang in languages)
+                {
+                    var translatedName = await translationService.TranslateText(model.Name, lang, "tr");
+
+                    if (!string.IsNullOrEmpty(translatedName))
+                    {
+                        var newTranslation = new RecipeCategoryTranslation
+                        {
+                            RecipeCategoryId = model.Id,
+                            Language = lang,
+                            Name = translatedName
+                        };
+                        _context.RecipeCategoryTranslations.Add(newTranslation);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+                await _tariflerHubContext.Clients.All.SendAsync("TarifUpdated");
+                return Json(new { success = true, message = "Tarif kategorisi başarıyla eklendi!" });
+            }
+
+            return PartialView("_CreateRecipeCategoryPartial", model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditCategory(int id)
+        {
+            var category = await _context.RecipeCategories.FindAsync(id);
+            if (category == null) return NotFound();
+
+            return PartialView("_EditRecipeCategoryPartial", category);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditCategory(RecipeCategory model, IFormFile? ImageFile, [FromServices] DeepLTranslationService translationService)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingCategory = await _context.RecipeCategories.FindAsync(model.Id);
+                if (existingCategory == null) return NotFound();
+
+                existingCategory.Name = model.Name;
+
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    await _cloudinaryService.DeleteImageAsync(existingCategory.ImagePath);
+                    var uploadResult = await _cloudinaryService.UploadImageAsync(ImageFile, "recipe-categories");
+                    if (uploadResult != null)
+                    {
+                        existingCategory.ImagePath = uploadResult;
+                    }
+                }
+
+                string[] languages = { "en", "de", "fr", "ru", "ja", "ko", "ar" };
+
+                foreach (var lang in languages)
+                {
+                    var translatedName = await translationService.TranslateText(model.Name, lang, "tr");
+
+                    var translation = await _context.RecipeCategoryTranslations.FirstOrDefaultAsync(t =>
+                        t.RecipeCategoryId == model.Id && t.Language == lang);
+
+                    if (translation != null)
+                    {
+                        translation.Name = !string.IsNullOrEmpty(translatedName) ? translatedName : translation.Name;
+                    }
+                    else if (!string.IsNullOrEmpty(translatedName))
+                    {
+                        _context.RecipeCategoryTranslations.Add(new RecipeCategoryTranslation
+                        {
+                            RecipeCategoryId = model.Id,
+                            Language = lang,
+                            Name = translatedName
+                        });
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+                await _tariflerHubContext.Clients.All.SendAsync("TarifUpdated");
+                return Json(new { success = true, message = "Tarif kategorisi başarıyla güncellendi!" });
+            }
+
+            return PartialView("_EditRecipeCategoryPartial", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            var category = await _context.RecipeCategories
+                .Include(c => c.Recipes)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (category == null)
+            {
+                return Json(new { success = false, message = "Kategori bulunamadı!" });
+            }
+
+            if (category.Recipes.Any())
+            {
+                return Json(new { success = false, message = "Bu kategoride tarifler bulunduğu için silinemez!" });
+            }
+
+            if (!string.IsNullOrEmpty(category.ImagePath))
+            {
+                await _cloudinaryService.DeleteImageAsync(category.ImagePath);
+            }
+
+            _context.RecipeCategories.Remove(category);
+
+            var translations = await _context.RecipeCategoryTranslations
+                .Where(t => t.RecipeCategoryId == id)
+                .ToListAsync();
+            _context.RecipeCategoryTranslations.RemoveRange(translations);
+
+            await _context.SaveChangesAsync();
+            await _tariflerHubContext.Clients.All.SendAsync("TarifUpdated");
+            return Json(new { success = true, message = "Tarif kategorisi başarıyla silindi!" });
         }
 
         [HttpGet]
@@ -284,6 +431,36 @@ namespace MyGoldenFood.Controllers
             await _context.SaveChangesAsync();
             await _tariflerHubContext.Clients.All.SendAsync("TarifUpdated");
             return Json(new { success = true, message = "Tarif başarıyla silindi!" });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetRecipesByCategory(int id)
+        {
+            string selectedLanguage = "tr";
+
+            var userCulture = Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
+            if (!string.IsNullOrEmpty(userCulture))
+            {
+                selectedLanguage = userCulture.Split('|')[0].Replace("c=", "");
+            }
+
+            var recipes = await _context.Recipes
+                .Include(r => r.RecipeCategory)
+                .Include(r => r.RecipeTranslations)
+                .Where(r => r.RecipeCategoryId == id)
+                .ToListAsync();
+
+            foreach (var recipe in recipes)
+            {
+                var translation = recipe.RecipeTranslations.FirstOrDefault(t => t.LanguageCode == selectedLanguage);
+                if (translation != null)
+                {
+                    recipe.Name = translation.Name;
+                    recipe.Content = translation.Content;
+                }
+            }
+
+            return PartialView("_RecipesByCategoryPartial", recipes);
         }
     }
 }
