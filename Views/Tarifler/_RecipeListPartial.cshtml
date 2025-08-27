@@ -1,0 +1,73 @@
+@model IEnumerable<MyGoldenFood.Models.Recipe>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Görsel</th>
+                <th>Tarif Adı</th>
+                <th>Kategori</th>
+                <th>İçerik</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var recipe in Model)
+            {
+                <tr>
+                    <td>@recipe.Id</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(recipe.ImagePath))
+                        {
+                            <img src="@recipe.ImagePath" alt="@recipe.Name" style="width: 50px; height: 50px; object-fit: cover;" class="img-thumbnail" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">Görsel yok</span>
+                        }
+                    </td>
+                    <td>@recipe.Name</td>
+                    <td>
+                        @if (recipe.RecipeCategory != null)
+                        {
+                            <span class="badge bg-info">@recipe.RecipeCategory.Name</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Kategori yok</span>
+                        }
+                    </td>
+                    <td>
+                        @if (recipe.Content.Length > 100)
+                        {
+                            @(recipe.Content.Substring(0, 100) + "...")
+                        }
+                        else
+                        {
+                            @recipe.Content
+                        }
+                    </td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-sm btn-primary" onclick="loadEditRecipeForm(@recipe.Id)">
+                                <i class="fas fa-edit"></i> Düzenle
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="deleteRecipe(@recipe.Id)">
+                                <i class="fas fa-trash"></i> Sil
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center text-muted py-4">
+        <i class="fas fa-info-circle fa-3x mb-3"></i>
+        <p>Henüz tarif eklenmemiş.</p>
+    </div>
+}

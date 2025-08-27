@@ -1,0 +1,73 @@
+@model IEnumerable<MyGoldenFood.Models.Benefit>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Görsel</th>
+                <th>Fayda Adı</th>
+                <th>Kategori</th>
+                <th>İçerik</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var benefit in Model)
+            {
+                <tr>
+                    <td>@benefit.Id</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(benefit.ImagePath))
+                        {
+                            <img src="@benefit.ImagePath" alt="@benefit.Name" style="width: 50px; height: 50px; object-fit: cover;" class="img-thumbnail" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">Görsel yok</span>
+                        }
+                    </td>
+                    <td>@benefit.Name</td>
+                    <td>
+                        @if (benefit.BenefitCategory != null)
+                        {
+                            <span class="badge bg-info">@benefit.BenefitCategory.Name</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Kategori yok</span>
+                        }
+                    </td>
+                    <td>
+                        @if (benefit.Content.Length > 100)
+                        {
+                            @(benefit.Content.Substring(0, 100) + "...")
+                        }
+                        else
+                        {
+                            @benefit.Content
+                        }
+                    </td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-sm btn-primary" onclick="loadEditBenefitForm(@benefit.Id)">
+                                <i class="fas fa-edit"></i> Düzenle
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="deleteBenefit(@benefit.Id)">
+                                <i class="fas fa-trash"></i> Sil
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center text-muted py-4">
+        <i class="fas fa-info-circle fa-3x mb-3"></i>
+        <p>Henüz fayda eklenmemiş.</p>
+    </div>
+}
