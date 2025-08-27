@@ -97,94 +97,92 @@
 </div>
 
 <!-- Blog Detay Sayfası İçeriği -->
-<div class="container" style="margin-top: 100px;">
-    <div class="row">
-        <div class="col-lg-8 mx-auto">
-            <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Ana Sayfa</a></li>
-                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Blog")">Blog</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
-                </ol>
-            </nav>
+<div class="blog-details-container">
+    <div class="blog-details-wrapper">
+        <!-- Breadcrumb -->
+        <nav class="blog-breadcrumb">
+            <ol>
+                <li><a href="@Url.Action("Index", "Home")">Ana Sayfa</a></li>
+                <li><a href="@Url.Action("Index", "Blog")">Blog</a></li>
+                <li class="active">@Model.Title</li>
+            </ol>
+        </nav>
 
-            <!-- Blog Başlığı -->
-            <h1 class="blog-title mb-4">@Model.Title</h1>
+        <!-- Blog Başlığı -->
+        <h1 class="blog-details-title">@Model.Title</h1>
 
-            <!-- Blog Meta Bilgileri -->
-            <div class="blog-meta">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="d-flex align-items-center mb-2">
-                            <i class="fas fa-user text-primary me-2"></i>
-                            <span class="text-muted">@Model.Author</span>
-                        </div>
-                        <div class="d-flex align-items-center mb-2">
-                            <i class="fas fa-calendar text-primary me-2"></i>
-                            <span class="text-muted">@Model.CreatedDate.ToString("dd MMMM yyyy")</span>
-                        </div>
-                        @if (Model.UpdatedDate.HasValue)
-                        {
-                            <div class="d-flex align-items-center">
-                                <i class="fas fa-edit text-primary me-2"></i>
-                                <span class="text-muted">Güncellendi: @Model.UpdatedDate.Value.ToString("dd MMMM yyyy")</span>
-                            </div>
-                        }
-                    </div>
-                    <div class="col-md-6 text-md-end">
-                        <div class="d-flex align-items-center justify-content-md-end mb-2">
-                            <i class="fas fa-eye text-primary me-2"></i>
-                            <span class="text-muted">@Model.ViewCount görüntülenme</span>
-                        </div>
-                        @if (!string.IsNullOrEmpty(Model.Category))
-                        {
-                            <span class="badge">@Model.Category</span>
-                        }
-                    </div>
+        <!-- Blog Meta Bilgileri -->
+        <div class="blog-details-meta">
+            <div class="meta-left">
+                <div class="meta-item">
+                    <i class="fas fa-user"></i>
+                    <span>@Model.Author</span>
                 </div>
+                <div class="meta-item">
+                    <i class="fas fa-calendar"></i>
+                    <span>@Model.CreatedDate.ToString("dd MMMM yyyy")</span>
+                </div>
+                @if (Model.UpdatedDate.HasValue)
+                {
+                    <div class="meta-item">
+                        <i class="fas fa-edit"></i>
+                        <span>Güncellendi: @Model.UpdatedDate.Value.ToString("dd MMMM yyyy")</span>
+                    </div>
+                }
             </div>
+            <div class="meta-right">
+                <div class="meta-item">
+                    <i class="fas fa-eye"></i>
+                    <span>@Model.ViewCount görüntülenme</span>
+                </div>
+                @if (!string.IsNullOrEmpty(Model.Category))
+                {
+                    <span class="category-badge">@Model.Category</span>
+                }
+            </div>
+        </div>
 
             <!-- Blog Resmi -->
             @if (!string.IsNullOrEmpty(Model.ImagePath))
             {
-                <div class="blog-image text-center">
-                    <img src="@Model.ImagePath" class="img-fluid" alt="@Model.Title - Donuk Gıda Blog Yazısı" style="max-height: 400px;">
+                <div class="blog-details-image">
+                    <img src="@Model.ImagePath" alt="@Model.Title - Donuk Gıda Blog Yazısı">
                 </div>
             }
 
             <!-- Blog Özeti -->
             @if (!string.IsNullOrEmpty(Model.Summary))
             {
-                <div class="alert alert-info mb-4">
-                    <h3 class="h5">Özet</h3>
-                    <p class="mb-0">@Model.Summary</p>
+                <div class="blog-summary-box">
+                    <h3>Özet</h3>
+                    <p>@Model.Summary</p>
                 </div>
             }
 
             <!-- Blog İçeriği -->
-            <div class="blog-content">
+            <div class="blog-details-content">
                 @Html.Raw(Model.Content)
             </div>
 
             <!-- Blog Etiketleri -->
             @if (!string.IsNullOrEmpty(Model.Tags))
             {
-                <div class="blog-tags mb-4">
-                    <h3 class="h5 mb-3">Etiketler:</h3>
-                    <div class="d-flex flex-wrap gap-2">
+                <div class="blog-tags-section">
+                    <h3>Etiketler:</h3>
+                    <div class="tags-container">
                         @foreach (var tag in Model.Tags.Split(','))
                         {
-                            <span class="badge bg-secondary">@tag.Trim()</span>
+                            <span class="tag-badge">@tag.Trim()</span>
                         }
                     </div>
                 </div>
             }
 
             <!-- Geri Dön Butonu -->
-            <div class="text-center mb-5">
-                <a href="@Url.Action("Index", "Blog")" class="btn btn-primary">
-                    <i class="fas fa-arrow-left me-2"></i>Tüm Blog Yazılarına Dön
+            <div class="back-button-container">
+                <a href="@Url.Action("Index", "Blog")" class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Tüm Blog Yazılarına Dön</span>
                 </a>
             </div>
         </div>
@@ -201,176 +199,388 @@
     </p>
 </div>
 
-<!-- Modern Blog Details CSS -->
+<!-- Dark Mode Blog Details CSS -->
 <style>
-.blog-title {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: #2c3e50;
-    line-height: 1.2;
-    text-align: center;
-    margin-bottom: 1.5rem;
-    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.breadcrumb {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border-radius: 15px;
-    padding: 15px 20px;
-    margin-bottom: 2rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-}
-
-.breadcrumb-item a {
-    color: #007bff;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-.breadcrumb-item a:hover {
-    color: #0056b3;
-}
-
-.blog-content {
-    background: #fff;
-    padding: 2rem;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.blog-content h2 {
-    color: #2c3e50;
-    font-weight: 700;
-    margin: 2rem 0 1rem 0;
-    padding-bottom: 0.5rem;
-    border-bottom: 3px solid #3498db;
-}
-
-.blog-content h3 {
-    color: #34495e;
-    font-weight: 600;
-    margin: 1.5rem 0 1rem 0;
-}
-
-.blog-content p {
-    color: #555;
-    line-height: 1.8;
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-}
-
-.blog-content ul {
-    margin-bottom: 1rem;
-}
-
-.blog-content li {
-    color: #555;
-    line-height: 1.8;
-    margin-bottom: 0.5rem;
-}
-
-.blog-content strong {
-    color: #2c3e50;
-    font-weight: 600;
-}
-
-.alert-info {
-    background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
-    border: none;
-    border-radius: 15px;
-    border-left: 5px solid #17a2b8;
-    box-shadow: 0 4px 15px rgba(23, 162, 184, 0.1);
-}
-
-.badge {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    border: none;
-    padding: 8px 16px;
-    border-radius: 25px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-}
-
-.badge.bg-secondary {
-    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-    box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
-}
-
-.blog-tags {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    padding: 1.5rem;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    border: none;
-    padding: 12px 30px;
-    border-radius: 25px;
-    font-weight: 600;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-    transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
-}
-
-.blog-meta {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    padding: 1.5rem;
-    border-radius: 15px;
-    margin-bottom: 2rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-}
-
-.blog-image {
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    margin-bottom: 2rem;
-}
-
-.blog-image img {
-    transition: transform 0.3s ease;
-}
-
-.blog-image:hover img {
-    transform: scale(1.05);
-}
-
-/* Responsive Design */
-@@media (max-width: 768px) {
-    .blog-title {
-        font-size: 2rem;
+    /* Ana Container Stilleri */
+    .blog-details-container {
+        margin-top: 100px;
+        min-height: 100vh;
+        background: black;
+        padding: 40px 20px;
     }
-    
-    .blog-content {
-        padding: 1.5rem;
-    }
-    
-    .blog-meta {
-        padding: 1rem;
-    }
-}
 
-@@media (max-width: 576px) {
-    .blog-title {
-        font-size: 1.5rem;
+    .blog-details-wrapper {
+        max-width: 900px;
+        margin: 0 auto;
+        background: linear-gradient(145deg, #2a2a2a, #1f1f1f);
+        border-radius: 25px;
+        padding: 40px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(15px);
     }
-    
-    .blog-content {
-        padding: 1rem;
+
+    /* Breadcrumb Stilleri */
+    .blog-breadcrumb {
+        margin-bottom: 30px;
     }
-}
+
+    .blog-breadcrumb ol {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .blog-breadcrumb li {
+        color: #a0a0a0;
+        font-size: 0.9rem;
+    }
+
+    .blog-breadcrumb li:not(:last-child)::after {
+        content: '>';
+        margin-left: 15px;
+        color: #667eea;
+    }
+
+    .blog-breadcrumb a {
+        color: #667eea;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .blog-breadcrumb a:hover {
+        color: #ffffff;
+    }
+
+    .blog-breadcrumb .active {
+        color: #ffffff;
+        font-weight: 600;
+    }
+
+    /* Blog Başlık */
+    .blog-details-title {
+        font-size: 2.8rem;
+        font-weight: 800;
+        color: #ffffff;
+        line-height: 1.2;
+        text-align: center;
+        margin-bottom: 30px;
+        background: linear-gradient(135deg, #ffffff 0%, #667eea 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 0 30px rgba(102, 126, 234, 0.3);
+    }
+
+    /* Meta Bilgiler */
+    .blog-details-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 25px;
+        border-radius: 20px;
+        margin-bottom: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+    }
+
+    .meta-left, .meta-right {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #d0d0d0;
+        font-size: 0.95rem;
+    }
+
+    .meta-item i {
+        color: #667eea;
+        font-size: 1.1rem;
+        width: 20px;
+        text-align: center;
+    }
+
+    .category-badge {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Blog Resmi */
+    .blog-details-image {
+        text-align: center;
+        margin-bottom: 30px;
+        border-radius: 20px;
+        overflow: hidden;
+   /*      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1); */
+    }
+
+    .blog-details-image img {
+        max-width: 100%;
+        max-height: 600px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .blog-details-image:hover img {
+        transform: scale(1.02);
+    }
+
+    /* Özet Kutusu */
+    .blog-summary-box {
+        background: rgba(0, 0, 0, 0.4);
+        padding: 25px;
+        border-radius: 20px;
+        margin-bottom: 30px;
+        border: 1px solid rgba(102, 126, 234, 0.3);
+        backdrop-filter: blur(10px);
+    }
+
+    .blog-summary-box h3 {
+        color: #667eea;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .blog-summary-box p {
+        color: #d0d0d0;
+        line-height: 1.7;
+        font-size: 1.05rem;
+        margin: 0;
+        text-align: center;
+    }
+
+    /* Blog İçeriği */
+    .blog-details-content {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 30px;
+        border-radius: 20px;
+        margin-bottom: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        color: #d0d0d0;
+        line-height: 1.8;
+        font-size: 1.05rem;
+    }
+
+    .blog-details-content h2 {
+        color: #ffffff;
+        font-weight: 700;
+        margin: 2rem 0 1rem 0;
+        padding-bottom: 0.5rem;
+        border-bottom: 3px solid #667eea;
+        font-size: 1.8rem;
+    }
+
+    .blog-details-content h3 {
+        color: #ffffff;
+        font-weight: 600;
+        margin: 1.5rem 0 1rem 0;
+        font-size: 1.4rem;
+    }
+
+    .blog-details-content p {
+        color: #d0d0d0;
+        line-height: 1.8;
+        margin-bottom: 1rem;
+        font-size: 1.05rem;
+    }
+
+    .blog-details-content ul, .blog-details-content ol {
+        margin-bottom: 1rem;
+        padding-left: 20px;
+    }
+
+    .blog-details-content li {
+        color: #d0d0d0;
+        line-height: 1.8;
+        margin-bottom: 0.5rem;
+    }
+
+    .blog-details-content strong {
+        color: #ffffff;
+        font-weight: 600;
+    }
+
+    .blog-details-content a {
+        color: #667eea;
+        text-decoration: none;
+        border-bottom: 1px solid #667eea;
+        transition: all 0.3s ease;
+    }
+
+    .blog-details-content a:hover {
+        color: #ffffff;
+        border-bottom-color: #ffffff;
+    }
+
+    /* Etiketler */
+    .blog-tags-section {
+        background: rgba(0, 0, 0, 0.4);
+        padding: 25px;
+        border-radius: 20px;
+        margin-bottom: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+    }
+
+    .blog-tags-section h3 {
+        color: #667eea;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: start;
+    }
+
+    .tag-badge {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .tag-badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    /* Geri Dön Butonu */
+    .back-button-container {
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    .back-button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 25px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 600;
+        font-size: 1.05rem;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .back-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+
+    .back-button:hover::before {
+        left: 100%;
+    }
+
+    .back-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(102, 126, 234, 0.6);
+        color: white;
+        text-decoration: none;
+    }
+
+    .back-button i {
+        font-size: 1.1rem;
+        transition: transform 0.3s ease;
+    }
+
+    .back-button:hover i {
+        transform: translateX(-5px);
+    }
+
+    /* Responsive Tasarım */
+    @@media (max-width: 768px) {
+        .blog-details-wrapper {
+            padding: 25px;
+        }
+
+        .blog-details-title {
+            font-size: 2.2rem;
+        }
+
+        .blog-details-meta {
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .meta-left, .meta-right {
+            align-items: start;
+        }
+
+        .blog-details-content {
+            padding: 20px;
+        }
+
+        .blog-details-image img {
+            max-height: 500px;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .blog-details-container {
+            padding: 20px 15px;
+        }
+
+        .blog-details-wrapper {
+            padding: 20px;
+        }
+
+        .blog-details-title {
+            font-size: 1.8rem;
+        }
+
+        .blog-details-content {
+            padding: 15px;
+        }
+
+        .back-button {
+            padding: 12px 25px;
+            font-size: 1rem;
+        }
+
+        .blog-details-image img {
+            max-height: 400px;
+        }
+    }
 </style>

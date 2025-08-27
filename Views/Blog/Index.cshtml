@@ -138,9 +138,9 @@
                         }
                         
                         <!-- Category Badge -->
-                        <div class="category-badge">
+                     @*    <div class="category-badge">
                             <span class="badge">@blog.Category</span>
-                        </div>
+                        </div> *@
                     </div>
                     
                     <div class="blog-content">
@@ -247,40 +247,65 @@
         margin-bottom: 40px;
     }
 
-    /* Blog Kartları */
+    /* Blog Kartları - Dark Mode */
     .blog-card {
-        background: white;
-        border-radius: 20px;
+        @* background: linear-gradient(145deg, #2a2a2a, #1f1f1f); *@
+        border-radius: 40px;
         overflow: hidden;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
         transition: all 0.3s ease;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
     }
 
     .blog-card:hover {
         transform: translateY(-10px);
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+        border-color: rgba(102, 126, 234, 0.3);
     }
 
     /* Resim Konteyner */
     .image-container {
         position: relative;
         width: 100%;
-        height: 250px;
+       /* height: 280px;*/
         overflow: hidden;
-        background: #000;
+       /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);*/
         cursor: pointer;
+       /* border-radius: 15px;*/
+       /* padding: 15px;*/
+        box-sizing: border-box;
     }
 
     .blog-image {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
         transition: transform 0.3s ease;
+       /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);*/
+       /* padding: 10px;*/
+        border-radius: 15px;
     }
 
     .image-container:hover .blog-image {
-        transform: scale(1.1);
+        transform: scale(1.05);
+        filter: brightness(1.1) contrast(1.05);
+    }
+
+    .image-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .image-container:hover::after {
+        opacity: 1;
     }
 
     .blog-placeholder {
@@ -289,9 +314,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        color: #6c757d;
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
         font-size: 3rem;
+        border: 2px dashed rgba(255, 255, 255, 0.3);
+        border-radius: 15px;
     }
 
     /* Kategori Badge */
@@ -308,12 +335,15 @@
         border-radius: 20px;
         font-size: 0.85rem;
         font-weight: 600;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
     }
 
-    /* Blog İçerik */
+    /* Blog İçerik - Dark Mode */
     .blog-content {
         padding: 25px;
+        background: rgba(0, 0, 0, 0.2);
     }
 
     /* Meta Bilgiler */
@@ -322,7 +352,7 @@
         justify-content: space-between;
         margin-bottom: 20px;
         font-size: 0.9rem;
-        color: #6c757d;
+        color: #a0a0a0;
     }
 
     .meta-item {
@@ -339,7 +369,7 @@
     .blog-title {
         font-size: 1.4rem;
         font-weight: 700;
-        color: #2d3748;
+        color: #ffffff;
         margin-bottom: 15px;
         line-height: 1.4;
         display: -webkit-box;
@@ -350,7 +380,7 @@
 
     /* Blog Özet */
     .blog-summary {
-        color: #4a5568;
+        color: #d0d0d0;
         line-height: 1.6;
         margin-bottom: 25px;
         display: -webkit-box;
@@ -376,12 +406,29 @@
         align-items: center;
         gap: 10px;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn-primary:hover::before {
+        left: 100%;
     }
 
     .btn-primary:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
         color: white;
         text-decoration: none;
     }
@@ -394,28 +441,34 @@
         transform: translateX(5px);
     }
 
-    /* Boş Durum */
+    /* Boş Durum - Dark Mode */
     .empty-state {
         text-align: center;
         padding: 80px 20px;
         color: white;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
     }
 
     .empty-icon {
         font-size: 4rem;
-        color: rgba(255, 255, 255, 0.6);
+        color: #667eea;
         margin-bottom: 20px;
+        text-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
     }
 
     .empty-state h3 {
         font-size: 1.8rem;
         margin-bottom: 15px;
         font-weight: 600;
+        color: #ffffff;
     }
 
     .empty-state p {
         font-size: 1.1rem;
-        opacity: 0.8;
+        color: #d0d0d0;
     }
 
     /* SEO Açıklama Stilleri */
@@ -467,6 +520,10 @@
         .blog-title {
             font-size: 1.2rem;
         }
+
+        .image-container {
+            height: 260px;
+        }
     }
 
     @@media (max-width: 480px) {
@@ -483,6 +540,10 @@
         .btn-primary {
             padding: 10px 20px;
             font-size: 0.9rem;
+        }
+
+        .image-container {
+            height: 240px;
         }
     }
 </style>
