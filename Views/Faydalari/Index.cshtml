@@ -41,44 +41,57 @@
                     </button>
                 </div> *@
                 
-                <div class="sidebar-content">
-                    <div class="search-box">
-                        <div class="search-input">
-                            <i class="fas fa-search"></i>
-                            <input type="text" placeholder="Kategori ara..." id="categorySearch">
-                        </div>
-                    </div>
-                    
-                    <div class="categories-list">
-                        @foreach (var category in ViewBag.Categories)
-                        {
-                            <div class="glass-card category-card @(category.Id == ViewBag.SelectedCategoryId ? "active" : "")" 
-                                 onclick="loadBenefitsByCategory(@category.Id, '@category.Name')" 
-                                 data-category-id="@category.Id">
-                                <div class="card-content">
-                                    <div class="card-icon">
-                                        @if (!string.IsNullOrEmpty(category.ImagePath))
-                                        {
-                                            <img src="@category.ImagePath" alt="@category.Name" class="category-image" />
-                                        }
-                                        else
-                                        {
-                                            <div class="icon-placeholder">
-                                                <i class="fas fa-heart"></i>
-                                            </div>
-                                        }
-                                    </div>
-                                    <div class="card-info">
-                                        <h4 class="card-title">@category.Name</h4>
-                                        <p class="card-subtitle">@(category.Benefits?.Count ?? 0) fayda</p>
-                                    </div>
-                                    <div class="card-action">
-                                        <i class="fas fa-arrow-right"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </div>
+                                 <div class="sidebar-content">
+                     <div class="categories-list">
+                         <!-- Tüm Kategoriler -->
+                         <div class="glass-card category-card @(ViewBag.SelectedCategoryId == 0 ? "active" : "")" 
+                              onclick="loadAllBenefits()" 
+                              data-category-id="0">
+                             <div class="card-content">
+                                 <div class="card-icon">
+                                     <div class="icon-placeholder">
+                                         <i class="fas fa-th-large"></i>
+                                     </div>
+                                 </div>
+                                 <div class="card-info">
+                                     <h4 class="card-title">Tüm Kategoriler</h4>
+                                     <p class="card-subtitle">@(ViewBag.DefaultBenefits?.Count ?? 0) fayda</p>
+                                 </div>
+                                 <div class="card-action">
+                                     <i class="fas fa-arrow-right"></i>
+                                 </div>
+                             </div>
+                         </div>
+                         
+                         @foreach (var category in ViewBag.Categories)
+                         {
+                             <div class="glass-card category-card @(category.Id == ViewBag.SelectedCategoryId ? "active" : "")" 
+                                  onclick="loadBenefitsByCategory(@category.Id, '@category.Name')" 
+                                  data-category-id="@category.Id">
+                                 <div class="card-content">
+                                     <div class="card-icon">
+                                         @if (!string.IsNullOrEmpty(category.ImagePath))
+                                         {
+                                             <img src="@category.ImagePath" alt="@category.Name" class="category-image" />
+                                         }
+                                         else
+                                         {
+                                             <div class="icon-placeholder">
+                                                 <i class="fas fa-heart"></i>
+                                             </div>
+                                         }
+                                     </div>
+                                     <div class="card-info">
+                                         <h4 class="card-title">@category.Name</h4>
+                                         <p class="card-subtitle">@(category.Benefits?.Count ?? 0) fayda</p>
+                                     </div>
+                                     <div class="card-action">
+                                         <i class="fas fa-arrow-right"></i>
+                                     </div>
+                                 </div>
+                             </div>
+                         }
+                     </div>
                 </div>
             </div>
         </div>
@@ -106,44 +119,31 @@
                 <div id="benefitsContent">
                     @if (ViewBag.DefaultBenefits != null && ViewBag.DefaultBenefits.Count > 0)
                     {
-                        <div class="row">
+                        <div class="benefit-grid" id="benefitGrid">
                             @foreach (var benefit in ViewBag.DefaultBenefits)
                             {
-                                <div class="col-lg-4 col-md-6 col-6 text-center mb-4">
-                                    <div class="benefit-card" 
-                                         data-name="@benefit.Name" 
-                                         data-content="@benefit.Content">
-                                        <div class="image-container">
-                                            @if (!string.IsNullOrEmpty(benefit.ImagePath))
-                                            {
-                                                <img src="@benefit.ImagePath" 
-                                                     alt="@benefit.Name" 
-                                                     class="benefit-image" />
-                                            }
-                                            else
-                                            {
-                                                <div class="bg-secondary text-white d-flex align-items-center justify-content-center benefit-image">
-                                                    <i class="fas fa-heart fa-3x"></i>
-                                                </div>
-                                            }
-                                        </div>
-                                        <h4 class="text-white mb-3">@benefit.Name</h4>
-                                        <p class="text-muted mb-3">
-                                            @if (!string.IsNullOrEmpty(benefit.Content) && benefit.Content.Length > 100)
-                                            {
-                                                @(benefit.Content.Substring(0, 100) + "...")
-                                            }
-                                            else
-                                            {
-                                                @benefit.Content
-                                            }
-                                        </p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <span class="badge bg-primary">@benefit.BenefitCategory?.Name</span>
-                                            <button class="btn btn-outline-light btn-sm" onclick="showBenefitDetails('@benefit.Name', '@benefit.Content')">
-                                                <i class="fas fa-eye"></i> Detaylar
-                                            </button>
-                                        </div>
+                                <div class="benefit-card" 
+                                     data-name="@benefit.Name" 
+                                     data-content="@benefit.Content">
+                                    <div class="image-container"
+                                         data-name="@benefit.Name"
+                                         data-description="@benefit.Content">
+                                        @if (!string.IsNullOrEmpty(benefit.ImagePath))
+                                        {
+                                            <img src="@benefit.ImagePath" 
+                                                 alt="@benefit.Name | Donuk Gıda Faydaları | Dondurulmuş Gıda Sağlık Avantajları" 
+                                                 class="benefit-image"
+                                                 title="@benefit.Name - Donuk Gıda Faydaları" />
+                                        }
+                                        else
+                                        {
+                                            <div class="bg-secondary text-white d-flex align-items-center justify-content-center benefit-image">
+                                                <i class="fas fa-heart fa-3x"></i>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="benefit-name-container">
+                                        <h3 class="benefit-name">@benefit.Name</h3>
                                     </div>
                                 </div>
                             }
@@ -163,18 +163,16 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="detailsModalLabel"></h4>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <h5 class="modal-title-with-line">@Html.T("BenefitDetails")</h5>
-                <p id="detailsModalDescription"></p>
-            </div>
+<!-- Custom Popup Modal -->
+<div id="customModal" class="custom-modal">
+    <div class="custom-modal-content">
+        <div class="custom-modal-header">
+            <h4 id="customModalTitle"></h4>
+            <span class="custom-modal-close" onclick="closeCustomModal()">&times;</span>
+        </div>
+        <div class="custom-modal-body">
+            <h5 class="custom-modal-title-with-line">@Html.T("BenefitDetails")</h5>
+            <p id="customModalDescription"></p>
         </div>
     </div>
 </div>
@@ -269,52 +267,9 @@
         box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
     }
 
-    .sidebar-content {
-        padding: 24px;
-    }
-
-    /* Search Box */
-    .search-box {
-        margin-bottom: 24px;
-    }
-
-    .search-input {
-        position: relative;
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 16px;
-        padding: 16px 20px 16px 50px;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-    }
-
-    .search-input:focus-within {
-        background: rgba(255, 255, 255, 0.12);
-        border-color: rgba(102, 126, 234, 0.5);
-        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-    }
-
-    .search-input i {
-        position: absolute;
-        left: 18px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 1rem;
-    }
-
-    .search-input input {
-        background: none;
-        border: none;
-        color: #ffffff;
-        width: 100%;
-        font-size: 0.95rem;
-        outline: none;
-    }
-
-    .search-input input::placeholder {
-        color: rgba(255, 255, 255, 0.5);
-    }
+         .sidebar-content {
+         padding: 24px;
+     }
 
     /* Categories List */
     .categories-list {
@@ -472,19 +427,33 @@
         text-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
     }
 
+    /* Benefit Grid Layout */
+    .benefit-grid {
+        min-height: 600px;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 20px;
+        justify-content: flex-start;
+        align-items: start;
+    }
+
+    /* Eğer fayda sayısı 3'ten azsa, ortalama yap */
+    .benefit-grid:has(.benefit-card:nth-child(1):nth-last-child(1)),
+    .benefit-grid:has(.benefit-card:nth-child(1):nth-last-child(2)) {
+        display: flex;
+        justify-content: start;
+        gap: 20px;
+    }
+
     /* Benefit Cards */
     .benefit-card {
-        background: rgba(255, 255, 255, 0.06);
-        backdrop-filter: blur(25px);
-        -webkit-backdrop-filter: blur(25px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 24px;
-        padding: 28px;
-        height: 100%;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        cursor: pointer;
-        position: relative;
         overflow: hidden;
+        text-align: center;
+        border-radius: 15px;
+        background-color: rgba(0, 0, 0, 0);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
     }
 
     .benefit-card::before {
@@ -504,76 +473,58 @@
     }
 
     .benefit-card:hover {
-        background: rgba(255, 255, 255, 0.1);
-        transform: translateY(-8px);
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-        border-color: rgba(102, 126, 234, 0.3);
+        transform: translateY(-10px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
 
     .image-container {
-        margin-bottom: 24px;
-        text-align: center;
-        position: relative;
+        width: 100%;
+        height: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000;
         overflow: hidden;
-        border-radius: 20px;
+        border-radius: 15px;
     }
 
     .benefit-image {
         width: 100%;
-        height: 220px;
+        height: 100%;
         object-fit: contain;
-        border-radius: 20px;
-        transition: transform 0.4s ease;
-        background: rgba(255, 255, 255, 0.05);
-        padding: 0px;
+        object-position: center;
+        transition: transform 0.3s ease;
     }
 
-    .benefit-card:hover .benefit-image {
-        transform: scale(1.08);
+    .image-container:hover .benefit-image {
+        transform: scale(1.1);
     }
 
-    .benefit-card h4 {
-        color: #ffffff;
-        font-size: 1.4rem;
-        font-weight: 600;
-        margin-bottom: 16px;
-        line-height: 1.4;
+    /* Fayda Adı */
+    .benefit-name-container {
+        padding: 15px;
+        background-color: rgba(0, 0, 0, 0);
+        border-radius: 0 0 15px 15px;
+        color: #fff;
     }
 
-    .benefit-card p {
-        color: rgba(255, 255, 255, 0.8);
-        line-height: 1.7;
-        margin-bottom: 24px;
-        font-size: 0.95rem;
+    .benefit-name {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #fff;
     }
 
-    .benefit-card .badge {
-        background: linear-gradient(135deg, #667eea, #764ba2) !important;
-        border: none;
-        padding: 10px 16px;
-        font-size: 0.9rem;
-        border-radius: 25px;
-        font-weight: 500;
-    }
 
-    .benefit-card .btn {
-        border-radius: 25px;
-        padding: 10px 24px;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        border: 1px solid rgba(102, 126, 234, 0.3);
-        background: rgba(102, 126, 234, 0.1);
-        color: #667eea;
-    }
-
-    .benefit-card .btn:hover {
-        background: rgba(102, 126, 234, 0.2);
-        border-color: rgba(102, 126, 234, 0.5);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-    }
 
     /* Responsive Design */
+    
+    /* Tablet görünümü (768px - 1024px) */
+    @@media (max-width: 1024px) and (min-width: 769px) {
+        .benefit-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+    
     @@media (max-width: 768px) {
         .glass-sidebar {
             position: static;
@@ -586,13 +537,9 @@
             max-height: 80px;
         }
 
-        .sidebar-content {
-            padding: 20px;
-        }
-
-        .search-input {
-            padding: 14px 18px 14px 45px;
-        }
+                 .sidebar-content {
+             padding: 20px;
+         }
 
         .glass-card {
             margin-bottom: 12px;
@@ -615,8 +562,12 @@
             font-size: 1.8rem;
         }
 
+        .benefit-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
         .benefit-card {
-            padding: 20px;
+           /*  padding: 15px; */
         }
 
         .benefit-image {
@@ -624,43 +575,8 @@
         }
 
         /* Mobil için benefit-card responsive düzenlemeleri */
-        .benefit-card .d-flex {
-            flex-direction: column !important;
-            gap: 15px;
-            align-items: stretch !important;
-        }
-
-        .benefit-card .badge {
-            align-self: flex-start;
-            margin-bottom: 10px;
-        }
-
-        .benefit-card .btn {
-            width: 100%;
-            margin-top: 5px;
-        }
-
-        /* Mobil için col-6 düzenlemesi */
-        .col-6 {
-            padding: 5px;
-        }
-
-        .col-6 .benefit-card {
-            padding: 15px;
-        }
-
-        .col-6 .benefit-image {
-            height: 140px;
-        }
-
-        .col-6 h4 {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-        }
-
-        .col-6 p {
-            font-size: 0.85rem;
-            margin-bottom: 15px;
+        .benefit-name {
+            font-size: 1rem;
         }
     }
 
@@ -683,26 +599,132 @@
         background: linear-gradient(180deg, #5a6fd8, #6a5acd);
     }
 
-    /* Modal Styling */
-    .modal-content {
-        background: rgba(15, 15, 35, 0.95);
-        backdrop-filter: blur(30px);
-        -webkit-backdrop-filter: blur(30px);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 24px;
-        color: #ffffff;
+    /* Custom Modal Styling */
+    .custom-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(5px);
+        animation: fadeIn 0.3s ease-out;
     }
 
-    .modal-header {
+    .custom-modal-content {
+        background: rgba(0, 0, 0, 0.95);
+        color: white;
+        border: 2px solid rgba(102, 126, 234, 0.3);
+        border-radius: 20px;
+        margin: 15% auto;
+        padding: 0;
+        width: 90%;
+        max-width: 600px;
+        position: relative;
+        transform: scale(0.8);
+        animation: scaleIn 0.3s ease-out forwards;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    }
+
+    .custom-modal-header {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+        padding: 20px 25px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.05));
+        border-radius: 18px 18px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
-    .modal-title-with-line {
-        color: #667eea;
-        border-bottom: 2px solid #667eea;
-        padding-bottom: 12px;
-        margin-bottom: 24px;
+    .custom-modal-header h4 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #ffffff;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .custom-modal-close {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 2rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        line-height: 1;
+        padding: 5px;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .custom-modal-close:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.1);
+        transform: scale(1.1);
+    }
+
+    .custom-modal-body {
+        padding: 25px;
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+
+    .custom-modal-title-with-line {
+        position: relative;
+        display: inline-block;
+        padding-bottom: 10px;
+        font-size: 1.3rem;
+        color: #FFD700;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .custom-modal-title-with-line::after {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, #FFD700, #FFA500);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        border-radius: 2px;
+    }
+
+    /* Custom Modal Animations */
+    @@keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @@keyframes scaleIn {
+        from { transform: scale(0.8); }
+        to { transform: scale(1); }
+    }
+
+    /* Custom Modal Responsive */
+    @@media (max-width: 768px) {
+        .custom-modal-content {
+            width: 95%;
+            margin: 50% auto;
+        }
+        
+        .custom-modal-header {
+            padding: 15px 20px;
+        }
+        
+        .custom-modal-header h4 {
+            font-size: 1.3rem;
+        }
+        
+        .custom-modal-body {
+            padding: 20px;
+        }
     }
 
     /* Loading Spinner */
@@ -747,8 +769,8 @@
 </style>
 
 <script>
-    // Kategori seçiminde ürünleri yükle
-    function loadBenefitsByCategory(categoryId, categoryName) {
+    // Tüm faydaları yükle
+    function loadAllBenefits() {
         // Loading spinner'ı göster
         document.getElementById('loadingSpinner').style.display = 'block';
         document.getElementById('benefitsContent').style.display = 'none';
@@ -757,15 +779,54 @@
         document.querySelectorAll('.glass-card').forEach(item => {
             item.classList.remove('active');
         });
-        document.querySelector(`[data-category-id="${categoryId}"]`).classList.add('active');
+        document.querySelector('[data-category-id="0"]').classList.add('active');
 
         // Kategori başlığını güncelle
-        document.getElementById('categoryTitle').textContent = categoryName;
+        document.getElementById('categoryTitle').textContent = 'Tüm Kategoriler';
 
-        // AJAX ile ürünleri yükle
-        fetch(`/Faydalari/GetBenefitsByCategory/${categoryId}`)
-            .then(response => response.text())
-            .then(html => {
+        // AJAX ile tüm faydaları yükle
+        fetch('/Faydalari/GetAllBenefits')
+            .then(response => response.json())
+            .then(data => {
+                // HTML'i manuel olarak oluştur
+                let html = '';
+                if (data && data.length > 0) {
+                    html = '<div class="benefit-grid" id="benefitGrid">';
+                    data.forEach(benefit => {
+                        html += `
+                            <div class="benefit-card" 
+                                 data-name="${benefit.name}" 
+                                 data-content="${benefit.content}">
+                                <div class="image-container"
+                                     data-name="${benefit.name}"
+                                     data-description="${benefit.content}">
+                                    ${benefit.imagePath ? 
+                                        `<img src="${benefit.imagePath}" 
+                                              alt="${benefit.name} | Donuk Gıda Faydaları | Dondurulmuş Gıda Sağlık Avantajları" 
+                                              class="benefit-image"
+                                              title="${benefit.name} - Donuk Gıda Faydaları" />` :
+                                        `<div class="bg-secondary text-white d-flex align-items-center justify-content-center benefit-image">
+                                             <i class="fas fa-heart fa-3x"></i>
+                                         </div>`
+                                    }
+                                </div>
+                                <div class="benefit-name-container">
+                                    <h3 class="benefit-name">${benefit.name}</h3>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                } else {
+                    html = `
+                        <div class="text-center text-muted py-5">
+                            <i class="fas fa-info-circle fa-3x mb-3"></i>
+                            <h4>Henüz fayda bulunmuyor</h4>
+                            <p>Yakında sağlık faydaları eklenecek!</p>
+                        </div>
+                    `;
+                }
+                
                 document.getElementById('benefitsContent').innerHTML = html;
                 document.getElementById('loadingSpinner').style.display = 'none';
                 document.getElementById('benefitsContent').style.display = 'block';
@@ -783,25 +844,133 @@
             });
     }
 
-    // Fayda detaylarını göster
-    function showBenefitDetails(name, content) {
-        document.getElementById('detailsModalLabel').textContent = name;
-        document.getElementById('detailsModalDescription').textContent = content;
-        
-        const modal = new bootstrap.Modal(document.getElementById('detailsModal'));
-        modal.show();
+    // Kategori seçiminde ürünleri yükle
+    function loadBenefitsByCategory(categoryId, categoryName) {
+        // Loading spinner'ı göster
+        document.getElementById('loadingSpinner').style.display = 'block';
+        document.getElementById('benefitsContent').style.display = 'none';
+
+        // Aktif kategoriyi güncelle
+        document.querySelectorAll('.glass-card').forEach(item => {
+            item.classList.remove('active');
+        });
+        document.querySelector(`[data-category-id="${categoryId}"]`).classList.add('active');
+
+        // Kategori başlığını güncelle
+        document.getElementById('categoryTitle').textContent = categoryName;
+
+        // AJAX ile ürünleri yükle
+        fetch(`/Faydalari/GetBenefitsByCategory/${categoryId}`)
+            .then(response => response.json())
+            .then(data => {
+                // HTML'i manuel olarak oluştur
+                let html = '';
+                if (data && data.length > 0) {
+                    html = '<div class="benefit-grid" id="benefitGrid">';
+                    data.forEach(benefit => {
+                        html += `
+                            <div class="benefit-card" 
+                                 data-name="${benefit.name}" 
+                                 data-content="${benefit.content}">
+                                <div class="image-container"
+                                     data-name="${benefit.name}"
+                                     data-description="${benefit.content}">
+                                    ${benefit.imagePath ? 
+                                        `<img src="${benefit.imagePath}" 
+                                              alt="${benefit.name} | Donuk Gıda Faydaları | Dondurulmuş Gıda Sağlık Avantajları" 
+                                              class="benefit-image"
+                                              title="${benefit.name} - Donuk Gıda Faydaları" />` :
+                                        `<div class="bg-secondary text-white d-flex align-items-center justify-content-center benefit-image">
+                                            <i class="fas fa-heart fa-3x"></i>
+                                        </div>`
+                                    }
+                                </div>
+                                <div class="benefit-name-container">
+                                    <h3 class="benefit-name">${benefit.name}</h3>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                } else {
+                    html = `
+                        <div class="text-center text-muted py-5">
+                            <i class="fas fa-info-circle fa-3x mb-3"></i>
+                            <h4>Bu kategoride henüz fayda bulunmuyor</h4>
+                            <p>Yakında sağlık faydaları eklenecek!</p>
+                        </div>
+                    `;
+                }
+                
+                document.getElementById('benefitsContent').innerHTML = html;
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('benefitsContent').style.display = 'block';
+                
+                // Fade-in animasyonu ekle
+                document.getElementById('benefitsContent').classList.add('fade-in');
+                
+                // Event listener'ları yeniden ekle
+                attachBenefitCardEvents();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('benefitsContent').style.display = 'block';
+            });
     }
+
+
 
     // Fayda kartlarına event listener ekle
     function attachBenefitCardEvents() {
-        document.querySelectorAll('.benefit-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const name = this.getAttribute('data-name');
-                const content = this.getAttribute('data-content');
-                showBenefitDetails(name, content);
+        document.querySelectorAll('.image-container').forEach(item => {
+            item.addEventListener('click', function() {
+                let name = this.getAttribute('data-name');
+                let description = this.getAttribute('data-description');
+
+                if (!name || !description) {
+                    alert('Fayda detayları eksik!');
+                    return;
+                }
+
+                // Custom modal'ı aç
+                openCustomModal(name, description);
             });
         });
     }
+
+    // Custom modal'ı aç
+    function openCustomModal(name, description) {
+        document.getElementById('customModalTitle').textContent = name;
+        document.getElementById('customModalDescription').innerHTML = description.replace(/\n/g, "<br>");
+        document.getElementById('customModal').style.display = 'block';
+        
+        // Body scroll'unu engelle
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Custom modal'ı kapat
+    function closeCustomModal() {
+        document.getElementById('customModal').style.display = 'none';
+        
+        // Body scroll'unu geri yükle
+        document.body.style.overflow = 'auto';
+    }
+
+    // Modal dışına tıklandığında kapat
+    document.addEventListener('click', function(event) {
+        const modal = document.getElementById('customModal');
+        if (event.target === modal) {
+            closeCustomModal();
+        }
+    });
+
+    // ESC tuşu ile modal'ı kapat
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeCustomModal();
+        }
+    });
 
     // Sidebar toggle fonksiyonu
     function toggleSidebar() {
@@ -809,34 +978,19 @@
         sidebar.classList.toggle('collapsed');
     }
 
-    // Kategori arama fonksiyonu
-    function filterCategories() {
-        const searchTerm = document.getElementById('categorySearch').value.toLowerCase();
-        const categories = document.querySelectorAll('.glass-card');
-        
-        categories.forEach(category => {
-            const title = category.querySelector('.card-title').textContent.toLowerCase();
-            if (title.includes(searchTerm)) {
-                category.style.display = 'block';
-                category.classList.add('slide-in');
-            } else {
-                category.style.display = 'none';
-            }
-        });
-    }
+    
 
     // Sayfa yüklendiğinde event listener'ları ekle
     document.addEventListener('DOMContentLoaded', function() {
         attachBenefitCardEvents();
         
-        // Arama input event listener
-        document.getElementById('categorySearch').addEventListener('input', filterCategories);
-        
-        // İlk kategoriyi aktif yap
-        const firstCategory = document.querySelector('.glass-card');
+                 // İlk kategoriyi (Tüm Kategoriler) aktif yap
+        const firstCategory = document.querySelector('[data-category-id="0"]');
         if (firstCategory) {
             firstCategory.classList.add('active');
         }
+        
+
     });
 </script>
 

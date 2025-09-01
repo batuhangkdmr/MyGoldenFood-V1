@@ -55,34 +55,28 @@ namespace MyGoldenFood.Controllers
                 }
             }
 
-            // Varsayılan olarak ilk kategorideki ürünleri de getir
-            var defaultBenefits = new List<Benefit>();
-            if (categories.Any())
-            {
-                var firstCategory = categories.First();
-                defaultBenefits = await _context.Benefits
-                    .Include(b => b.BenefitCategory)
-                    .Include(b => b.Translations)
-                    .Where(b => b.BenefitCategoryId == firstCategory.Id)
-                    .ToListAsync();
+            // Varsayılan olarak tüm faydaları getir
+            var defaultBenefits = await _context.Benefits
+                .Include(b => b.BenefitCategory)
+                .Include(b => b.Translations)
+                .ToListAsync();
 
-                foreach (var benefit in defaultBenefits)
+            foreach (var benefit in defaultBenefits)
+            {
+                var translation = benefit.Translations.FirstOrDefault(t => t.LanguageCode == selectedLanguage);
+                if (translation != null)
                 {
-                    var translation = benefit.Translations.FirstOrDefault(t => t.LanguageCode == selectedLanguage);
-                    if (translation != null)
-                    {
-                        benefit.Name = translation.Name;
-                        benefit.Content = translation.Content;
-                    }
+                    benefit.Name = translation.Name;
+                    benefit.Content = translation.Content;
                 }
             }
 
             ViewBag.Categories = categories;
             ViewBag.DefaultBenefits = defaultBenefits;
-            ViewBag.SelectedCategoryId = categories.Any() ? categories.First().Id : 0;
+            ViewBag.SelectedCategoryId = 0; // 0 = Tüm Kategoriler
             ViewBag.SelectedLanguage = selectedLanguage;
             ViewBag.HasCategories = categories.Any();
-            ViewBag.FirstCategoryName = categories.Any() ? categories.First().Name : "";
+            ViewBag.FirstCategoryName = "Tüm Kategoriler";
 
             return View();
         }
@@ -94,6 +88,43 @@ namespace MyGoldenFood.Controllers
                 .Include(b => b.BenefitCategory)
                 .ToListAsync();
             return PartialView("_BenefitListPartial", benefits);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllBenefits()
+        {
+            string selectedLanguage = "tr";
+
+            var userCulture = Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
+            if (!string.IsNullOrEmpty(userCulture))
+            {
+                selectedLanguage = userCulture.Split('|')[0].Replace("c=", "");
+            }
+
+            var benefits = await _context.Benefits
+                .Include(b => b.BenefitCategory)
+                .Include(b => b.Translations)
+                .ToListAsync();
+
+            foreach (var benefit in benefits)
+            {
+                var translation = benefit.Translations.FirstOrDefault(t => t.LanguageCode == selectedLanguage);
+                if (translation != null)
+                {
+                    benefit.Name = translation.Name;
+                    benefit.Content = translation.Content;
+                }
+            }
+
+            // JSON formatında döndür
+            var benefitData = benefits.Select(b => new
+            {
+                name = b.Name,
+                content = b.Content,
+                imagePath = b.ImagePath
+            });
+
+            return Json(benefitData);
         }
 
         [HttpGet]
@@ -123,7 +154,15 @@ namespace MyGoldenFood.Controllers
                 }
             }
 
-            return PartialView("_BenefitsByCategoryPartial", benefits);
+            // JSON formatında döndür
+            var benefitData = benefits.Select(b => new
+            {
+                name = b.Name,
+                content = b.Content,
+                imagePath = b.ImagePath
+            });
+
+            return Json(benefitData);
         }
 
         [HttpGet]
