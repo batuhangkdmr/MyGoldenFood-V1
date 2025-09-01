@@ -14,7 +14,6 @@
         left: 0;
         right: 0; /* Sağ kenarı da sabitle */
         z-index: 1000;
-        transition: top 0.3s ease-in-out; /* Yumuşak geçiş */
         transform: translateZ(0); /* Hardware acceleration */
         will-change: transform; /* Performance optimizasyonu */
     }
@@ -206,7 +205,6 @@
 </nav>
 <!-- Navbar Takip Etme JavaScript -->
 <script>
-    let lastScrollTop = 0;
     const navbar = document.getElementById("dynamicNavbar");
 
     // Navbar'ı viewport'a sabitle
@@ -222,18 +220,19 @@
     window.addEventListener('load', fixNavbarPosition);
     window.addEventListener('resize', fixNavbarPosition);
 
-    window.addEventListener("scroll", function () {
-        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        if (scrollTop > lastScrollTop) {
-            navbar.style.top = `-${navbar.offsetHeight}px`; // Aşağı kayınca navbar gizleniyor
-        } else {
-            navbar.style.top = "0"; // Yukarı kayınca navbar tekrar görünüyor
-        }
-        lastScrollTop = scrollTop;
-        
-        // Scroll sırasında da navbar pozisyonunu koru
-        fixNavbarPosition();
-    });
+    // Navbar artık scroll sırasında gizlenmiyor, sabit kalıyor
+    // window.addEventListener("scroll", function () {
+    //     let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    //     if (scrollTop > lastScrollTop) {
+    //         navbar.style.top = `-${navbar.offsetHeight}px`; // Aşağı kayınca navbar gizleniyor
+    //     } else {
+    //         navbar.style.top = "0"; // Yukarı kayınca navbar tekrar görünüyor
+    //     }
+    //     lastScrollTop = scrollTop;
+    //     
+    //     // Scroll sırasında da navbar pozisyonunu koru
+    //     fixNavbarPosition();
+    // });
 
     // Touch olayları için navbar pozisyonunu koru (sadece navbar alanında)
     document.addEventListener('touchmove', function(e) {
