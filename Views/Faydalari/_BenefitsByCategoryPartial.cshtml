@@ -5,21 +5,25 @@
     <div class="row">
         @foreach (var benefit in Model)
         {
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="benefit-card">
-                    @if (!string.IsNullOrEmpty(benefit.ImagePath))
-                    {
-                        <img src="@benefit.ImagePath" alt="@benefit.Name" class="benefit-image" />
-                    }
-                    else
-                    {
-                        <div class="bg-secondary text-white d-flex align-items-center justify-content-center benefit-image">
-                            <i class="fas fa-heart fa-3x"></i>
-                        </div>
-                    }
-                    
+            <div class="col-lg-4 col-md-6 col-6 text-center mb-4">
+                <div class="benefit-card" 
+                     data-name="@benefit.Name" 
+                     data-content="@benefit.Content">
+                    <div class="image-container">
+                        @if (!string.IsNullOrEmpty(benefit.ImagePath))
+                        {
+                            <img src="@benefit.ImagePath" 
+                                 alt="@benefit.Name" 
+                                 class="benefit-image" />
+                        }
+                        else
+                        {
+                            <div class="bg-secondary text-white d-flex align-items-center justify-content-center benefit-image">
+                                <i class="fas fa-heart fa-3x"></i>
+                            </div>
+                        }
+                    </div>
                     <h4 class="text-white mb-3">@benefit.Name</h4>
-                    
                     <p class="text-muted mb-3">
                         @if (!string.IsNullOrEmpty(benefit.Content) && benefit.Content.Length > 100)
                         {
@@ -30,12 +34,11 @@
                             @benefit.Content
                         }
                     </p>
-                    
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="badge bg-primary">@benefit.BenefitCategory?.Name</span>
-                        <a href="/Faydalari/Details/@benefit.Id" class="btn btn-outline-light btn-sm">
+                        <button class="btn btn-outline-light btn-sm" onclick="showBenefitDetails('@benefit.Name', '@benefit.Content')">
                             <i class="fas fa-eye"></i> Detaylar
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -47,6 +50,6 @@ else
     <div class="text-center text-muted py-5">
         <i class="fas fa-info-circle fa-3x mb-3"></i>
         <h4>Bu kategoride henüz fayda bulunmuyor</h4>
-        <p>Yakında faydaları eklenecek!</p>
+        <p>Yakında sağlık faydaları eklenecek!</p>
     </div>
 }

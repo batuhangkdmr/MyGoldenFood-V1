@@ -1,5 +1,4 @@
 ﻿@using Microsoft.Extensions.Localization
-@model IEnumerable<MyGoldenFood.Models.BenefitCategory>
 
 @{
     ViewData["Title"] = "Donuk Gıda Faydaları | Dondurulmuş Gıda Sağlık Avantajları | My Golden Food";
@@ -25,91 +24,840 @@
     Donuk Gıda Faydaları | Dondurulmuş Gıdaların Sağlık Avantajları | Flash Freezing Teknolojisi ile Besin Değeri Korunumu
 </h1>
 
-<div class="container" style="margin-top: 100px;">
-    <h2 class="text-center text-white mb-4">@Html.T("BenefitCategories")</h2>
-    
-    <!-- Kategoriler -->
-    <div class="row" id="categoriesSection">
-        @foreach (var category in Model)
-        {
-            <div class="col-md-4 col-6 text-center mb-4">
-                <div class="category-card" onclick="goToDetails(@category.Id)" style="cursor: pointer;">
-                    <div class="image-container">
-                        <img src="@category.ImagePath" 
-                             alt="@category.Name | Donuk Gıda Faydaları | Dondurulmuş Gıda Sağlık Avantajları" 
-                             class="category-image" 
-                             title="@category.Name - Donuk Gıda Faydaları" />
+<div class="container-fluid" style="margin-top: 100px;">
+    <div class="row">
+        <!-- Sol Sidebar - Kategoriler -->
+        <div class="col-lg-3 col-md-4">
+            <div class="glass-sidebar">
+         @*        <div class="sidebar-header">
+                    <div class="header-content">
+                        <div class="header-icon">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <h3>@Html.T("BenefitCategories")</h3>
                     </div>
-                    <h3 class="mt-3">@category.Name</h3>
-                    <p class="text-muted">@category.Benefits.Count fayda</p>
+                    <button class="sidebar-toggle d-md-none" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div> *@
+                
+                <div class="sidebar-content">
+                    <div class="search-box">
+                        <div class="search-input">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Kategori ara..." id="categorySearch">
+                        </div>
+                    </div>
+                    
+                    <div class="categories-list">
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <div class="glass-card category-card @(category.Id == ViewBag.SelectedCategoryId ? "active" : "")" 
+                                 onclick="loadBenefitsByCategory(@category.Id, '@category.Name')" 
+                                 data-category-id="@category.Id">
+                                <div class="card-content">
+                                    <div class="card-icon">
+                                        @if (!string.IsNullOrEmpty(category.ImagePath))
+                                        {
+                                            <img src="@category.ImagePath" alt="@category.Name" class="category-image" />
+                                        }
+                                        else
+                                        {
+                                            <div class="icon-placeholder">
+                                                <i class="fas fa-heart"></i>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="card-info">
+                                        <h4 class="card-title">@category.Name</h4>
+                                        <p class="card-subtitle">@(category.Benefits?.Count ?? 0) fayda</p>
+                                    </div>
+                                    <div class="card-action">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
-        }
+        </div>
+
+                <!-- Sağ Content - Ürünler -->
+        <div class="col-lg-9 col-md-8">
+            <div class="content-container">
+                <div class="content-header">
+                    <h2 class="text-white mb-4" id="categoryTitle">
+                        @if (ViewBag.HasCategories)
+                        {
+                            @ViewBag.FirstCategoryName
+                        }
+                    </h2>
+                </div>
+
+                <!-- Loading Spinner -->
+                <div id="loadingSpinner" class="text-center" style="display: none;">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="visually-hidden">Yükleniyor...</span>
+                    </div>
+                </div>
+
+                <!-- Benefits Content -->
+                <div id="benefitsContent">
+                    @if (ViewBag.DefaultBenefits != null && ViewBag.DefaultBenefits.Count > 0)
+                    {
+                        <div class="row">
+                            @foreach (var benefit in ViewBag.DefaultBenefits)
+                            {
+                                <div class="col-lg-4 col-md-6 col-6 text-center mb-4">
+                                    <div class="benefit-card" 
+                                         data-name="@benefit.Name" 
+                                         data-content="@benefit.Content">
+                                        <div class="image-container">
+                                            @if (!string.IsNullOrEmpty(benefit.ImagePath))
+                                            {
+                                                <img src="@benefit.ImagePath" 
+                                                     alt="@benefit.Name" 
+                                                     class="benefit-image" />
+                                            }
+                                            else
+                                            {
+                                                <div class="bg-secondary text-white d-flex align-items-center justify-content-center benefit-image">
+                                                    <i class="fas fa-heart fa-3x"></i>
+                                                </div>
+                                            }
+                                        </div>
+                                        <h4 class="text-white mb-3">@benefit.Name</h4>
+                                        <p class="text-muted mb-3">
+                                            @if (!string.IsNullOrEmpty(benefit.Content) && benefit.Content.Length > 100)
+                                            {
+                                                @(benefit.Content.Substring(0, 100) + "...")
+                                            }
+                                            else
+                                            {
+                                                @benefit.Content
+                                            }
+                                        </p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-primary">@benefit.BenefitCategory?.Name</span>
+                                            <button class="btn btn-outline-light btn-sm" onclick="showBenefitDetails('@benefit.Name', '@benefit.Content')">
+                                                <i class="fas fa-eye"></i> Detaylar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center text-muted py-5">
+                            <i class="fas fa-info-circle fa-3x mb-3"></i>
+                            <h4>Bu kategoride henüz fayda bulunmuyor</h4>
+                            <p>Yakında sağlık faydaları eklenecek!</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="detailsModalLabel"></h4>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5 class="modal-title-with-line">@Html.T("BenefitDetails")</h5>
+                <p id="detailsModalDescription"></p>
+            </div>
+        </div>
     </div>
 </div>
 
 <style>
-    /* 🌟 Görsel kapsayıcı */
-    .image-container {
+    /* Modern Glassmorphism Dashboard Background */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
         width: 100%;
-        height: 250px;
-        overflow: hidden;
-        border-radius: 10px;
-        background-color: #000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        height: 100%;
+      /*   background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%); */
+        z-index: -1;
     }
 
-    /* 🌟 Görsel düzenleme */
+    /* Glassmorphism Sidebar */
+    .glass-sidebar {
+      /*   background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(25px); */
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 0;
+        height: fit-content;
+        position: sticky;
+        top: 172px;
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .sidebar-header {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+        padding: 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+    }
+
+    .sidebar-header::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 20px;
+        right: 20px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    }
+
+    .header-content {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .header-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.4rem;
+        box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+    }
+
+    .sidebar-header h3 {
+        color: #ffffff;
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    .sidebar-toggle {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+        font-size: 1.1rem;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 12px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(10px);
+    }
+
+    .sidebar-toggle:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: scale(1.05);
+        box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
+    }
+
+    .sidebar-content {
+        padding: 24px;
+    }
+
+    /* Search Box */
+    .search-box {
+        margin-bottom: 24px;
+    }
+
+    .search-input {
+        position: relative;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        padding: 16px 20px 16px 50px;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+
+    .search-input:focus-within {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(102, 126, 234, 0.5);
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .search-input i {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 1rem;
+    }
+
+    .search-input input {
+        background: none;
+        border: none;
+        color: #ffffff;
+        width: 100%;
+        font-size: 0.95rem;
+        outline: none;
+    }
+
+    .search-input input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Categories List */
+    .categories-list {
+        max-height: 65vh;
+        overflow-y: auto;
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        margin-bottom: 16px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .glass-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
+
+    .glass-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .glass-card:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        border-color: rgba(102, 126, 234, 0.3);
+    }
+
+    .glass-card.active {
+        background: rgba(102, 126, 234, 0.15);
+        border-color: rgba(102, 126, 234, 0.4);
+        box-shadow: 0 0 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .glass-card.active::before {
+        transform: scaleX(1);
+    }
+
+    .card-content {
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .card-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: all 0.3s ease;
+    }
+
+    .glass-card:hover .card-icon {
+        background: rgba(102, 126, 234, 0.2);
+        transform: scale(1.1);
+    }
+
     .category-image {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: center;
+        transition: transform 0.3s ease;
     }
 
-    /* 🌟 Kart düzeni */
-    .category-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        padding: 10px;
-        background-color: #121928;
-        border-radius: 10px;
+    .glass-card:hover .category-image {
+        transform: scale(1.1);
+    }
+
+    .icon-placeholder {
+        width: 100%;
         height: 100%;
         display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        align-items: center;
+        justify-content: center;
+        color: #667eea;
+        font-size: 1.4rem;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
     }
 
-    .category-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+    .card-info {
+        flex: 1;
+        min-width: 0;
     }
 
-    /* 🌟 📱 Mobil Görünüm */
+    .card-title {
+        color: #ffffff;
+        margin: 0 0 4px 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .card-subtitle {
+        color: rgba(255, 255, 255, 0.6);
+        margin: 0;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .card-action {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    .glass-card:hover .card-action {
+        opacity: 1;
+        transform: translateX(0);
+        color: #667eea;
+    }
+
+    /* Content Container */
+    .content-container {
+        padding: 0 24px;
+    }
+
+    .content-header {
+        margin-bottom: 32px;
+    }
+
+    .content-header h2 {
+        color: #ffffff;
+        font-size: 3.2rem;
+        font-weight: 700;
+        margin: 0;
+        background: linear-gradient(135deg, #ffffff, #667eea);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+    }
+
+    /* Benefit Cards */
+    .benefit-card {
+        background: rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 28px;
+        height: 100%;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .benefit-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
+
+    .benefit-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .benefit-card:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-8px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        border-color: rgba(102, 126, 234, 0.3);
+    }
+
+    .image-container {
+        margin-bottom: 24px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        border-radius: 20px;
+    }
+
+    .benefit-image {
+        width: 100%;
+        height: 220px;
+        object-fit: contain;
+        border-radius: 20px;
+        transition: transform 0.4s ease;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0px;
+    }
+
+    .benefit-card:hover .benefit-image {
+        transform: scale(1.08);
+    }
+
+    .benefit-card h4 {
+        color: #ffffff;
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+        line-height: 1.4;
+    }
+
+    .benefit-card p {
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.7;
+        margin-bottom: 24px;
+        font-size: 0.95rem;
+    }
+
+    .benefit-card .badge {
+        background: linear-gradient(135deg, #667eea, #764ba2) !important;
+        border: none;
+        padding: 10px 16px;
+        font-size: 0.9rem;
+        border-radius: 25px;
+        font-weight: 500;
+    }
+
+    .benefit-card .btn {
+        border-radius: 25px;
+        padding: 10px 24px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(102, 126, 234, 0.3);
+        background: rgba(102, 126, 234, 0.1);
+        color: #667eea;
+    }
+
+    .benefit-card .btn:hover {
+        background: rgba(102, 126, 234, 0.2);
+        border-color: rgba(102, 126, 234, 0.5);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    /* Responsive Design */
     @@media (max-width: 768px) {
-        .col-6 {
-            width: 50%;
-            padding: 5px;
+        .glass-sidebar {
+            position: static;
+            margin-bottom: 24px;
+            max-height: 500px;
+            overflow: hidden;
         }
 
-        .image-container {
+        .glass-sidebar.collapsed {
+            max-height: 80px;
+        }
+
+        .sidebar-content {
+            padding: 20px;
+        }
+
+        .search-input {
+            padding: 14px 18px 14px 45px;
+        }
+
+        .glass-card {
+            margin-bottom: 12px;
+        }
+
+        .card-content {
+            padding: 16px;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+        }
+
+        .content-container {
+            padding: 0 16px;
+        }
+
+        .content-header h2 {
+            font-size: 1.8rem;
+        }
+
+        .benefit-card {
+            padding: 20px;
+        }
+
+        .benefit-image {
             height: 180px;
         }
 
-        h3 {
+        /* Mobil için benefit-card responsive düzenlemeleri */
+        .benefit-card .d-flex {
+            flex-direction: column !important;
+            gap: 15px;
+            align-items: stretch !important;
+        }
+
+        .benefit-card .badge {
+            align-self: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .benefit-card .btn {
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        /* Mobil için col-6 düzenlemesi */
+        .col-6 {
+            padding: 5px;
+        }
+
+        .col-6 .benefit-card {
+            padding: 15px;
+        }
+
+        .col-6 .benefit-image {
+            height: 140px;
+        }
+
+        .col-6 h4 {
             font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .col-6 p {
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+    }
+
+    /* Scrollbar Styling */
+    .categories-list::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .categories-list::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+    }
+
+    .categories-list::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #667eea, #764ba2);
+        border-radius: 4px;
+    }
+
+    .categories-list::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #5a6fd8, #6a5acd);
+    }
+
+    /* Modal Styling */
+    .modal-content {
+        background: rgba(15, 15, 35, 0.95);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 24px;
+        color: #ffffff;
+    }
+
+    .modal-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.05));
+    }
+
+    .modal-title-with-line {
+        color: #667eea;
+        border-bottom: 2px solid #667eea;
+        padding-bottom: 12px;
+        margin-bottom: 24px;
+    }
+
+    /* Loading Spinner */
+    #loadingSpinner {
+        padding: 48px;
+    }
+
+    .spinner-border {
+        color: #667eea !important;
+    }
+
+    /* Animation Classes */
+    .fade-in {
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .slide-in {
+        animation: slideIn 0.5s ease-out;
+    }
+
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
         }
     }
 </style>
 
 <script>
-    function goToDetails(categoryId) {
-        // Details sayfasına yönlendir
-        window.location.href = '/Faydalari/Details/' + categoryId;
+    // Kategori seçiminde ürünleri yükle
+    function loadBenefitsByCategory(categoryId, categoryName) {
+        // Loading spinner'ı göster
+        document.getElementById('loadingSpinner').style.display = 'block';
+        document.getElementById('benefitsContent').style.display = 'none';
+
+        // Aktif kategoriyi güncelle
+        document.querySelectorAll('.glass-card').forEach(item => {
+            item.classList.remove('active');
+        });
+        document.querySelector(`[data-category-id="${categoryId}"]`).classList.add('active');
+
+        // Kategori başlığını güncelle
+        document.getElementById('categoryTitle').textContent = categoryName;
+
+        // AJAX ile ürünleri yükle
+        fetch(`/Faydalari/GetBenefitsByCategory/${categoryId}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('benefitsContent').innerHTML = html;
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('benefitsContent').style.display = 'block';
+                
+                // Fade-in animasyonu ekle
+                document.getElementById('benefitsContent').classList.add('fade-in');
+                
+                // Event listener'ları yeniden ekle
+                attachBenefitCardEvents();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('benefitsContent').style.display = 'block';
+            });
     }
+
+    // Fayda detaylarını göster
+    function showBenefitDetails(name, content) {
+        document.getElementById('detailsModalLabel').textContent = name;
+        document.getElementById('detailsModalDescription').textContent = content;
+        
+        const modal = new bootstrap.Modal(document.getElementById('detailsModal'));
+        modal.show();
+    }
+
+    // Fayda kartlarına event listener ekle
+    function attachBenefitCardEvents() {
+        document.querySelectorAll('.benefit-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const name = this.getAttribute('data-name');
+                const content = this.getAttribute('data-content');
+                showBenefitDetails(name, content);
+            });
+        });
+    }
+
+    // Sidebar toggle fonksiyonu
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.glass-sidebar');
+        sidebar.classList.toggle('collapsed');
+    }
+
+    // Kategori arama fonksiyonu
+    function filterCategories() {
+        const searchTerm = document.getElementById('categorySearch').value.toLowerCase();
+        const categories = document.querySelectorAll('.glass-card');
+        
+        categories.forEach(category => {
+            const title = category.querySelector('.card-title').textContent.toLowerCase();
+            if (title.includes(searchTerm)) {
+                category.style.display = 'block';
+                category.classList.add('slide-in');
+            } else {
+                category.style.display = 'none';
+            }
+        });
+    }
+
+    // Sayfa yüklendiğinde event listener'ları ekle
+    document.addEventListener('DOMContentLoaded', function() {
+        attachBenefitCardEvents();
+        
+        // Arama input event listener
+        document.getElementById('categorySearch').addEventListener('input', filterCategories);
+        
+        // İlk kategoriyi aktif yap
+        const firstCategory = document.querySelector('.glass-card');
+        if (firstCategory) {
+            firstCategory.classList.add('active');
+        }
+    });
 </script>
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        // SignalR bağlantısı
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/faydalariHub")
+            .build();
+
+        connection.on("BenefitUpdated", function () {
+            console.log("Fayda güncellemesi alındı, sayfa yenileniyor...");
+            location.reload();
+        });
+
+        connection.start().then(() => {
+            console.log("SignalR Faydalari bağlantısı kuruldu.");
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+    </script>
 }

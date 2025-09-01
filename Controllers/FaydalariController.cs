@@ -9,6 +9,7 @@ using MyGoldenFood.Hubs;
 using MyGoldenFood.Models;
 using MyGoldenFood.Services;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -54,7 +55,36 @@ namespace MyGoldenFood.Controllers
                 }
             }
 
-            return View(categories);
+            // Varsayılan olarak ilk kategorideki ürünleri de getir
+            var defaultBenefits = new List<Benefit>();
+            if (categories.Any())
+            {
+                var firstCategory = categories.First();
+                defaultBenefits = await _context.Benefits
+                    .Include(b => b.BenefitCategory)
+                    .Include(b => b.Translations)
+                    .Where(b => b.BenefitCategoryId == firstCategory.Id)
+                    .ToListAsync();
+
+                foreach (var benefit in defaultBenefits)
+                {
+                    var translation = benefit.Translations.FirstOrDefault(t => t.LanguageCode == selectedLanguage);
+                    if (translation != null)
+                    {
+                        benefit.Name = translation.Name;
+                        benefit.Content = translation.Content;
+                    }
+                }
+            }
+
+            ViewBag.Categories = categories;
+            ViewBag.DefaultBenefits = defaultBenefits;
+            ViewBag.SelectedCategoryId = categories.Any() ? categories.First().Id : 0;
+            ViewBag.SelectedLanguage = selectedLanguage;
+            ViewBag.HasCategories = categories.Any();
+            ViewBag.FirstCategoryName = categories.Any() ? categories.First().Name : "";
+
+            return View();
         }
 
         [HttpGet]
