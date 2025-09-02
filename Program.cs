@@ -15,6 +15,9 @@ using System.Net;
 using System.Net.Mail;
 using MyGoldenFood.Hubs;
 using Microsoft.Extensions.Localization;
+using Microsoft.AspNetCore.Server.IIS;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace MyGoldenFood
 {
@@ -100,6 +103,23 @@ namespace MyGoldenFood
 
             // MVC
             services.AddControllersWithViews();
+
+            // 📏 Request Boyut Limitleri
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.MaxRequestBodySize = 52428800; // 50MB
+            });
+
+            services.Configure<KestrelServerOptions>(options =>
+            {
+                options.Limits.MaxRequestBodySize = 52428800; // 50MB
+            });
+
+            services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 52428800; // 50MB
+                options.ValueLengthLimit = 52428800; // 50MB
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

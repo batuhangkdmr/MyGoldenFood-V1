@@ -529,29 +529,54 @@
         .glass-sidebar {
             position: static;
             margin-bottom: 24px;
-            max-height: 500px;
-            overflow: hidden;
+            max-height: none;
+            overflow: visible;
         }
 
         .glass-sidebar.collapsed {
-            max-height: 80px;
+            max-height: none;
         }
 
-                 .sidebar-content {
-             padding: 20px;
-         }
+        .sidebar-content {
+            padding: 12px;
+        }
+
+        .categories-list {
+            max-height: none;
+            overflow: visible;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding-bottom: 10px;
+        }
 
         .glass-card {
-            margin-bottom: 12px;
+            margin-bottom: 0;
+            width: 100%;
+            min-width: unset;
+            max-width: unset;
         }
 
         .card-content {
-            padding: 16px;
+            padding: 10px;
         }
 
         .card-icon {
-            width: 48px;
-            height: 48px;
+            width: 36px;
+            height: 36px;
+        }
+
+        .card-title {
+            font-size: 0.85rem;
+            margin-bottom: 2px;
+        }
+
+        .card-subtitle {
+            font-size: 0.75rem;
+        }
+
+        .card-action {
+            display: none;
         }
 
         .content-container {
@@ -567,7 +592,7 @@
         }
 
         .benefit-card {
-           /*  padding: 15px; */
+            /*  padding: 15px; */
         }
 
         .benefit-image {
@@ -577,6 +602,30 @@
         /* Mobil için benefit-card responsive düzenlemeleri */
         .benefit-name {
             font-size: 1rem;
+        }
+
+        /* Mobilde sidebar'ın tam görünmesi için */
+        .col-lg-3.col-md-4 {
+            margin-bottom: 20px;
+        }
+
+        /* Mobilde yatay scroll için özel stiller */
+        .categories-list::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .categories-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .categories-list::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 3px;
+        }
+
+        .categories-list::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(90deg, #5a6fd8, #6a5acd);
         }
     }
 
