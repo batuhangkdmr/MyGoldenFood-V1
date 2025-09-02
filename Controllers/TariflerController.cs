@@ -9,6 +9,7 @@ using MyGoldenFood.Hubs;
 using MyGoldenFood.Models;
 using MyGoldenFood.Services;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -42,6 +43,11 @@ namespace MyGoldenFood.Controllers
             var categories = await _context.RecipeCategories
                 .Include(c => c.Translations)
                 .Include(c => c.Recipes)
+                .Include(c => c.ChildCategories)
+                .Include(c => c.ParentCategory)
+                .OrderBy(c => c.Level)
+                .ThenBy(c => c.SortOrder)
+                .ThenBy(c => c.Name)
                 .ToListAsync();
 
             foreach (var category in categories)
@@ -50,6 +56,16 @@ namespace MyGoldenFood.Controllers
                 if (translation != null)
                 {
                     category.Name = translation.Name;
+                }
+
+                // Alt kategorilerin çevirilerini de güncelle
+                foreach (var child in category.ChildCategories)
+                {
+                    var childTranslation = child.Translations.FirstOrDefault(t => t.Language == selectedLanguage);
+                    if (childTranslation != null)
+                    {
+                        child.Name = childTranslation.Name;
+                    }
                 }
             }
 
@@ -148,6 +164,23 @@ namespace MyGoldenFood.Controllers
             return PartialView("_CreateRecipeCategoryPartial");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetParentCategories()
+        {
+            var parentCategories = await _context.RecipeCategories
+                .Where(c => c.Level == 0) // Sadece ana kategoriler
+                .OrderBy(c => c.SortOrder)
+                .ThenBy(c => c.Name)
+                .Select(c => new
+                {
+                    id = c.Id,
+                    name = c.Name
+                })
+                .ToListAsync();
+
+            return Json(parentCategories);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateCategory(RecipeCategory model, IFormFile ImageFile, [FromServices] DeepLTranslationService translationService)
         {
@@ -160,6 +193,17 @@ namespace MyGoldenFood.Controllers
                     {
                         model.ImagePath = uploadResult;
                     }
+                }
+
+                // Alt kategori sistemi için Level ve ParentCategoryId ayarla
+                if (model.ParentCategoryId.HasValue)
+                {
+                    model.Level = 1; // Alt kategori
+                }
+                else
+                {
+                    model.Level = 0; // Ana kategori
+                    model.ParentCategoryId = null;
                 }
 
                 _context.RecipeCategories.Add(model);
@@ -209,6 +253,19 @@ namespace MyGoldenFood.Controllers
                 if (existingCategory == null) return NotFound();
 
                 existingCategory.Name = model.Name;
+                existingCategory.SortOrder = model.SortOrder;
+                
+                // Alt kategori sistemi için Level ve ParentCategoryId ayarla
+                if (model.ParentCategoryId.HasValue)
+                {
+                    existingCategory.Level = 1; // Alt kategori
+                    existingCategory.ParentCategoryId = model.ParentCategoryId;
+                }
+                else
+                {
+                    existingCategory.Level = 0; // Ana kategori
+                    existingCategory.ParentCategoryId = null;
+                }
 
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
@@ -507,10 +564,42 @@ namespace MyGoldenFood.Controllers
                 selectedLanguage = userCulture.Split('|')[0].Replace("c=", "");
             }
 
+            var categoryIds = new List<int>();
+            
+            if (id == 0) // Tüm Kategoriler
+            {
+                // Tüm kategorilerin ID'lerini al
+                categoryIds = await _context.RecipeCategories.Select(c => c.Id).ToListAsync();
+            }
+            else
+            {
+                var category = await _context.RecipeCategories
+                    .Include(c => c.ChildCategories)
+                    .FirstOrDefaultAsync(c => c.Id == id);
+                
+                if (category != null)
+                {
+                    if (category.Level == 0) // Ana kategori (ParentCategoryId = NULL)
+                    {
+                        // Ana kategori seçilirse, alt kategorilerin ID'lerini de ekle
+                        categoryIds.Add(id);
+                        if (category.ChildCategories.Any())
+                        {
+                            categoryIds.AddRange(category.ChildCategories.Select(c => c.Id));
+                        }
+                    }
+                    else // Alt kategori (ParentCategoryId != NULL)
+                    {
+                        // Alt kategori seçilirse, sadece o alt kategorinin ID'sini kullan
+                        categoryIds.Add(id);
+                    }
+                }
+            }
+
             var recipes = await _context.Recipes
                 .Include(r => r.RecipeCategory)
                 .Include(r => r.RecipeTranslations)
-                .Where(r => r.RecipeCategoryId == id)
+                .Where(r => id == 0 || categoryIds.Contains(r.RecipeCategoryId))
                 .ToListAsync();
 
             foreach (var recipe in recipes)
@@ -532,6 +621,202 @@ namespace MyGoldenFood.Controllers
                 recipeCategoryId = r.RecipeCategoryId,
                 recipeCategoryName = r.RecipeCategory?.Name ?? "Kategori Yok"
             }).ToList();
+
+            return Json(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> TestSubcategoryRecipes(int categoryId)
+        {
+            // Debug için alt kategori tariflerini test et
+            var category = await _context.RecipeCategories
+                .Include(c => c.ChildCategories)
+                .FirstOrDefaultAsync(c => c.Id == categoryId);
+            
+            var recipes = await _context.Recipes
+                .Include(r => r.RecipeCategory)
+                .Where(r => r.RecipeCategoryId == categoryId)
+                .ToListAsync();
+            
+            var result = new
+            {
+                categoryId = categoryId,
+                categoryName = category?.Name,
+                categoryLevel = category?.Level,
+                parentCategoryId = category?.ParentCategoryId,
+                isSubcategory = category?.Level == 1,
+                recipeCount = recipes.Count,
+                recipes = recipes.Select(r => new
+                {
+                    id = r.Id,
+                    name = r.Name,
+                    categoryId = r.RecipeCategoryId,
+                    categoryName = r.RecipeCategory?.Name
+                }).ToList()
+            };
+            
+            return Json(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetRecipesBySubcategory(int recipeCategoryId)
+        {
+            string selectedLanguage = "tr";
+
+            var userCulture = Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
+            if (!string.IsNullOrEmpty(userCulture))
+            {
+                selectedLanguage = userCulture.Split('|')[0].Replace("c=", "");
+            }
+
+            // Alt kategorideki tarifleri direkt getir
+            var recipes = await _context.Recipes
+                .Include(r => r.RecipeCategory)
+                .Include(r => r.RecipeTranslations)
+                .Where(r => r.RecipeCategoryId == recipeCategoryId)
+                .ToListAsync();
+
+            // Debug: Kaç tarif bulundu
+            Console.WriteLine($"GetRecipesBySubcategory - recipeCategoryId: {recipeCategoryId}, bulunan tarif sayısı: {recipes.Count}");
+
+            foreach (var recipe in recipes)
+            {
+                var translation = recipe.RecipeTranslations.FirstOrDefault(t => t.LanguageCode == selectedLanguage);
+                if (translation != null)
+                {
+                    recipe.Name = translation.Name;
+                    recipe.Content = translation.Content;
+                }
+            }
+
+            var result = recipes.Select(r => new
+            {
+                id = r.Id,
+                name = r.Name,
+                content = r.Content,
+                imagePath = r.ImagePath,
+                recipeCategoryId = r.RecipeCategoryId,
+                recipeCategoryName = r.RecipeCategory?.Name ?? "Kategori Yok"
+            }).ToList();
+
+            return Json(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCategoriesWithChildren()
+        {
+            string selectedLanguage = "tr";
+
+            var userCulture = Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
+            if (!string.IsNullOrEmpty(userCulture))
+            {
+                selectedLanguage = userCulture.Split('|')[0].Replace("c=", "");
+            }
+
+            var categories = await _context.RecipeCategories
+                .Include(c => c.Translations)
+                .Include(c => c.ChildCategories)
+                .Include(c => c.Recipes)
+                .Where(c => c.Level == 0) // Sadece ana kategoriler
+                .OrderBy(c => c.SortOrder)
+                .ThenBy(c => c.Name)
+                .ToListAsync();
+
+            foreach (var category in categories)
+            {
+                var translation = category.Translations.FirstOrDefault(t => t.Language == selectedLanguage);
+                if (translation != null)
+                {
+                    category.Name = translation.Name;
+                }
+
+                // Alt kategorilerin çevirilerini de güncelle
+                foreach (var child in category.ChildCategories)
+                {
+                    var childTranslation = child.Translations.FirstOrDefault(t => t.Language == selectedLanguage);
+                    if (childTranslation != null)
+                    {
+                        child.Name = childTranslation.Name;
+                    }
+                }
+            }
+
+            var result = categories.Select(c => new
+            {
+                id = c.Id,
+                name = c.Name,
+                imagePath = c.ImagePath,
+                level = c.Level,
+                sortOrder = c.SortOrder,
+                recipeCount = c.Recipes.Count + c.ChildCategories.Sum(child => child.Recipes.Count),
+                childCategories = c.ChildCategories.OrderBy(child => child.SortOrder).ThenBy(child => child.Name).Select(child => new
+                {
+                    id = child.Id,
+                    name = child.Name,
+                    imagePath = child.ImagePath,
+                    recipeCount = child.Recipes.Count
+                }).ToList()
+            }).ToList();
+
+            return Json(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSubCategories(int parentId)
+        {
+            string selectedLanguage = "tr";
+
+            var userCulture = Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
+            if (!string.IsNullOrEmpty(userCulture))
+            {
+                selectedLanguage = userCulture.Split('|')[0].Replace("c=", "");
+            }
+
+            var subCategories = await _context.RecipeCategories
+                .Include(c => c.Translations)
+                .Where(c => c.ParentCategoryId == parentId)
+                .OrderBy(c => c.SortOrder)
+                .ThenBy(c => c.Name)
+                .ToListAsync();
+
+            foreach (var category in subCategories)
+            {
+                var translation = category.Translations.FirstOrDefault(t => t.Language == selectedLanguage);
+                if (translation != null)
+                {
+                    category.Name = translation.Name;
+                }
+            }
+
+            var result = subCategories.Select(c => new
+            {
+                id = c.Id,
+                name = c.Name,
+                imagePath = c.ImagePath,
+                recipeCount = c.Recipes.Count
+            }).ToList();
+
+            return Json(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCategoryInfo(int categoryId)
+        {
+            var category = await _context.RecipeCategories
+                .FirstOrDefaultAsync(c => c.Id == categoryId);
+
+            if (category == null)
+            {
+                return Json(new { error = "Kategori bulunamadı" });
+            }
+
+            var result = new
+            {
+                id = category.Id,
+                name = category.Name,
+                isChild = category.Level == 1,
+                parentId = category.ParentCategoryId
+            };
 
             return Json(result);
         }

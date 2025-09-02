@@ -7,15 +7,20 @@
                 <th>ID</th>
                 <th>Görsel</th>
                 <th>Kategori Adı</th>
+                <th>Seviye</th>
+                <th>Ana Kategori</th>
+                <th>Sıralama</th>
                 <th>İşlemler</th>
             </tr>
         </thead>
         <tbody>
             @if (Model != null && Model.Any())
             {
-                foreach (var category in Model)
+                @* Sadece ana kategorileri göster *@
+                @foreach (var category in Model.Where(c => c.Level == 0).OrderBy(c => c.SortOrder).ThenBy(c => c.Name))
                 {
-                    <tr>
+                    @* Ana Kategori *@
+                    <tr class="table-primary">
                         <td>@category.Id</td>
                         <td>
                             @if (!string.IsNullOrEmpty(category.ImagePath))
@@ -29,7 +34,16 @@
                                 </div>
                             }
                         </td>
-                        <td>@category.Name</td>
+                        <td>
+                            <strong>@category.Name</strong>
+                        </td>
+                        <td>
+                            <span class="badge bg-primary">Ana Kategori</span>
+                        </td>
+                        <td>
+                            <span class="text-muted">-</span>
+                        </td>
+                        <td>@category.SortOrder</td>
                         <td>
                             <button class="btn btn-sm btn-primary" onclick="editRecipeCategory(@category.Id)">
                                 <i class="fas fa-edit"></i> Düzenle
@@ -39,12 +53,53 @@
                             </button>
                         </td>
                     </tr>
+                    
+                    @* Alt Kategoriler *@
+                    @if (category.ChildCategories != null && category.ChildCategories.Any())
+                    {
+                        @foreach (var childCategory in category.ChildCategories.OrderBy(c => c.SortOrder).ThenBy(c => c.Name))
+                        {
+                            <tr class="table-light">
+                                <td>@childCategory.Id</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(childCategory.ImagePath))
+                                    {
+                                        <img src="@childCategory.ImagePath" alt="@childCategory.Name" style="width: 50px; height: 50px; object-fit: cover;" class="img-thumbnail" />
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                            <i class="fas fa-image"></i>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="text-muted">└─ </span>@childCategory.Name
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">Alt Kategori</span>
+                                </td>
+                                <td>
+                                    @category.Name
+                                </td>
+                                <td>@childCategory.SortOrder</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" onclick="editRecipeCategory(@childCategory.Id)">
+                                        <i class="fas fa-edit"></i> Düzenle
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteRecipeCategory(@childCategory.Id)">
+                                        <i class="fas fa-trash"></i> Sil
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
                 }
             }
             else
             {
                 <tr>
-                    <td colspan="4" class="text-center text-muted">
+                    <td colspan="7" class="text-center text-muted">
                         <i class="fas fa-info-circle"></i> Henüz kategori eklenmemiş.
                     </td>
                 </tr>
