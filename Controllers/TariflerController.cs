@@ -53,6 +53,29 @@ namespace MyGoldenFood.Controllers
                 }
             }
 
+            // Varsayılan olarak tüm tarifleri getir
+            var defaultRecipes = await _context.Recipes
+                .Include(r => r.RecipeCategory)
+                .Include(r => r.RecipeTranslations)
+                .ToListAsync();
+
+            foreach (var recipe in defaultRecipes)
+            {
+                var translation = recipe.RecipeTranslations.FirstOrDefault(t => t.LanguageCode == selectedLanguage);
+                if (translation != null)
+                {
+                    recipe.Name = translation.Name;
+                    recipe.Content = translation.Content;
+                }
+            }
+
+            ViewBag.Categories = categories;
+            ViewBag.DefaultRecipes = defaultRecipes;
+            ViewBag.SelectedCategoryId = 0; // 0 = Tüm Kategoriler
+            ViewBag.SelectedLanguage = selectedLanguage;
+            ViewBag.HasCategories = categories.Any();
+            ViewBag.FirstCategoryName = "Tüm Kategoriler";
+
             return View(categories);
         }
 
@@ -434,6 +457,45 @@ namespace MyGoldenFood.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetAllRecipes()
+        {
+            string selectedLanguage = "tr";
+
+            var userCulture = Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
+            if (!string.IsNullOrEmpty(userCulture))
+            {
+                selectedLanguage = userCulture.Split('|')[0].Replace("c=", "");
+            }
+
+            var recipes = await _context.Recipes
+                .Include(r => r.RecipeCategory)
+                .Include(r => r.RecipeTranslations)
+                .ToListAsync();
+
+            foreach (var recipe in recipes)
+            {
+                var translation = recipe.RecipeTranslations.FirstOrDefault(t => t.LanguageCode == selectedLanguage);
+                if (translation != null)
+                {
+                    recipe.Name = translation.Name;
+                    recipe.Content = translation.Content;
+                }
+            }
+
+            var result = recipes.Select(r => new
+            {
+                id = r.Id,
+                name = r.Name,
+                content = r.Content,
+                imagePath = r.ImagePath,
+                recipeCategoryId = r.RecipeCategoryId,
+                recipeCategoryName = r.RecipeCategory?.Name ?? "Kategori Yok"
+            }).ToList();
+
+            return Json(result);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> GetRecipesByCategory(int id)
         {
             string selectedLanguage = "tr";
@@ -460,7 +522,17 @@ namespace MyGoldenFood.Controllers
                 }
             }
 
-            return PartialView("_RecipesByCategoryPartial", recipes);
+            var result = recipes.Select(r => new
+            {
+                id = r.Id,
+                name = r.Name,
+                content = r.Content,
+                imagePath = r.ImagePath,
+                recipeCategoryId = r.RecipeCategoryId,
+                recipeCategoryName = r.RecipeCategory?.Name ?? "Kategori Yok"
+            }).ToList();
+
+            return Json(result);
         }
     }
 }
