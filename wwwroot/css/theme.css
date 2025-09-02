@@ -123,6 +123,254 @@ a {
     width: 100%;
 }
 
+/* 🖼️ Resim Arka Plan Şeffaflığı - Sadece ana sayfa resimleri için */
+.recipe-card .recipe-image,
+.benefit-card .benefit-image,
+.product-card .product-image {
+    background-color: transparent !important; /* Şeffaf arka plan */
+}
+
+.recipe-card .image-container,
+.benefit-card .image-container,
+.product-card .image-container {
+    background-color: transparent !important; /* Container arka planı da şeffaf */
+}
+
+/* 📱 Tarifler Sayfası - Image Container Responsive */
+.recipe-card .image-container {
+    height: 250px; /* Desktop için 250px */
+}
+
+/* 📱 Faydalari Sayfası - Image Container Responsive */
+.benefit-card .image-container {
+    height: 250px; /* Desktop için 250px */
+}
+
+/* 📱 Mobil görünümler için image-container height */
+@media (max-width: 768px) {
+    .recipe-card .image-container {
+        height: 200px; /* Mobil için 200px */
+    }
+    
+    .benefit-card .image-container {
+        height: 200px; /* Mobil için 200px */
+    }
+}
+
+/* 🎯 Bottom Sheet Style Sidebar - Mobil Uygulama Tarzı */
+.bottom-sheet-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bottom-sheet-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.bottom-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, rgba(20, 20, 30, 0.95), rgba(30, 30, 45, 0.95));
+    backdrop-filter: blur(20px);
+    border-radius: 24px 24px 0 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: 85vh;
+    overflow: hidden;
+}
+
+.bottom-sheet.show {
+    transform: translateY(0);
+}
+
+/* Bottom Sheet Handle */
+.bottom-sheet-handle {
+    width: 40px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    margin: 12px auto 20px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.bottom-sheet-handle:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Bottom Sheet Header */
+.bottom-sheet-header {
+    padding: 0 24px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 24px;
+}
+
+.bottom-sheet-title {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    text-align: center;
+    background: linear-gradient(135deg, #ffffff, #667eea);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Categories Grid */
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    padding: 0 24px 24px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* Category Card */
+.category-card-new {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.category-card-new::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.category-card-new:hover::before {
+    transform: scaleX(1);
+}
+
+.category-card-new:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+    border-color: rgba(102, 126, 234, 0.3);
+}
+
+.category-card-new.active {
+    background: rgba(102, 126, 234, 0.15);
+    border-color: rgba(102, 126, 234, 0.4);
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+}
+
+.category-card-new.active::before {
+    transform: scaleX(1);
+}
+
+/* Category Icon */
+.category-icon-new {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 12px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #667eea;
+    transition: all 0.3s ease;
+}
+
+.category-card-new:hover .category-icon-new {
+    background: rgba(102, 126, 234, 0.2);
+    transform: scale(1.1);
+}
+
+/* Category Name */
+.category-name-new {
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    line-height: 1.3;
+    word-wrap: break-word;
+}
+
+/* Category Count */
+.category-count-new {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.75rem;
+    margin: 0;
+}
+
+/* Scrollbar for categories grid */
+.categories-grid::-webkit-scrollbar {
+    width: 4px;
+}
+
+.categories-grid::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+}
+
+.categories-grid::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #667eea, #764ba2);
+    border-radius: 2px;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .categories-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 12px;
+        padding: 0 16px 20px;
+    }
+    
+    .category-card-new {
+        padding: 16px 12px;
+    }
+    
+    .category-icon-new {
+        width: 40px;
+        height: 40px;
+        font-size: 1.3rem;
+    }
+    
+    .category-name-new {
+        font-size: 0.85rem;
+    }
+    
+    .bottom-sheet-header {
+        padding: 0 16px 16px;
+    }
+    
+    .bottom-sheet-title {
+        font-size: 1.3rem;
+    }
+}
+
 @-webkit-keyframes rotation {
     from {
         -webkit-transform: rotate(0deg);

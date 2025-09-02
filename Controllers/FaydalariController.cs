@@ -77,6 +77,7 @@ namespace MyGoldenFood.Controllers
             ViewBag.SelectedLanguage = selectedLanguage;
             ViewBag.HasCategories = categories.Any();
             ViewBag.FirstCategoryName = "Tüm Kategoriler";
+            ViewBag.CloudinaryService = _cloudinaryService; // 🚀 Responsive resimler için
 
             return View();
         }

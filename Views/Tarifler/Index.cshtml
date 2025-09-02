@@ -25,8 +25,8 @@
     Donuk Gıda Tarifleri | Dondurulmuş Gıda ile Lezzetli ve Pratik Yemek Tarifleri | Flash Freezing Teknolojisi
 </h1>
 
-<!-- Sidebar Toggle Button -->
-<button class="sidebar-toggle d-md-none" onclick="toggleSidebar()">
+<!-- Bottom Sheet Toggle Button -->
+<button class="sidebar-toggle d-md-none" onclick="openBottomSheet()">
     <i class="fas fa-bars"></i>
     <span>Kategoriler</span>
 </button>
@@ -51,10 +51,10 @@
                                         <i class="fas fa-th-large"></i>
                                     </div>
                                 </div>
-                                <div class="card-info">
-                                    <h4 class="card-title">Tüm Kategoriler</h4>
-                                    <p class="card-subtitle">@(ViewBag.DefaultRecipes?.Count ?? 0) tarif</p>
-                                </div>
+                                                                    <div class="card-info">
+                                        <h4 class="card-title">Tüm Kategoriler</h4>
+                                        <p class="card-subtitle">@(ViewBag.DefaultRecipes?.Count ?? 0) tarif</p>
+                                    </div>
                                 <div class="card-action">
                                     <i class="fas fa-arrow-right"></i>
                                 </div>
@@ -128,10 +128,18 @@
                                          data-description="@recipe.Content">
                                         @if (!string.IsNullOrEmpty(recipe.ImagePath))
                                         {
-                                            <img src="@recipe.ImagePath" 
-                                                 alt="@recipe.Name | Donuk Gıda Tarifi | Dondurulmuş Gıda ile Hazırlanan Tarif" 
-                                                 class="recipe-image"
-                                                 title="@recipe.Name - Donuk Gıda Tarifi" />
+                                            var cloudinaryService = ViewBag.CloudinaryService as MyGoldenFood.Services.CloudinaryService;
+                                            <picture>
+                                                <source media="(max-width: 768px)" 
+                                                        srcset="@cloudinaryService?.GetMobileImageUrl(recipe.ImagePath)">
+                                                <source media="(max-width: 1200px)" 
+                                                        srcset="@cloudinaryService?.GetTabletImageUrl(recipe.ImagePath)">
+                                                <img src="@cloudinaryService?.GetDesktopImageUrl(recipe.ImagePath)" 
+                                                     alt="@recipe.Name | Donuk Gıda Tarifi | Dondurulmuş Gıda ile Hazırlanan Tarif" 
+                                                     class="recipe-image"
+                                                     title="@recipe.Name - Donuk Gıda Tarifi"
+                                                     loading="lazy" />
+                                            </picture>
                                         }
                                         else
                                         {
@@ -172,6 +180,43 @@
             <h5 class="custom-modal-title-with-line">@Html.T("RecipeDetails")</h5>
             <p id="customModalDescription"></p>
         </div>
+    </div>
+</div>
+
+<!-- Bottom Sheet Categories -->
+<div id="bottomSheetOverlay" class="bottom-sheet-overlay" onclick="closeBottomSheet()"></div>
+<div id="bottomSheet" class="bottom-sheet">
+    <div class="bottom-sheet-handle" onclick="closeBottomSheet()"></div>
+    <div class="bottom-sheet-header">
+        <h3 class="bottom-sheet-title">Kategoriler</h3>
+    </div>
+    <div class="categories-grid" id="categoriesGrid">
+        <!-- Tüm Kategoriler -->
+        <div class="category-card-new active" onclick="selectCategoryFromBottomSheet(0, 'Tüm Kategoriler')">
+            <div class="category-icon-new">
+                <i class="fas fa-th-large"></i>
+            </div>
+            <h4 class="category-name-new">Tüm Kategoriler</h4>
+            <p class="category-count-new">@(ViewBag.DefaultRecipes?.Count ?? 0) tarif</p>
+        </div>
+        
+        @foreach (var category in ViewBag.Categories)
+        {
+            <div class="category-card-new" onclick="selectCategoryFromBottomSheet(@category.Id, '@category.Name')">
+                <div class="category-icon-new">
+                    @if (!string.IsNullOrEmpty(category.ImagePath))
+                    {
+                        <img src="@category.ImagePath" alt="@category.Name" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" />
+                    }
+                    else
+                    {
+                        <i class="fas fa-utensils"></i>
+                    }
+                </div>
+                <h4 class="category-name-new">@category.Name</h4>
+                <p class="category-count-new">@(category.Recipes?.Count ?? 0) tarif</p>
+            </div>
+        }
     </div>
 </div>
 
@@ -830,10 +875,15 @@
                                      data-name="${recipe.name}"
                                      data-description="${recipe.content}">
                                     ${recipe.imagePath ? 
-                                        `<img src="${recipe.imagePath}" 
-                                               alt="${recipe.name} | Donuk Gıda Tarifi | Dondurulmuş Gıda ile Hazırlanan Tarif" 
-                                               class="recipe-image"
-                                               title="${recipe.name} - Donuk Gıda Tarifi" />` :
+                                        `<picture>
+                                            <source media="(max-width: 768px)" srcset="${getMobileImageUrl(recipe.imagePath)}">
+                                            <source media="(max-width: 1200px)" srcset="${getTabletImageUrl(recipe.imagePath)}">
+                                            <img src="${getDesktopImageUrl(recipe.imagePath)}" 
+                                                 alt="${recipe.name} | Donuk Gıda Tarifi | Dondurulmuş Gıda ile Hazırlanan Tarif" 
+                                                 class="recipe-image"
+                                                 title="${recipe.name} - Donuk Gıda Tarifi"
+                                                 loading="lazy" />
+                                         </picture>` :
                                         `<div class="bg-secondary text-white d-flex align-items-center justify-content-center recipe-image">
                                              <i class="fas fa-utensils fa-3x"></i>
                                          </div>`
@@ -905,10 +955,15 @@
                                      data-name="${recipe.name}"
                                      data-description="${recipe.content}">
                                     ${recipe.imagePath ? 
-                                        `<img src="${recipe.imagePath}" 
-                                               alt="${recipe.name} | Donuk Gıda Tarifi | Dondurulmuş Gıda ile Hazırlanan Tarif" 
-                                               class="recipe-image"
-                                               title="${recipe.name} - Donuk Gıda Tarifi" />` :
+                                        `<picture>
+                                            <source media="(max-width: 768px)" srcset="${getMobileImageUrl(recipe.imagePath)}">
+                                            <source media="(max-width: 1200px)" srcset="${getTabletImageUrl(recipe.imagePath)}">
+                                            <img src="${getDesktopImageUrl(recipe.imagePath)}" 
+                                                 alt="${recipe.name} | Donuk Gıda Tarifi | Dondurulmuş Gıda ile Hazırlanan Tarif" 
+                                                 class="recipe-image"
+                                                 title="${recipe.name} - Donuk Gıda Tarifi"
+                                                 loading="lazy" />
+                                         </picture>` :
                                         `<div class="bg-secondary text-white d-flex align-items-center justify-content-center recipe-image">
                                              <i class="fas fa-utensils fa-3x"></i>
                                          </div>`
@@ -1014,6 +1069,37 @@
             overlay.classList.remove('open');
         }
 
+        // Bottom Sheet fonksiyonları
+        function openBottomSheet() {
+            document.getElementById('bottomSheetOverlay').classList.add('show');
+            document.getElementById('bottomSheet').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeBottomSheet() {
+            document.getElementById('bottomSheetOverlay').classList.remove('show');
+            document.getElementById('bottomSheet').classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        function selectCategoryFromBottomSheet(categoryId, categoryName) {
+            // Bottom sheet'i kapat
+            closeBottomSheet();
+            
+            // Kategori seçimini yap
+            if (categoryId === 0) {
+                loadAllRecipes();
+            } else {
+                loadRecipesByCategory(categoryId, categoryName);
+            }
+            
+            // Bottom sheet'teki aktif kategoriyi güncelle
+            document.querySelectorAll('.category-card-new').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
         // Sayfa yüklendiğinde event listener'ları ekle
         document.addEventListener('DOMContentLoaded', function() {
             attachRecipeCardEvents();
@@ -1028,4 +1114,32 @@
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // 🚀 Responsive resim URL helper fonksiyonu
+        function getResponsiveImageUrl(imagePath, width, height = 0) {
+            if (!imagePath) return '';
+            
+            // Cloudinary transformation URL oluştur
+            const baseUrl = imagePath.split('/upload/')[0] + '/upload/';
+            const publicId = imagePath.split('/upload/')[1];
+            
+            let transformation = `w_${width}`;
+            if (height > 0) transformation += `,h_${height}`;
+            transformation += ',c_fit,q_auto:good,f_auto,fl_progressive,fl_immutable_cache';
+            
+            return `${baseUrl}${transformation}/${publicId}`;
+        }
+
+        function getMobileImageUrl(imagePath) {
+            return getResponsiveImageUrl(imagePath, 400, 300);
+        }
+
+        function getTabletImageUrl(imagePath) {
+            return getResponsiveImageUrl(imagePath, 600, 450);
+        }
+
+        function getDesktopImageUrl(imagePath) {
+            return getResponsiveImageUrl(imagePath, 800, 600);
+        }
+    </script>
 }
