@@ -31,65 +31,91 @@
     <span>Kategoriler</span>
 </button>
 
-<!-- Sidebar Overlay -->
-<div class="sidebar-overlay" onclick="closeSidebar()"></div>
+<!-- Sidebar Overlay - Artık kullanılmıyor -->
 
 <div class="container-fluid" style="margin-top: 100px;">
     <div class="row">
         <!-- Sol Sidebar - Kategoriler -->
         <div class="col-lg-3 col-md-4">
-            <div class="glass-sidebar">
-                <div class="sidebar-content">
-                    <div class="categories-list">
-                        <!-- Tüm Kategoriler -->
-                        <div class="glass-card category-card @(ViewBag.SelectedCategoryId == 0 ? "active" : "")" 
+            <div class="modern-desktop-sidebar">
+                <div class="sidebar-header">
+                    <h3>Kategoriler</h3>
+                </div>
+                <div class="desktop-categories-container">
+                    <!-- Tüm Kategoriler -->
+                    <div class="desktop-category-section">
+                        <div class="desktop-category-main @(ViewBag.SelectedCategoryId == 0 ? "active" : "")" 
                              onclick="loadAllRecipes()" 
                              data-category-id="0">
-                            <div class="card-content">
-                                <div class="card-icon">
-                                    <div class="icon-placeholder">
-                                        <i class="fas fa-th-large"></i>
-                                    </div>
-                                </div>
-                                                                    <div class="card-info">
-                                        <h4 class="card-title">Tüm Kategoriler</h4>
-                                        <p class="card-subtitle">@(ViewBag.DefaultRecipes?.Count ?? 0) tarif</p>
-                                    </div>
-                                <div class="card-action">
-                                    <i class="fas fa-arrow-right"></i>
-                                </div>
+                            <div class="desktop-category-icon">
+                                <i class="fas fa-th-large"></i>
+                            </div>
+                            <div class="desktop-category-details">
+                                <h4>Tüm Kategoriler</h4>
+                                <span>@(ViewBag.DefaultRecipes?.Count ?? 0) tarif</span>
                             </div>
                         </div>
-                        
-                        @foreach (var category in ViewBag.Categories)
+                    </div>
+                    
+                    @foreach (var category in (IEnumerable<MyGoldenFood.Models.RecipeCategory>)ViewBag.Categories)
+                    {
+                        @if (category.Level == 0)
                         {
-                            <div class="glass-card category-card @(category.Id == ViewBag.SelectedCategoryId ? "active" : "")" 
-                                 onclick="loadRecipesByCategory(@category.Id, '@category.Name')" 
-                                 data-category-id="@category.Id">
-                                <div class="card-content">
-                                    <div class="card-icon">
+                            <div class="desktop-category-section">
+                                <!-- Ana Kategori -->
+                                <div class="desktop-category-main @(ViewBag.SelectedCategoryId == category.Id ? "active" : "")" 
+                                     onclick="loadRecipesByCategory(@category.Id, '@category.Name')" 
+                                     data-category-id="@category.Id">
+                                    <div class="desktop-category-icon">
                                         @if (!string.IsNullOrEmpty(category.ImagePath))
                                         {
-                                            <img src="@category.ImagePath" alt="@category.Name" class="category-image" />
+                                            <img src="@category.ImagePath" alt="@category.Name" />
                                         }
                                         else
                                         {
-                                            <div class="icon-placeholder">
-                                                <i class="fas fa-utensils"></i>
+                                            <i class="fas fa-utensils"></i>
+                                        }
+                                    </div>
+                                    <div class="desktop-category-details">
+                                        <h4>@category.Name</h4>
+                                        <span>@(category.Recipes?.Count ?? 0) tarif</span>
+                                    </div>
+                                    @if (category.ChildCategories != null && category.ChildCategories.Any())
+                                    {
+                                        <div class="desktop-expand-btn" onclick="toggleDesktopCategory(this)">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </div>
+                                    }
+                                </div>
+                                
+                                <!-- Alt Kategoriler -->
+                                @if (category.ChildCategories != null && category.ChildCategories.Any())
+                                {
+                                    <div class="desktop-subcategory-list" style="display: none;">
+                                        @foreach (var childCategory in category.ChildCategories.OrderBy(c => c.SortOrder).ThenBy(c => c.Name))
+                                        {
+                                            <div class="desktop-subcategory-item" onclick="loadRecipesByCategory(@childCategory.Id, '@childCategory.Name')">
+                                                <div class="desktop-subcategory-icon">
+                                                    @if (!string.IsNullOrEmpty(childCategory.ImagePath))
+                                                    {
+                                                        <img src="@childCategory.ImagePath" alt="@childCategory.Name" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="fas fa-circle"></i>
+                                                    }
+                                                </div>
+                                                <div class="desktop-subcategory-details">
+                                                    <span>@childCategory.Name</span>
+                                                    <small>@(childCategory.Recipes?.Count ?? 0) tarif</small>
+                                                </div>
                                             </div>
                                         }
                                     </div>
-                                    <div class="card-info">
-                                        <h4 class="card-title">@category.Name</h4>
-                                        <p class="card-subtitle">@(category.Recipes?.Count ?? 0) tarif</p>
-                                    </div>
-                                    <div class="card-action">
-                                        <i class="fas fa-arrow-right"></i>
-                                    </div>
-                                </div>
+                                }
                             </div>
                         }
-                    </div>
+                    }
                 </div>
             </div>
         </div>
@@ -190,32 +216,76 @@
     <div class="bottom-sheet-header">
         <h3 class="bottom-sheet-title">Kategoriler</h3>
     </div>
-    <div class="categories-grid" id="categoriesGrid">
+    <div class="modern-categories-container">
         <!-- Tüm Kategoriler -->
-        <div class="category-card-new active" onclick="selectCategoryFromBottomSheet(0, 'Tüm Kategoriler')">
-            <div class="category-icon-new">
-                <i class="fas fa-th-large"></i>
+        <div class="category-section">
+            <div class="category-main" onclick="selectCategoryFromBottomSheet(0, 'Tüm Kategoriler')">
+                <div class="category-icon">
+                    <i class="fas fa-th-large"></i>
+                </div>
+                <div class="category-details">
+                    <h4>Tüm Kategoriler</h4>
+                    <span>@(ViewBag.DefaultRecipes?.Count ?? 0) tarif</span>
+                </div>
             </div>
-            <h4 class="category-name-new">Tüm Kategoriler</h4>
-            <p class="category-count-new">@(ViewBag.DefaultRecipes?.Count ?? 0) tarif</p>
         </div>
         
-        @foreach (var category in ViewBag.Categories)
+        @foreach (var category in (IEnumerable<MyGoldenFood.Models.RecipeCategory>)ViewBag.Categories)
         {
-            <div class="category-card-new" onclick="selectCategoryFromBottomSheet(@category.Id, '@category.Name')">
-                <div class="category-icon-new">
-                    @if (!string.IsNullOrEmpty(category.ImagePath))
+            @if (category.Level == 0)
+            {
+                <div class="category-section">
+                    <!-- Ana Kategori -->
+                    <div class="category-main" onclick="selectCategoryFromBottomSheet(@category.Id, '@category.Name')">
+                        <div class="category-icon">
+                            @if (!string.IsNullOrEmpty(category.ImagePath))
+                            {
+                                <img src="@category.ImagePath" alt="@category.Name" />
+                            }
+                            else
+                            {
+                                <i class="fas fa-utensils"></i>
+                            }
+                        </div>
+                        <div class="category-details">
+                            <h4>@category.Name</h4>
+                            <span>@(category.Recipes?.Count ?? 0) tarif</span>
+                        </div>
+                        @if (category.ChildCategories != null && category.ChildCategories.Any())
+                        {
+                            <div class="expand-btn" onclick="toggleCategory(this, event)">
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        }
+                    </div>
+                    
+                    <!-- Alt Kategoriler -->
+                    @if (category.ChildCategories != null && category.ChildCategories.Any())
                     {
-                        <img src="@category.ImagePath" alt="@category.Name" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" />
-                    }
-                    else
-                    {
-                        <i class="fas fa-utensils"></i>
+                        <div class="subcategory-list" style="display: none;">
+                            @foreach (var childCategory in category.ChildCategories.OrderBy(c => c.SortOrder).ThenBy(c => c.Name))
+                            {
+                                <div class="subcategory-item" onclick="selectCategoryFromBottomSheet(@childCategory.Id, '@childCategory.Name')">
+                                    <div class="subcategory-icon">
+                                        @if (!string.IsNullOrEmpty(childCategory.ImagePath))
+                                        {
+                                            <img src="@childCategory.ImagePath" alt="@childCategory.Name" />
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-circle"></i>
+                                        }
+                                    </div>
+                                    <div class="subcategory-details">
+                                        <span>@childCategory.Name</span>
+                                        <small>@(childCategory.Recipes?.Count ?? 0) tarif</small>
+                                    </div>
+                                </div>
+                            }
+                        </div>
                     }
                 </div>
-                <h4 class="category-name-new">@category.Name</h4>
-                <p class="category-count-new">@(category.Recipes?.Count ?? 0) tarif</p>
-            </div>
+            }
         }
     </div>
 </div>
@@ -232,18 +302,7 @@
         z-index: -1;
     }
 
-    /* Glassmorphism Sidebar */
-    .glass-sidebar {
-        -webkit-backdrop-filter: blur(25px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 24px;
-        padding: 0;
-        height: fit-content;
-        position: sticky;
-        top: 172px;
-        overflow: hidden;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    }
+    /* Eski glass-sidebar CSS'leri kaldırıldı */
 
     .sidebar-content {
         padding: 24px;
@@ -502,22 +561,7 @@
     }
     
     @@media (max-width: 768px) {
-        .glass-sidebar {
-            position: fixed;
-            top: 0;
-            left: -100%;
-            width: 280px;
-            height: 100vh;
-            z-index: 1000;
-            transition: left 0.3s ease;
-            margin-bottom: 0;
-            max-height: none;
-            overflow: visible;
-        }
-
-        .glass-sidebar.open {
-            left: 0;
-        }
+        /* Eski glass-sidebar CSS'leri kaldırıldı */
 
         .sidebar-toggle {
             display: block;
@@ -543,20 +587,7 @@
             font-size: 1.2rem;
         }
 
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-
-        .sidebar-overlay.open {
-            display: block;
-        }
+        /* Eski sidebar-overlay CSS'leri kaldırıldı */
 
         .glass-sidebar.collapsed {
             max-height: none;
@@ -925,6 +956,8 @@
 
     // Kategori seçiminde tarifleri yükle
     function loadRecipesByCategory(categoryId, categoryName) {
+        console.log('loadRecipesByCategory çağrıldı:', { categoryId, categoryName });
+        
         // Loading spinner'ı göster
         document.getElementById('loadingSpinner').style.display = 'block';
         document.getElementById('recipesContent').style.display = 'none';
@@ -933,15 +966,33 @@
         document.querySelectorAll('.glass-card').forEach(item => {
             item.classList.remove('active');
         });
-        document.querySelector(`[data-category-id="${categoryId}"]`).classList.add('active');
+        
+        const activeCategory = document.querySelector(`[data-category-id="${categoryId}"]`);
+        if (activeCategory) {
+            activeCategory.classList.add('active');
+        }
 
         // Kategori başlığını güncelle
         document.getElementById('categoryTitle').textContent = categoryName;
 
         // AJAX ile tarifleri yükle
-        fetch(`/Tarifler/GetRecipesByCategory/${categoryId}`)
+        console.log('AJAX çağrısı yapılıyor:', `/Tarifler/GetRecipesByCategory/${categoryId}`);
+        
+        // Alt kategori mi kontrol et (ParentCategoryId'si olan kategoriler)
+        let apiUrl = `/Tarifler/GetRecipesByCategory/${categoryId}`;
+        
+        // Alt kategoriler: ID 19 (Frambuzlı Tarifler), ID 20 (Çilekli Tarifler)
+        if (categoryId === 19 || categoryId === 20) {
+            apiUrl = `/Tarifler/GetRecipesBySubcategory?recipeCategoryId=${categoryId}`;
+            console.log('Alt kategori için özel metot kullanılıyor:', apiUrl);
+        }
+        
+        fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
+                console.log('API Response:', data);
+                console.log('Tarif sayısı:', data.length);
+                
                 // HTML'i manuel olarak oluştur
                 let html = '';
                 if (data && data.length > 0) {
@@ -1054,20 +1105,7 @@
         }
     });
 
-            // Sidebar toggle fonksiyonu
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.glass-sidebar');
-            const overlay = document.querySelector('.sidebar-overlay');
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('open');
-        }
-
-        function closeSidebar() {
-            const sidebar = document.querySelector('.glass-sidebar');
-            const overlay = document.querySelector('.sidebar-overlay');
-            sidebar.classList.remove('open');
-            overlay.classList.remove('open');
-        }
+            // Eski sidebar fonksiyonları kaldırıldı - artık sadece Bottom Sheet kullanılıyor
 
         // Bottom Sheet fonksiyonları
         function openBottomSheet() {
@@ -1083,6 +1121,8 @@
         }
 
         function selectCategoryFromBottomSheet(categoryId, categoryName) {
+            console.log('selectCategoryFromBottomSheet çağrıldı:', { categoryId, categoryName });
+            
             // Bottom sheet'i kapat
             closeBottomSheet();
             
@@ -1098,6 +1138,58 @@
                 card.classList.remove('active');
             });
             event.currentTarget.classList.add('active');
+        }
+
+        // Yeni kategori toggle fonksiyonu
+        function toggleCategory(element, event) {
+            event.stopPropagation();
+            
+            const subcategoryList = element.parentElement.parentElement.querySelector('.subcategory-list');
+            const expandIcon = element.querySelector('.fas');
+            
+            if (subcategoryList.style.display === 'none' || subcategoryList.style.display === '') {
+                subcategoryList.style.display = 'block';
+                expandIcon.classList.remove('fa-chevron-down');
+                expandIcon.classList.add('fa-chevron-up');
+                element.parentElement.classList.add('expanded');
+            } else {
+                subcategoryList.style.display = 'none';
+                expandIcon.classList.remove('fa-chevron-up');
+                expandIcon.classList.add('fa-chevron-down');
+                element.parentElement.classList.remove('expanded');
+            }
+        }
+
+        // Desktop kategori toggle fonksiyonu
+        function toggleDesktopCategory(element) {
+            console.log('toggleDesktopCategory çağrıldı, element:', element);
+            
+            // Basit çözüm: parentElement kullan
+            const categorySection = element.parentElement.parentElement;
+            const subcategoryList = categorySection.querySelector('.desktop-subcategory-list');
+            const expandIcon = element.querySelector('.fas') || element.querySelector('i') || element.children[0];
+            
+            console.log('Elements:', { categorySection, subcategoryList, expandIcon });
+            console.log('Element children:', element.children);
+            console.log('Element innerHTML:', element.innerHTML);
+            
+            if (subcategoryList && expandIcon) {
+                console.log('SubcategoryList display:', subcategoryList.style.display);
+                
+                if (subcategoryList.style.display === 'none' || subcategoryList.style.display === '') {
+                    subcategoryList.style.display = 'block';
+                    expandIcon.classList.remove('fa-chevron-down');
+                    expandIcon.classList.add('fa-chevron-up');
+                    console.log('Alt kategoriler açıldı');
+                } else {
+                    subcategoryList.style.display = 'none';
+                    expandIcon.classList.remove('fa-chevron-up');
+                    expandIcon.classList.add('fa-chevron-down');
+                    console.log('Alt kategoriler kapandı');
+                }
+            } else {
+                console.log('Element bulunamadı!');
+            }
         }
 
         // Sayfa yüklendiğinde event listener'ları ekle
