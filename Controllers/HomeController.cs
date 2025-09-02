@@ -27,13 +27,15 @@ namespace MyGoldenFood.Controllers
         private readonly string _recipientEmail1;
         private readonly string _recipientEmail2;
         private readonly IHubContext<ProductHub> _hubContext;
+        private readonly MyGoldenFood.Services.CloudinaryService _cloudinaryService;
 
-        public HomeController(ILogger<HomeController> logger, AppDbContext context, IConfiguration configuration, IHubContext<ProductHub> hubContext)
+        public HomeController(ILogger<HomeController> logger, AppDbContext context, IConfiguration configuration, IHubContext<ProductHub> hubContext, MyGoldenFood.Services.CloudinaryService cloudinaryService)
         {
             _logger = logger;
             _context = context;
             _configuration = configuration;
             _hubContext = hubContext;
+            _cloudinaryService = cloudinaryService;
 
             var emailSettings = _configuration.GetSection("EmailSettings");
             _smtpServer = emailSettings["SmtpServer"];
@@ -90,6 +92,7 @@ namespace MyGoldenFood.Controllers
                 }
             }
 
+            ViewBag.CloudinaryService = _cloudinaryService; // 🚀 Responsive resimler için
             return View(products);
         }
 

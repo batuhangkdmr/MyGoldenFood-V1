@@ -108,10 +108,20 @@
                 <div class="image-container"
                      data-name="@product.Name"
                      data-description="@product.Description">
-                    <img src="@product.ImagePath" 
-                         alt="@product.Name | Dondurulmuş Gıda Ürünü | My Golden Food Kalitesi | 350 Gram Paket" 
-                         class="product-image"
-                         title="@product.Name - Dondurulmuş Gıda Ürünü">
+                    @{
+                        var cloudinaryService = ViewBag.CloudinaryService as MyGoldenFood.Services.CloudinaryService;
+                    }
+                    <picture>
+                        <source media="(max-width: 768px)" 
+                                srcset="@cloudinaryService?.GetMobileImageUrl(product.ImagePath)">
+                        <source media="(max-width: 1200px)" 
+                                srcset="@cloudinaryService?.GetTabletImageUrl(product.ImagePath)">
+                        <img src="@cloudinaryService?.GetDesktopImageUrl(product.ImagePath)" 
+                             alt="@product.Name | Dondurulmuş Gıda Ürünü | My Golden Food Kalitesi | 350 Gram Paket" 
+                             class="product-image"
+                             title="@product.Name - Dondurulmuş Gıda Ürünü"
+                             loading="lazy" />
+                    </picture>
                 </div>
                 <div class="product-name-container">
                     <h3 class="product-name">@product.Name</h3>
@@ -668,6 +678,61 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
 
 <script>
+    // 🚀 Responsive resim URL helper fonksiyonu
+    function getResponsiveImageUrl(imagePath, width, height = 0) {
+        if (!imagePath) return '';
+        
+        // Cloudinary transformation URL oluştur
+        const baseUrl = imagePath.split('/upload/')[0] + '/upload/';
+        const publicId = imagePath.split('/upload/')[1];
+        
+        let transformation = `w_${width}`;
+        if (height > 0) transformation += `,h_${height}`;
+        transformation += ',c_fit,q_auto:good,f_auto,fl_progressive,fl_immutable_cache';
+        
+        return `${baseUrl}${transformation}/${publicId}`;
+    }
+
+    function getMobileImageUrl(imagePath) {
+        return getResponsiveImageUrl(imagePath, 400, 300);
+    }
+
+    function getTabletImageUrl(imagePath) {
+        return getResponsiveImageUrl(imagePath, 600, 450);
+    }
+
+    function getDesktopImageUrl(imagePath) {
+        return getResponsiveImageUrl(imagePath, 800, 600);
+    }
+
+    // 🚀 Lazy Loading için Intersection Observer
+    function initLazyLoading() {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        observer.unobserve(img);
+                    }
+                }
+            });
+        }, {
+            rootMargin: '50px 0px',
+            threshold: 0.01
+        });
+
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
+
+    // Sayfa yüklendiğinde lazy loading'i başlat
+    document.addEventListener('DOMContentLoaded', function() {
+        initLazyLoading();
+    });
+
     const connection = new signalR.HubConnectionBuilder()
         .withUrl("/productHub")
         .build();

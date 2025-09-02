@@ -130,10 +130,18 @@
                                          data-description="@benefit.Content">
                                         @if (!string.IsNullOrEmpty(benefit.ImagePath))
                                         {
-                                            <img src="@benefit.ImagePath" 
-                                                 alt="@benefit.Name | Donuk Gıda Faydaları | Dondurulmuş Gıda Sağlık Avantajları" 
-                                                 class="benefit-image"
-                                                 title="@benefit.Name - Donuk Gıda Faydaları" />
+                                            var cloudinaryService = ViewBag.CloudinaryService as MyGoldenFood.Services.CloudinaryService;
+                                            <picture>
+                                                <source media="(max-width: 768px)" 
+                                                        srcset="@cloudinaryService?.GetMobileImageUrl(benefit.ImagePath)">
+                                                <source media="(max-width: 1200px)" 
+                                                        srcset="@cloudinaryService?.GetTabletImageUrl(benefit.ImagePath)">
+                                                <img src="@cloudinaryService?.GetDesktopImageUrl(benefit.ImagePath)" 
+                                                     alt="@benefit.Name | Donuk Gıda Faydaları | Dondurulmuş Gıda Sağlık Avantajları" 
+                                                     class="benefit-image"
+                                                     title="@benefit.Name - Donuk Gıda Faydaları"
+                                                     loading="lazy" />
+                                            </picture>
                                         }
                                         else
                                         {
@@ -850,10 +858,15 @@
                                      data-name="${benefit.name}"
                                      data-description="${benefit.content}">
                                     ${benefit.imagePath ? 
-                                        `<img src="${benefit.imagePath}" 
-                                              alt="${benefit.name} | Donuk Gıda Faydaları | Dondurulmuş Gıda Sağlık Avantajları" 
-                                              class="benefit-image"
-                                              title="${benefit.name} - Donuk Gıda Faydaları" />` :
+                                        `<picture>
+                                            <source media="(max-width: 768px)" srcset="${getMobileImageUrl(benefit.imagePath)}">
+                                            <source media="(max-width: 1200px)" srcset="${getTabletImageUrl(benefit.imagePath)}">
+                                            <img src="${getDesktopImageUrl(benefit.imagePath)}" 
+                                                 alt="${benefit.name} | Donuk Gıda Faydaları | Dondurulmuş Gıda Sağlık Avantajları" 
+                                                 class="benefit-image"
+                                                 title="${benefit.name} - Donuk Gıda Faydaları"
+                                                 loading="lazy" />
+                                         </picture>` :
                                         `<div class="bg-secondary text-white d-flex align-items-center justify-content-center benefit-image">
                                              <i class="fas fa-heart fa-3x"></i>
                                          </div>`
@@ -925,10 +938,15 @@
                                      data-name="${benefit.name}"
                                      data-description="${benefit.content}">
                                     ${benefit.imagePath ? 
-                                        `<img src="${benefit.imagePath}" 
-                                              alt="${benefit.name} | Donuk Gıda Faydaları | Dondurulmuş Gıda Sağlık Avantajları" 
-                                              class="benefit-image"
-                                              title="${benefit.name} - Donuk Gıda Faydaları" />` :
+                                        `<picture>
+                                            <source media="(max-width: 768px)" srcset="${getMobileImageUrl(benefit.imagePath)}">
+                                            <source media="(max-width: 1200px)" srcset="${getTabletImageUrl(benefit.imagePath)}">
+                                            <img src="${getDesktopImageUrl(benefit.imagePath)}" 
+                                                 alt="${benefit.name} | Donuk Gıda Faydaları | Dondurulmuş Gıda Sağlık Avantajları" 
+                                                 class="benefit-image"
+                                                 title="${benefit.name} - Donuk Gıda Faydaları"
+                                                 loading="lazy" />
+                                         </picture>` :
                                         `<div class="bg-secondary text-white d-flex align-items-center justify-content-center benefit-image">
                                             <i class="fas fa-heart fa-3x"></i>
                                         </div>`
@@ -1047,6 +1065,33 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
     <script>
+        // 🚀 Responsive resim URL helper fonksiyonu
+        function getResponsiveImageUrl(imagePath, width, height = 0) {
+            if (!imagePath) return '';
+            
+            // Cloudinary transformation URL oluştur
+            const baseUrl = imagePath.split('/upload/')[0] + '/upload/';
+            const publicId = imagePath.split('/upload/')[1];
+            
+            let transformation = `w_${width}`;
+            if (height > 0) transformation += `,h_${height}`;
+            transformation += ',c_fit,q_auto:good,f_auto,fl_progressive,fl_immutable_cache';
+            
+            return `${baseUrl}${transformation}/${publicId}`;
+        }
+
+        function getMobileImageUrl(imagePath) {
+            return getResponsiveImageUrl(imagePath, 400, 300);
+        }
+
+        function getTabletImageUrl(imagePath) {
+            return getResponsiveImageUrl(imagePath, 600, 450);
+        }
+
+        function getDesktopImageUrl(imagePath) {
+            return getResponsiveImageUrl(imagePath, 800, 600);
+        }
+
         // SignalR bağlantısı
         const connection = new signalR.HubConnectionBuilder()
             .withUrl("/faydalariHub")
