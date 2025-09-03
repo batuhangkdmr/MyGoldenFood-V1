@@ -94,7 +94,7 @@
                                     <div class="desktop-subcategory-list" style="display: none;">
                                         @foreach (var childCategory in category.ChildCategories.OrderBy(c => c.SortOrder).ThenBy(c => c.Name))
                                         {
-                                            <div class="desktop-subcategory-item" onclick="loadRecipesBySubcategory(@childCategory.Id, '@childCategory.Name')">
+                                            <div class="desktop-subcategory-item" onclick="selectCategoryFromBottomSheet(@childCategory.Id, '@childCategory.Name')">
                                                 <div class="desktop-subcategory-icon">
                                                     @if (!string.IsNullOrEmpty(childCategory.ImagePath))
                                                     {
@@ -999,6 +999,8 @@
         // Kategori başlığını güncelle
         document.getElementById('categoryTitle').textContent = categoryName;
 
+
+
         // AJAX ile tarifleri yükle
         console.log('AJAX çağrısı yapılıyor:', `/Tarifler/GetRecipesByCategory/${categoryId}`);
 
@@ -1142,6 +1144,28 @@
             document.getElementById('bottomSheetOverlay').classList.remove('show');
             document.getElementById('bottomSheet').classList.remove('show');
             document.body.style.overflow = 'auto';
+            
+            // Mobil sidebar'ı da kapat
+            const sidebarToggle = document.querySelector('.sidebar-toggle');
+            if (sidebarToggle && sidebarToggle.classList.contains('show')) {
+                sidebarToggle.classList.remove('show');
+            }
+            
+            // Alt kategori listelerini kapat
+            document.querySelectorAll('.subcategory-list').forEach(list => {
+                list.style.display = 'none';
+            });
+            
+            // Desktop alt kategori listelerini de kapat
+            document.querySelectorAll('.desktop-subcategory-list').forEach(list => {
+                list.style.display = 'none';
+            });
+
+            // Expand icon'ları sıfırla (chevron-down yap)
+            document.querySelectorAll('.expand-icon, .desktop-expand-btn i').forEach(icon => {
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            });
         }
 
         function selectCategoryFromBottomSheet(categoryId, categoryName) {
@@ -1207,82 +1231,9 @@
             }
         }
 
-        // Alt kategori seçiminde tarifleri yükle
-        function loadRecipesBySubcategory(categoryId, categoryName) {
-            console.log('loadRecipesBySubcategory çağrıldı:', { categoryId, categoryName });
 
-            // Loading spinner'ı göster
-            document.getElementById('loadingSpinner').style.display = 'block';
-            document.getElementById('recipesContent').style.display = 'none';
 
-            // Aktif kategoriyi güncelle
-            document.querySelectorAll('.desktop-category-main').forEach(item => {
-                item.classList.remove('active');
-            });
 
-            // Kategori başlığını güncelle
-            document.getElementById('categoryTitle').textContent = categoryName;
-
-            // AJAX ile sadece bu alt kategorinin tariflerini yükle
-            console.log('Alt kategori için AJAX çağrısı yapılıyor:', `/Tarifler/GetRecipesBySubcategory?recipeCategoryId=${categoryId}`);
-
-            fetch(`/Tarifler/GetRecipesBySubcategory?recipeCategoryId=${categoryId}`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('API Response:', data);
-                    console.log('Tarif sayısı:', data.length);
-
-                    const recipesContent = document.getElementById('recipesContent');
-                    let html = '';
-
-                    if (data && data.length > 0) {
-                        data.forEach(recipe => {
-                            html += `
-                                <div class="recipe-card">
-                                    <div class="image-container" data-name="${recipe.name}" data-description="${recipe.content}">
-                                        <picture>
-                                            <source media="(max-width: 768px)" srcset="${getMobileImageUrl(recipe.imagePath)}">
-                                            <source media="(max-width: 1200px)" srcset="${getTabletImageUrl(recipe.imagePath)}">
-                                            <img src="${getDesktopImageUrl(recipe.imagePath)}" 
-                                                 alt="${recipe.name} | Dondurulmuş Gıda Tarifi | My Golden Food" 
-                                                 class="recipe-image"
-                                                 title="${recipe.name} - Dondurulmuş Gıda Tarifi"
-                                                 loading="lazy" />
-                                        </picture>
-                                    </div>
-                                    <div class="recipe-name-container">
-                                        <h3 class="recipe-name">${recipe.name}</h3>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                    } else {
-                        html = `
-                            <div class="text-center text-muted py-5">
-                                <i class="fas fa-info-circle fa-3x mb-3"></i>
-                                <h4>Bu alt kategoride henüz tarif bulunmuyor</h4>
-                                <p>Yakında lezzetli tarifler eklenecek!</p>
-                            </div>
-                        `;
-                    }
-
-                    recipesContent.innerHTML = html;
-                    document.getElementById('loadingSpinner').style.display = 'none';
-                    document.getElementById('recipesContent').style.display = 'block';
-                })
-                .catch(error => {
-                    console.error('Hata:', error);
-                    document.getElementById('loadingSpinner').style.display = 'none';
-                    document.getElementById('recipesContent').innerHTML = `
-                        <div class="text-center text-muted py-5">
-                            <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
-                            <h4>Tarifler yüklenirken hata oluştu</h4>
-                            <p>Lütfen sayfayı yenileyin.</p>
-                        </div>
-                    `;
-                    document.getElementById('recipesContent').style.display = 'block';
-                });
-        }
 
         // Sayfa yüklendiğinde event listener'ları ekle
         document.addEventListener('DOMContentLoaded', function() {

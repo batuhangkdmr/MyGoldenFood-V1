@@ -28,6 +28,41 @@ namespace MyGoldenFood.Controllers
             _cloudinaryService = cloudinaryService;
             _tariflerHubContext = tariflerHubContext;
         }
+
+        // SEO Slug oluşturma helper metodu
+        private string GenerateSeoSlug(string title)
+        {
+            if (string.IsNullOrEmpty(title))
+                return string.Empty;
+
+            // Türkçe karakterleri değiştir
+            title = title.ToLower()
+                .Replace("ç", "c")
+                .Replace("ğ", "g")
+                .Replace("ı", "i")
+                .Replace("ö", "o")
+                .Replace("ş", "s")
+                .Replace("ü", "u");
+
+            // Özel karakterleri kaldır ve tire ile değiştir
+            title = System.Text.RegularExpressions.Regex.Replace(title, @"[^a-z0-9\s-]", "");
+            title = System.Text.RegularExpressions.Regex.Replace(title, @"\s+", "-");
+            title = title.Trim('-');
+
+            // Duplicate slug'ları önlemek için ID ekle
+            var baseSlug = title;
+            var counter = 1;
+            var finalSlug = baseSlug;
+
+            // Aynı slug'ın var olup olmadığını kontrol et
+            while (_context.Recipes.Any(r => r.SeoSlug == finalSlug))
+            {
+                finalSlug = $"{baseSlug}-{counter}";
+                counter++;
+            }
+
+            return finalSlug;
+        }
         
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -127,6 +162,17 @@ namespace MyGoldenFood.Controllers
                     }
                 }
 
+                // SEO alanlarını otomatik oluştur
+                model.SeoSlug = GenerateSeoSlug(model.Name);
+                model.SeoTitle = $"{model.Name} Tarifi | Dondurulmuş Gıda ile Lezzetli Tarif | My Golden Food";
+                
+                var shortContent = model.Content.Length > 150 ? model.Content.Substring(0, 150) + "..." : model.Content;
+                model.SeoDescription = $"{model.Name} tarifi. Dondurulmuş gıda ile hazırlanan lezzetli ve pratik tarif. {shortContent}";
+                
+                var category = await _context.RecipeCategories.FindAsync(model.RecipeCategoryId);
+                model.SeoKeywords = $"dondurulmuş gıda tarifi, {model.Name.ToLower()}, donuk gıda tarifleri, {category?.Name?.ToLower()}, pratik yemek tarifi, my golden food";
+
+                model.CreatedDate = DateTime.Now;
                 _context.Recipes.Add(model);
                 await _context.SaveChangesAsync();
 
@@ -374,7 +420,7 @@ namespace MyGoldenFood.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> CategoryDetails(int id)
         {
             string selectedLanguage = "tr";
 
@@ -442,6 +488,17 @@ namespace MyGoldenFood.Controllers
                 existingRecipe.Name = model.Name;
                 existingRecipe.Content = model.Content;
                 existingRecipe.RecipeCategoryId = model.RecipeCategoryId;
+                existingRecipe.UpdatedDate = DateTime.Now;
+                
+                // SEO alanlarını güncelle
+                existingRecipe.SeoSlug = GenerateSeoSlug(model.Name);
+                existingRecipe.SeoTitle = $"{model.Name} Tarifi | Dondurulmuş Gıda ile Lezzetli Tarif | My Golden Food";
+                
+                var shortContent = model.Content.Length > 150 ? model.Content.Substring(0, 150) + "..." : model.Content;
+                existingRecipe.SeoDescription = $"{model.Name} tarifi. Dondurulmuş gıda ile hazırlanan lezzetli ve pratik tarif. {shortContent}";
+                
+                var category = await _context.RecipeCategories.FindAsync(model.RecipeCategoryId);
+                existingRecipe.SeoKeywords = $"dondurulmuş gıda tarifi, {model.Name.ToLower()}, donuk gıda tarifleri, {category?.Name?.ToLower()}, pratik yemek tarifi, my golden food";
 
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
@@ -548,7 +605,14 @@ namespace MyGoldenFood.Controllers
                 content = r.Content,
                 imagePath = r.ImagePath,
                 recipeCategoryId = r.RecipeCategoryId,
-                recipeCategoryName = r.RecipeCategory?.Name ?? "Kategori Yok"
+                recipeCategoryName = r.RecipeCategory?.Name ?? "Kategori Yok",
+                seoSlug = r.SeoSlug,
+                seoTitle = r.SeoTitle,
+                seoDescription = r.SeoDescription,
+                preparationTime = r.PreparationTime,
+                cookingTime = r.CookingTime,
+                servings = r.Servings,
+                difficulty = r.Difficulty
             }).ToList();
 
             return Json(result);
@@ -620,7 +684,14 @@ namespace MyGoldenFood.Controllers
                 content = r.Content,
                 imagePath = r.ImagePath,
                 recipeCategoryId = r.RecipeCategoryId,
-                recipeCategoryName = r.RecipeCategory?.Name ?? "Kategori Yok"
+                recipeCategoryName = r.RecipeCategory?.Name ?? "Kategori Yok",
+                seoSlug = r.SeoSlug,
+                seoTitle = r.SeoTitle,
+                seoDescription = r.SeoDescription,
+                preparationTime = r.PreparationTime,
+                cookingTime = r.CookingTime,
+                servings = r.Servings,
+                difficulty = r.Difficulty
             }).ToList();
 
             return Json(result);
@@ -697,7 +768,14 @@ namespace MyGoldenFood.Controllers
                 content = r.Content,
                 imagePath = r.ImagePath,
                 recipeCategoryId = r.RecipeCategoryId,
-                recipeCategoryName = r.RecipeCategory?.Name ?? "Kategori Yok"
+                recipeCategoryName = r.RecipeCategory?.Name ?? "Kategori Yok",
+                seoSlug = r.SeoSlug,
+                seoTitle = r.SeoTitle,
+                seoDescription = r.SeoDescription,
+                preparationTime = r.PreparationTime,
+                cookingTime = r.CookingTime,
+                servings = r.Servings,
+                difficulty = r.Difficulty
             }).ToList();
 
             return Json(result);
@@ -821,5 +899,7 @@ namespace MyGoldenFood.Controllers
 
             return Json(result);
         }
+
+
     }
 }

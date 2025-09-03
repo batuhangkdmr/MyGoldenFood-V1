@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MyGoldenFood.Models
@@ -7,6 +8,10 @@ namespace MyGoldenFood.Models
     {
         public string Name { get; set; } = string.Empty;
         public string ImagePath { get; set; } = string.Empty;
+        
+        // Tarih Alanları
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime? UpdatedDate { get; set; }
         
         // Alt kategori sistemi için yeni alanlar
         public int? ParentCategoryId { get; set; }

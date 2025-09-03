@@ -39,6 +39,62 @@
             <input type="file" class="form-control" id="ImageFile" name="ImageFile" accept="image/*">
             <small class="form-text text-muted">Desteklenen formatlar: JPG, PNG, GIF. Maksimum boyut: 5MB</small>
         </div>
+
+        <!-- SEO Alanları -->
+        <!-- SEO Bilgisi -->
+        <div class="alert alert-info mt-4">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>SEO Otomatik Oluşturulacak:</strong> Tarif başlığından otomatik olarak SEO başlığı, açıklaması, anahtar kelimeleri ve URL oluşturulacaktır.
+        </div>
+
+        <!-- Tarif Detayları -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="card-title mb-0">
+                    <i class="fas fa-clock me-2"></i>
+                    Tarif Detayları (İsteğe Bağlı)
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="PreparationTime" class="form-label">Hazırlık Süresi</label>
+                            <input type="text" class="form-control" id="PreparationTime" name="PreparationTime" 
+                                   placeholder="Örnek: 15 dakika, PT15M">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="CookingTime" class="form-label">Pişirme Süresi</label>
+                            <input type="text" class="form-control" id="CookingTime" name="CookingTime" 
+                                   placeholder="Örnek: 30 dakika, PT30M">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="Servings" class="form-label">Porsiyon Sayısı</label>
+                            <input type="number" class="form-control" id="Servings" name="Servings" 
+                                   placeholder="Örnek: 4" min="1" max="20">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="Difficulty" class="form-label">Zorluk Seviyesi</label>
+                            <select class="form-control" id="Difficulty" name="Difficulty">
+                                <option value="">Seçin</option>
+                                <option value="Kolay">Kolay</option>
+                                <option value="Orta">Orta</option>
+                                <option value="Zor">Zor</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
