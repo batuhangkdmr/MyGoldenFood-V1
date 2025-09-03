@@ -768,7 +768,7 @@
     @@media (max-width: 768px) {
         .custom-modal-content {
             width: 95%;
-            margin: 50% auto;
+            margin: 20% auto;
         }
         
         .custom-modal-header {
@@ -781,6 +781,19 @@
         
         .custom-modal-body {
             padding: 20px;
+        }
+    }
+
+    /* Samsung SE ve çok küçük ekranlar için */
+    @@media (max-width: 375px) {
+        .custom-modal-content {
+            margin: 15% auto;
+            max-height: 70vh;
+        }
+        
+        .custom-modal-body {
+            max-height: 50vh;
+            padding: 15px;
         }
     }
 
