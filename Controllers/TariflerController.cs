@@ -44,6 +44,7 @@ namespace MyGoldenFood.Controllers
                 .Include(c => c.Translations)
                 .Include(c => c.Recipes)
                 .Include(c => c.ChildCategories)
+                    .ThenInclude(child => child.Recipes)
                 .Include(c => c.ParentCategory)
                 .OrderBy(c => c.Level)
                 .ThenBy(c => c.SortOrder)
