@@ -190,8 +190,9 @@ a {
     z-index: 9999;
     transform: translateY(100%);
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    max-height: 85vh;
-    overflow: hidden;
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .bottom-sheet.show {
@@ -226,7 +227,7 @@ a {
     font-weight: 700;
     margin: 0;
     text-align: center;
-    background: linear-gradient(135deg, #ffffff, #667eea);
+    background: linear-gradient(135deg, #d9b41b, #e7a400);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -237,7 +238,7 @@ a {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 16px;
-    padding: 0 24px 24px;
+    padding: 0 24px 40px;
     max-height: 60vh;
     overflow-y: auto;
 }
@@ -853,7 +854,7 @@ a {
     .categories-grid {
         grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
         gap: 12px;
-        padding: 0 16px 20px;
+        padding: 0 16px 40px;
     }
     
     .category-card-new {
@@ -876,6 +877,22 @@ a {
     
     .bottom-sheet-title {
         font-size: 1.3rem;
+    }
+}
+
+/* Samsung SE ve çok küçük ekranlar için */
+@media (max-width: 375px) {
+    .bottom-sheet {
+        max-height: 85vh;
+    }
+    
+    .categories-grid {
+        padding: 0 12px 50px;
+        max-height: 55vh;
+    }
+    
+    .category-card-new {
+        padding: 12px 8px;
     }
 }
 

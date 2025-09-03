@@ -1,5 +1,4 @@
-﻿
-@using Microsoft.Extensions.Localization
+﻿@using Microsoft.Extensions.Localization
 
 @{
     ViewData["Title"] = "Donuk Gıda Tarifleri | Dondurulmuş Gıda ile Lezzetli Tarifler | My Golden Food";
@@ -44,8 +43,8 @@
                 <div class="desktop-categories-container">
                     <!-- Tüm Kategoriler -->
                     <div class="desktop-category-section">
-                        <div class="desktop-category-main @(ViewBag.SelectedCategoryId == 0 ? "active" : "")" 
-                             onclick="loadAllRecipes()" 
+                        <div class="desktop-category-main @(ViewBag.SelectedCategoryId == 0 ? "active" : "")"
+                             onclick="loadAllRecipes()"
                              data-category-id="0">
                             <div class="desktop-category-icon">
                                 <i class="fas fa-th-large"></i>
@@ -56,15 +55,15 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     @foreach (var category in (IEnumerable<MyGoldenFood.Models.RecipeCategory>)ViewBag.Categories)
                     {
                         @if (category.Level == 0)
                         {
                             <div class="desktop-category-section">
                                 <!-- Ana Kategori -->
-                                <div class="desktop-category-main @(ViewBag.SelectedCategoryId == category.Id ? "active" : "")" 
-                                     onclick="loadRecipesByCategory(@category.Id, '@category.Name')" 
+                                <div class="desktop-category-main @(ViewBag.SelectedCategoryId == category.Id ? "active" : "")"
+                                     onclick="loadRecipesByCategory(@category.Id, '@category.Name')"
                                      data-category-id="@category.Id">
                                     <div class="desktop-category-icon">
                                         @if (!string.IsNullOrEmpty(category.ImagePath))
@@ -87,7 +86,7 @@
                                         </div>
                                     }
                                 </div>
-                                
+
                                 <!-- Alt Kategoriler -->
                                 @if (category.ChildCategories != null && category.ChildCategories.Any())
                                 {
@@ -146,8 +145,8 @@
                         <div class="recipe-grid" id="recipeGrid">
                             @foreach (var recipe in ViewBag.DefaultRecipes)
                             {
-                                <div class="recipe-card" 
-                                     data-name="@recipe.Name" 
+                                <div class="recipe-card"
+                                     data-name="@recipe.Name"
                                      data-content="@recipe.Content">
                                     <div class="image-container"
                                          data-name="@recipe.Name"
@@ -156,12 +155,12 @@
                                         {
                                             var cloudinaryService = ViewBag.CloudinaryService as MyGoldenFood.Services.CloudinaryService;
                                             <picture>
-                                                <source media="(max-width: 768px)" 
+                                                <source media="(max-width: 768px)"
                                                         srcset="@cloudinaryService?.GetMobileImageUrl(recipe.ImagePath)">
-                                                <source media="(max-width: 1200px)" 
+                                                <source media="(max-width: 1200px)"
                                                         srcset="@cloudinaryService?.GetTabletImageUrl(recipe.ImagePath)">
-                                                <img src="@cloudinaryService?.GetDesktopImageUrl(recipe.ImagePath)" 
-                                                     alt="@recipe.Name | Donuk Gıda Tarifi | Dondurulmuş Gıda ile Hazırlanan Tarif" 
+                                                <img src="@cloudinaryService?.GetDesktopImageUrl(recipe.ImagePath)"
+                                                     alt="@recipe.Name | Donuk Gıda Tarifi | Dondurulmuş Gıda ile Hazırlanan Tarif"
                                                      class="recipe-image"
                                                      title="@recipe.Name - Donuk Gıda Tarifi"
                                                      loading="lazy" />
@@ -229,7 +228,7 @@
                 </div>
             </div>
         </div>
-        
+
         @foreach (var category in (IEnumerable<MyGoldenFood.Models.RecipeCategory>)ViewBag.Categories)
         {
             @if (category.Level == 0)
@@ -258,7 +257,7 @@
                             </div>
                         }
                     </div>
-                    
+
                     <!-- Alt Kategoriler -->
                     @if (category.ChildCategories != null && category.ChildCategories.Any())
                     {
@@ -326,38 +325,38 @@
         overflow: hidden;
     }
 
-    .glass-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, #667eea, #764ba2);
-        transform: scaleX(0);
-        transition: transform 0.4s ease;
-    }
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
 
-    .glass-card:hover::before {
-        transform: scaleX(1);
-    }
+        .glass-card:hover::before {
+            transform: scaleX(1);
+        }
 
-    .glass-card:hover {
-        background: rgba(255, 255, 255, 0.1);
-        transform: translateY(-4px) scale(1.02);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-        border-color: rgba(102, 126, 234, 0.3);
-    }
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
 
-    .glass-card.active {
-        background: rgba(102, 126, 234, 0.15);
-        border-color: rgba(102, 126, 234, 0.4);
-        box-shadow: 0 0 25px rgba(102, 126, 234, 0.3);
-    }
+        .glass-card.active {
+            background: rgba(102, 126, 234, 0.15);
+            border-color: rgba(102, 126, 234, 0.4);
+            box-shadow: 0 0 25px rgba(102, 126, 234, 0.3);
+        }
 
-    .glass-card.active::before {
-        transform: scaleX(1);
-    }
+            .glass-card.active::before {
+                transform: scaleX(1);
+            }
 
     .card-content {
         padding: 20px;
@@ -452,17 +451,17 @@
         margin-bottom: 32px;
     }
 
-    .content-header h2 {
-        color: #ffffff;
-        font-size: 3.2rem;
-        font-weight: 700;
-        margin: 0;
-        background: linear-gradient(135deg, #ffffff, #667eea);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        text-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
-    }
+        .content-header h2 {
+            color: #ffffff;
+            font-size: 3.2rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(135deg, #d9b41b, #e7a400);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+        }
 
     /* Recipe Grid Layout */
     .recipe-grid {
@@ -474,13 +473,13 @@
         align-items: start;
     }
 
-    /* Eğer tarif sayısı 3'ten azsa, ortalama yap */
-    .recipe-grid:has(.recipe-card:nth-child(1):nth-last-child(1)),
-    .recipe-grid:has(.recipe-card:nth-child(1):nth-last-child(2)) {
-        display: flex;
-        justify-content: start;
-        gap: 20px;
-    }
+        /* Eğer tarif sayısı 3'ten azsa, ortalama yap */
+        .recipe-grid:has(.recipe-card:nth-child(1):nth-last-child(1)),
+        .recipe-grid:has(.recipe-card:nth-child(1):nth-last-child(2)) {
+            display: flex;
+            justify-content: start;
+            gap: 20px;
+        }
 
     /* Recipe Cards */
     .recipe-card {
@@ -493,26 +492,26 @@
         cursor: pointer;
     }
 
-    .recipe-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, #667eea, #764ba2);
-        transform: scaleX(0);
-        transition: transform 0.4s ease;
-    }
+        .recipe-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
 
-    .recipe-card:hover::before {
-        transform: scaleX(1);
-    }
+        .recipe-card:hover::before {
+            transform: scaleX(1);
+        }
 
-    .recipe-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-    }
+        .recipe-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
 
     .image-container {
         width: 100%;
@@ -552,14 +551,14 @@
     }
 
     /* Responsive Design */
-    
+
     /* Tablet görünümü (768px - 1024px) */
     @@media (max-width: 1024px) and (min-width: 769px) {
         .recipe-grid {
             grid-template-columns: repeat(3, 1fr);
         }
     }
-    
+
     @@media (max-width: 768px) {
         /* Eski glass-sidebar CSS'leri kaldırıldı */
 
@@ -569,7 +568,7 @@
             bottom: 20px;
             right: 20px;
             z-index: 1001;
-            background: rgba(102, 126, 234, 0.9);
+            background: linear-gradient(135deg, #d7b41f, #987318);
             border: none;
             color: white;
             padding: 16px;
@@ -583,10 +582,9 @@
             gap: 8px;
         }
 
-        .sidebar-toggle i {
-            font-size: 1.2rem;
-        }
-
+            .sidebar-toggle i {
+                font-size: 1.2rem;
+            }
         /* Eski sidebar-overlay CSS'leri kaldırıldı */
 
         .glass-sidebar.collapsed {
@@ -636,11 +634,14 @@
         }
 
         .content-container {
-            padding: 0 16px;
+            padding: 0 0;
         }
 
         .content-header h2 {
             font-size: 1.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            text-align: start;
         }
 
         .recipe-grid {
@@ -654,17 +655,14 @@
         .recipe-image {
             height: 180px;
         }
-
         /* Mobil için recipe-card responsive düzenlemeleri */
         .recipe-name {
             font-size: 1rem;
         }
-
         /* Mobilde sidebar'ın tam görünmesi için */
         .col-lg-3.col-md-4 {
             margin-bottom: 20px;
         }
-
         /* Mobilde yatay scroll için özel stiller */
         .categories-list::-webkit-scrollbar {
             height: 6px;
@@ -680,9 +678,9 @@
             border-radius: 3px;
         }
 
-        .categories-list::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(90deg, #5a6fd8, #6a5acd);
-        }
+            .categories-list::-webkit-scrollbar-thumb:hover {
+                background: linear-gradient(90deg, #5a6fd8, #6a5acd);
+            }
     }
 
     /* Scrollbar Styling */
@@ -700,9 +698,9 @@
         border-radius: 4px;
     }
 
-    .categories-list::-webkit-scrollbar-thumb:hover {
-        background: linear-gradient(180deg, #5a6fd8, #6a5acd);
-    }
+        .categories-list::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #5a6fd8, #6a5acd);
+        }
 
     /* Custom Modal Styling */
     .custom-modal {
@@ -743,13 +741,13 @@
         align-items: center;
     }
 
-    .custom-modal-header h4 {
-        margin: 0;
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: #ffffff;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    }
+        .custom-modal-header h4 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
 
     .custom-modal-close {
         color: rgba(255, 255, 255, 0.7);
@@ -767,11 +765,11 @@
         justify-content: center;
     }
 
-    .custom-modal-close:hover {
-        color: #ffffff;
-        background: rgba(255, 255, 255, 0.1);
-        transform: scale(1.1);
-    }
+        .custom-modal-close:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.1);
+        }
 
     .custom-modal-body {
         padding: 25px;
@@ -789,46 +787,69 @@
         font-weight: 600;
     }
 
-    .custom-modal-title-with-line::after {
-        content: "";
-        display: block;
-        width: 100%;
-        height: 3px;
-        background: linear-gradient(90deg, #FFD700, #FFA500);
-        border-radius: 2px;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-    }
+        .custom-modal-title-with-line::after {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            border-radius: 2px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
 
     /* Custom Modal Animations */
     @@keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
     }
 
     @@keyframes scaleIn {
-        from { transform: scale(0.8); }
-        to { transform: scale(1); }
+        from {
+            transform: scale(0.8);
+        }
+
+        to {
+            transform: scale(1);
+        }
     }
 
     /* Custom Modal Responsive */
     @@media (max-width: 768px) {
         .custom-modal-content {
             width: 95%;
-            margin: 50% auto;
+            margin: 20% auto;
         }
-        
+
         .custom-modal-header {
             padding: 15px 20px;
         }
-        
-        .custom-modal-header h4 {
-            font-size: 1.3rem;
-        }
-        
+
+            .custom-modal-header h4 {
+                font-size: 1.3rem;
+            }
+
         .custom-modal-body {
             padding: 20px;
+        }
+    }
+
+    /* Samsung SE ve çok küçük ekranlar için */
+    @@media (max-width: 375px) {
+        .custom-modal-content {
+            margin: 15% auto;
+            max-height: 70vh;
+        }
+
+        .custom-modal-body {
+            max-height: 50vh;
+            padding: 15px;
         }
     }
 
@@ -851,6 +872,7 @@
             opacity: 0;
             transform: translateY(20px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -866,6 +888,7 @@
             opacity: 0;
             transform: translateX(-30px);
         }
+
         to {
             opacity: 1;
             transform: translateX(0);
@@ -899,18 +922,18 @@
                     html = '<div class="recipe-grid" id="recipeGrid">';
                     data.forEach(recipe => {
                         html += `
-                            <div class="recipe-card" 
-                                 data-name="${recipe.name}" 
+                            <div class="recipe-card"
+                                 data-name="${recipe.name}"
                                  data-content="${recipe.content}">
                                 <div class="image-container"
                                      data-name="${recipe.name}"
                                      data-description="${recipe.content}">
-                                    ${recipe.imagePath ? 
+                                    ${recipe.imagePath ?
                                         `<picture>
                                             <source media="(max-width: 768px)" srcset="${getMobileImageUrl(recipe.imagePath)}">
                                             <source media="(max-width: 1200px)" srcset="${getTabletImageUrl(recipe.imagePath)}">
-                                            <img src="${getDesktopImageUrl(recipe.imagePath)}" 
-                                                 alt="${recipe.name} | Donuk Gıda Tarifi | Dondurulmuş Gıda ile Hazırlanan Tarif" 
+                                            <img src="${getDesktopImageUrl(recipe.imagePath)}"
+                                                 alt="${recipe.name} | Donuk Gıda Tarifi | Dondurulmuş Gıda ile Hazırlanan Tarif"
                                                  class="recipe-image"
                                                  title="${recipe.name} - Donuk Gıda Tarifi"
                                                  loading="lazy" />
@@ -936,14 +959,14 @@
                         </div>
                     `;
                 }
-                
+
                 document.getElementById('recipesContent').innerHTML = html;
                 document.getElementById('loadingSpinner').style.display = 'none';
                 document.getElementById('recipesContent').style.display = 'block';
-                
+
                 // Fade-in animasyonu ekle
                 document.getElementById('recipesContent').classList.add('fade-in');
-                
+
                 // Event listener'ları yeniden ekle
                 attachRecipeCardEvents();
             })
@@ -957,7 +980,7 @@
     // Kategori seçiminde tarifleri yükle
     function loadRecipesByCategory(categoryId, categoryName) {
         console.log('loadRecipesByCategory çağrıldı:', { categoryId, categoryName });
-        
+
         // Loading spinner'ı göster
         document.getElementById('loadingSpinner').style.display = 'block';
         document.getElementById('recipesContent').style.display = 'none';
@@ -966,7 +989,7 @@
         document.querySelectorAll('.glass-card').forEach(item => {
             item.classList.remove('active');
         });
-        
+
         const activeCategory = document.querySelector(`[data-category-id="${categoryId}"]`);
         if (activeCategory) {
             activeCategory.classList.add('active');
@@ -977,40 +1000,40 @@
 
         // AJAX ile tarifleri yükle
         console.log('AJAX çağrısı yapılıyor:', `/Tarifler/GetRecipesByCategory/${categoryId}`);
-        
+
         // Alt kategori mi kontrol et (ParentCategoryId'si olan kategoriler)
         let apiUrl = `/Tarifler/GetRecipesByCategory/${categoryId}`;
-        
+
         // Alt kategoriler: ID 19 (Frambuzlı Tarifler), ID 20 (Çilekli Tarifler)
         if (categoryId === 19 || categoryId === 20) {
             apiUrl = `/Tarifler/GetRecipesBySubcategory?recipeCategoryId=${categoryId}`;
             console.log('Alt kategori için özel metot kullanılıyor:', apiUrl);
         }
-        
+
         fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
                 console.log('API Response:', data);
                 console.log('Tarif sayısı:', data.length);
-                
+
                 // HTML'i manuel olarak oluştur
                 let html = '';
                 if (data && data.length > 0) {
                     html = '<div class="recipe-grid" id="recipeGrid">';
                     data.forEach(recipe => {
                         html += `
-                            <div class="recipe-card" 
-                                 data-name="${recipe.name}" 
+                            <div class="recipe-card"
+                                 data-name="${recipe.name}"
                                  data-content="${recipe.content}">
                                 <div class="image-container"
                                      data-name="${recipe.name}"
                                      data-description="${recipe.content}">
-                                    ${recipe.imagePath ? 
+                                    ${recipe.imagePath ?
                                         `<picture>
                                             <source media="(max-width: 768px)" srcset="${getMobileImageUrl(recipe.imagePath)}">
                                             <source media="(max-width: 1200px)" srcset="${getTabletImageUrl(recipe.imagePath)}">
-                                            <img src="${getDesktopImageUrl(recipe.imagePath)}" 
-                                                 alt="${recipe.name} | Donuk Gıda Tarifi | Dondurulmuş Gıda ile Hazırlanan Tarif" 
+                                            <img src="${getDesktopImageUrl(recipe.imagePath)}"
+                                                 alt="${recipe.name} | Donuk Gıda Tarifi | Dondurulmuş Gıda ile Hazırlanan Tarif"
                                                  class="recipe-image"
                                                  title="${recipe.name} - Donuk Gıda Tarifi"
                                                  loading="lazy" />
@@ -1036,14 +1059,14 @@
                         </div>
                     `;
                 }
-                
+
                 document.getElementById('recipesContent').innerHTML = html;
                 document.getElementById('loadingSpinner').style.display = 'none';
                 document.getElementById('recipesContent').style.display = 'block';
-                
+
                 // Fade-in animasyonu ekle
                 document.getElementById('recipesContent').classList.add('fade-in');
-                
+
                 // Event listener'ları yeniden ekle
                 attachRecipeCardEvents();
             })
@@ -1077,7 +1100,7 @@
         document.getElementById('customModalTitle').textContent = name;
         document.getElementById('customModalDescription').innerHTML = description.replace(/\n/g, "<br>");
         document.getElementById('customModal').style.display = 'block';
-        
+
         // Body scroll'unu engelle
         document.body.style.overflow = 'hidden';
     }
@@ -1085,7 +1108,7 @@
     // Custom modal'ı kapat
     function closeCustomModal() {
         document.getElementById('customModal').style.display = 'none';
-        
+
         // Body scroll'unu geri yükle
         document.body.style.overflow = 'auto';
     }
@@ -1122,17 +1145,17 @@
 
         function selectCategoryFromBottomSheet(categoryId, categoryName) {
             console.log('selectCategoryFromBottomSheet çağrıldı:', { categoryId, categoryName });
-            
+
             // Bottom sheet'i kapat
             closeBottomSheet();
-            
+
             // Kategori seçimini yap
             if (categoryId === 0) {
                 loadAllRecipes();
             } else {
                 loadRecipesByCategory(categoryId, categoryName);
             }
-            
+
             // Bottom sheet'teki aktif kategoriyi güncelle
             document.querySelectorAll('.category-card-new').forEach(card => {
                 card.classList.remove('active');
@@ -1143,10 +1166,10 @@
         // Yeni kategori toggle fonksiyonu
         function toggleCategory(element, event) {
             event.stopPropagation();
-            
+
             const subcategoryList = element.parentElement.parentElement.querySelector('.subcategory-list');
             const expandIcon = element.querySelector('.fas');
-            
+
             if (subcategoryList.style.display === 'none' || subcategoryList.style.display === '') {
                 subcategoryList.style.display = 'block';
                 expandIcon.classList.remove('fa-chevron-down');
@@ -1163,19 +1186,19 @@
         // Desktop kategori toggle fonksiyonu
         function toggleDesktopCategory(element) {
             console.log('toggleDesktopCategory çağrıldı, element:', element);
-            
+
             // Basit çözüm: parentElement kullan
             const categorySection = element.parentElement.parentElement;
             const subcategoryList = categorySection.querySelector('.desktop-subcategory-list');
             const expandIcon = element.querySelector('.fas') || element.querySelector('i') || element.children[0];
-            
+
             console.log('Elements:', { categorySection, subcategoryList, expandIcon });
             console.log('Element children:', element.children);
             console.log('Element innerHTML:', element.innerHTML);
-            
+
             if (subcategoryList && expandIcon) {
                 console.log('SubcategoryList display:', subcategoryList.style.display);
-                
+
                 if (subcategoryList.style.display === 'none' || subcategoryList.style.display === '') {
                     subcategoryList.style.display = 'block';
                     expandIcon.classList.remove('fa-chevron-down');
@@ -1195,14 +1218,14 @@
         // Sayfa yüklendiğinde event listener'ları ekle
         document.addEventListener('DOMContentLoaded', function() {
             attachRecipeCardEvents();
-            
+
             // İlk kategoriyi (Tüm Kategoriler) aktif yap
             const firstCategory = document.querySelector('[data-category-id="0"]');
             if (firstCategory) {
                 firstCategory.classList.add('active');
             }
         });
-    </script>
+</script>
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -1210,15 +1233,15 @@
         // 🚀 Responsive resim URL helper fonksiyonu
         function getResponsiveImageUrl(imagePath, width, height = 0) {
             if (!imagePath) return '';
-            
+
             // Cloudinary transformation URL oluştur
             const baseUrl = imagePath.split('/upload/')[0] + '/upload/';
             const publicId = imagePath.split('/upload/')[1];
-            
+
             let transformation = `w_${width}`;
             if (height > 0) transformation += `,h_${height}`;
             transformation += ',c_fit,q_auto:good,f_auto,fl_progressive,fl_immutable_cache';
-            
+
             return `${baseUrl}${transformation}/${publicId}`;
         }
 

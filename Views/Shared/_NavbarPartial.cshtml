@@ -70,12 +70,16 @@
         .dropdown-menu {
             background-color: #222;
             border: none;
+            max-height: 60vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 0;
         }
 
         .dropdown-item {
             color: #fff;
             padding: 10px;
-            text-align: center;
+            text-align: start;
         }
 
         .navbar-nav {
@@ -110,6 +114,50 @@
         }
     }
 
+    /* Samsung SE ve çok küçük ekranlar için */
+    @@media (max-width: 375px) {
+        .dropdown-menu {
+            max-height: 50vh;
+            width: 100%;
+            left: 0 !important;
+            right: 0 !important;
+            transform: none !important;
+            padding: 0;
+        }
+
+        .dropdown-item {
+            padding: 8px 10px;
+            font-size: 14px;
+        }
+
+        .navbar-brand img {
+            width: 100px;
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 14px;
+        }
+    }
+
+    /* Dropdown scrollbar styling */
+    .dropdown-menu::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .dropdown-menu::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+    }
+
+    .dropdown-menu::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 2px;
+    }
+
+    .dropdown-menu::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.5);
+    }
+
 </style>
 
 <nav class="navbar navbar-expand-md navbar-dark main-menu" id="dynamicNavbar">
@@ -130,15 +178,10 @@
                     @Html.T("Home").ToUpper(System.Globalization.CultureInfo.CurrentCulture)
                 </a>
             </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <li class="nav-item">
+                <a class="nav-link" href="/Home/About">
                     @Html.T("About").ToUpper(System.Globalization.CultureInfo.CurrentCulture)
                 </a>
-                <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="/Home/About">
-                        @Html.T("About").ToUpper(System.Globalization.CultureInfo.CurrentCulture)
-                    </a>
-                </div>
             </li>
             <li class="nav-item">
                 <a href="/Home/Products" class="nav-link">
