@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 
 namespace MyGoldenFood.Models
@@ -12,5 +13,19 @@ namespace MyGoldenFood.Models
         public int RecipeCategoryId { get; set; }
         public virtual RecipeCategory RecipeCategory { get; set; }
         public virtual ICollection<RecipeTranslation> RecipeTranslations { get; set; } = new List<RecipeTranslation>();
+        
+        // Tarih Alanları
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime? UpdatedDate { get; set; }
+        
+        // SEO Alanları
+        public string? SeoTitle { get; set; }
+        public string? SeoDescription { get; set; }
+        public string? SeoKeywords { get; set; }
+        public string? SeoSlug { get; set; }
+        public string? PreparationTime { get; set; } // Hazırlık süresi
+        public string? CookingTime { get; set; } // Pişirme süresi
+        public int? Servings { get; set; } // Porsiyon sayısı
+        public string? Difficulty { get; set; } // Zorluk seviyesi
     }
 }
