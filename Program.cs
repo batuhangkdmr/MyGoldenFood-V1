@@ -152,6 +152,49 @@ namespace MyGoldenFood
                 endpoints.MapHub<FaydalariHub>("/faydalariHub");
                 endpoints.MapHub<TariflerHub>("/tariflerHub");
 
+                // Özel route'lar - temiz URL'ler için
+                endpoints.MapControllerRoute(
+                    name: "about",
+                    pattern: "hakkimizda",
+                    defaults: new { controller = "Home", action = "About" });
+
+                endpoints.MapControllerRoute(
+                    name: "products",
+                    pattern: "urunler",
+                    defaults: new { controller = "Home", action = "Products" });
+
+                endpoints.MapControllerRoute(
+                    name: "recipes",
+                    pattern: "tarifler",
+                    defaults: new { controller = "Tarifler", action = "Index" });
+
+                endpoints.MapControllerRoute(
+                    name: "benefits",
+                    pattern: "faydalari",
+                    defaults: new { controller = "Faydalari", action = "Index" });
+
+                endpoints.MapControllerRoute(
+                    name: "recipes-benefits",
+                    pattern: "tariflervefaydalari",
+                    defaults: new { controller = "Tariflervefaydalari", action = "Index" });
+
+                endpoints.MapControllerRoute(
+                    name: "contact",
+                    pattern: "iletisim",
+                    defaults: new { controller = "Home", action = "Iletisim" });
+
+                endpoints.MapControllerRoute(
+                    name: "home",
+                    pattern: "anasayfa",
+                    defaults: new { controller = "Home", action = "Index" });
+
+                // Ana sayfa için root route
+                endpoints.MapControllerRoute(
+                    name: "root",
+                    pattern: "",
+                    defaults: new { controller = "Home", action = "Index" });
+
+                // Varsayılan route
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
