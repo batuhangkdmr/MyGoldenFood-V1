@@ -29,6 +29,41 @@ namespace MyGoldenFood.Controllers
             _faydalariHubContext = faydalariHubContext;
         }
 
+        // SEO Slug oluşturma helper metodu
+        private string GenerateSeoSlug(string title)
+        {
+            if (string.IsNullOrEmpty(title))
+                return string.Empty;
+
+            // Türkçe karakterleri değiştir
+            title = title.ToLower()
+                .Replace("ç", "c")
+                .Replace("ğ", "g")
+                .Replace("ı", "i")
+                .Replace("ö", "o")
+                .Replace("ş", "s")
+                .Replace("ü", "u");
+
+            // Özel karakterleri kaldır ve tire ile değiştir
+            title = System.Text.RegularExpressions.Regex.Replace(title, @"[^a-z0-9\s-]", "");
+            title = System.Text.RegularExpressions.Regex.Replace(title, @"\s+", "-");
+            title = title.Trim('-');
+
+            // Duplicate slug'ları önlemek için ID ekle
+            var baseSlug = title;
+            var counter = 1;
+            var finalSlug = baseSlug;
+
+            // Aynı slug'ın var olup olmadığını kontrol et
+            while (_context.Benefits.Any(b => b.SeoSlug == finalSlug))
+            {
+                finalSlug = $"{baseSlug}-{counter}";
+                counter++;
+            }
+
+            return finalSlug;
+        }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -43,6 +78,14 @@ namespace MyGoldenFood.Controllers
             var categories = await _context.BenefitCategories
                 .Include(c => c.Translations)
                 .Include(c => c.Benefits)
+                .Include(c => c.ChildCategories)
+                    .ThenInclude(child => child.Benefits)
+                .Include(c => c.ChildCategories)
+                    .ThenInclude(child => child.Translations)
+                .Include(c => c.ParentCategory)
+                .OrderBy(c => c.Level)
+                .ThenBy(c => c.SortOrder)
+                .ThenBy(c => c.Name)
                 .ToListAsync();
 
             foreach (var category in categories)
@@ -51,7 +94,16 @@ namespace MyGoldenFood.Controllers
                 if (translation != null)
                 {
                     category.Name = translation.Name;
-                    category.Description = translation.Description;
+                }
+
+                // Alt kategorilerin çevirilerini de güncelle
+                foreach (var child in category.ChildCategories)
+                {
+                    var childTranslation = child.Translations.FirstOrDefault(t => t.Language == selectedLanguage);
+                    if (childTranslation != null)
+                    {
+                        child.Name = childTranslation.Name;
+                    }
                 }
             }
 
@@ -139,10 +191,45 @@ namespace MyGoldenFood.Controllers
                 selectedLanguage = userCulture.Split('|')[0].Replace("c=", "");
             }
 
+            var categoryIds = new List<int>();
+            
+            if (id == 0) // Tüm Kategoriler
+            {
+                // Tüm kategorilerin ID'lerini al
+                categoryIds = await _context.BenefitCategories.Select(c => c.Id).ToListAsync();
+            }
+            else
+            {
+                var category = await _context.BenefitCategories
+                    .Include(c => c.ChildCategories)
+                        .ThenInclude(child => child.Translations)
+                    .Include(c => c.Translations)
+                    .FirstOrDefaultAsync(c => c.Id == id);
+                
+                if (category != null)
+                {
+                    if (category.Level == 0) // Ana kategori (ParentCategoryId = NULL)
+                    {
+                        // Ana kategori seçilirse, alt kategorilerin ID'lerini de ekle
+                        categoryIds.Add(id);
+                        if (category.ChildCategories.Any())
+                        {
+                            categoryIds.AddRange(category.ChildCategories.Select(c => c.Id));
+                        }
+                    }
+                    else // Alt kategori (ParentCategoryId != NULL)
+                    {
+                        // Alt kategori seçilirse, sadece o alt kategorinin ID'sini kullan
+                        categoryIds.Add(id);
+                    }
+                }
+            }
+
             var benefits = await _context.Benefits
                 .Include(b => b.BenefitCategory)
+                    .ThenInclude(c => c.Translations)
                 .Include(b => b.Translations)
-                .Where(b => b.BenefitCategoryId == id)
+                .Where(b => id == 0 || categoryIds.Contains(b.BenefitCategoryId ?? 0))
                 .ToListAsync();
 
             foreach (var benefit in benefits)
@@ -158,16 +245,26 @@ namespace MyGoldenFood.Controllers
             // JSON formatında döndür
             var benefitData = benefits.Select(b => new
             {
+                id = b.Id,
                 name = b.Name,
                 content = b.Content,
-                imagePath = b.ImagePath
+                imagePath = b.ImagePath,
+                benefitCategoryId = b.BenefitCategoryId,
+                benefitCategoryName = b.BenefitCategory?.Name ?? "Kategori Yok",
+                seoSlug = b.SeoSlug,
+                seoTitle = b.SeoTitle,
+                seoDescription = b.SeoDescription,
+                preparationTime = b.PreparationTime,
+                cookingTime = b.CookingTime,
+                servings = b.Servings,
+                difficulty = b.Difficulty
             });
 
             return Json(benefitData);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> GetBenefitsBySubcategory(int benefitCategoryId)
         {
             string selectedLanguage = "tr";
 
@@ -177,11 +274,15 @@ namespace MyGoldenFood.Controllers
                 selectedLanguage = userCulture.Split('|')[0].Replace("c=", "");
             }
 
+            // Alt kategorideki faydaları direkt getir
             var benefits = await _context.Benefits
                 .Include(b => b.BenefitCategory)
                 .Include(b => b.Translations)
-                .Where(b => b.BenefitCategoryId == id)
+                .Where(b => b.BenefitCategoryId == benefitCategoryId)
                 .ToListAsync();
+
+            // Debug: Kaç fayda bulundu
+            Console.WriteLine($"GetBenefitsBySubcategory - benefitCategoryId: {benefitCategoryId}, bulunan fayda sayısı: {benefits.Count}");
 
             foreach (var benefit in benefits)
             {
@@ -193,24 +294,41 @@ namespace MyGoldenFood.Controllers
                 }
             }
 
-            var category = await _context.BenefitCategories
-                .Include(c => c.Translations)
-                .FirstOrDefaultAsync(c => c.Id == id);
-
-            if (category != null)
+            var result = benefits.Select(b => new
             {
-                var translatedCategory = category.Translations
-                    .FirstOrDefault(t => t.Language == selectedLanguage);
+                id = b.Id,
+                name = b.Name,
+                content = b.Content,
+                imagePath = b.ImagePath,
+                benefitCategoryId = b.BenefitCategoryId,
+                benefitCategoryName = b.BenefitCategory?.Name ?? "Kategori Yok",
+                seoSlug = b.SeoSlug,
+                seoTitle = b.SeoTitle,
+                seoDescription = b.SeoDescription,
+                preparationTime = b.PreparationTime,
+                cookingTime = b.CookingTime,
+                servings = b.Servings,
+                difficulty = b.Difficulty
+            });
 
-                if (translatedCategory != null)
-                {
-                    category.Name = translatedCategory.Name;
-                    category.Description = translatedCategory.Description;
-                }
+            return Json(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCategoryInfo(int categoryId)
+        {
+            var category = await _context.BenefitCategories
+                .FirstOrDefaultAsync(c => c.Id == categoryId);
+
+            if (category == null)
+            {
+                return Json(new { level = 0, parentId = (int?)null });
             }
 
-            ViewBag.Category = category;
-            return View(benefits);
+            return Json(new { 
+                level = category.Level, 
+                parentId = category.ParentCategoryId 
+            });
         }
 
         [HttpGet]
@@ -233,6 +351,14 @@ namespace MyGoldenFood.Controllers
                         model.ImagePath = uploadResult;
                     }
                 }
+
+                // Otomatik SEO alanlarını oluştur
+                model.SeoTitle = model.Name;
+                model.SeoDescription = model.Content?.Length > 160 ? model.Content.Substring(0, 157) + "..." : model.Content;
+                model.SeoKeywords = $"fayda, {model.Name.ToLower()}, sağlık, beslenme";
+                model.SeoSlug = GenerateSeoSlug(model.Name);
+                model.CreatedDate = DateTime.Now;
+                model.UpdatedDate = DateTime.Now;
 
                 _context.Benefits.Add(model);
                 await _context.SaveChangesAsync();
@@ -287,6 +413,13 @@ namespace MyGoldenFood.Controllers
                 existingBenefit.Name = model.Name;
                 existingBenefit.Content = model.Content;
                 existingBenefit.BenefitCategoryId = model.BenefitCategoryId;
+
+                // SEO alanlarını güncelle
+                existingBenefit.SeoTitle = model.Name;
+                existingBenefit.SeoDescription = model.Content?.Length > 160 ? model.Content.Substring(0, 157) + "..." : model.Content;
+                existingBenefit.SeoKeywords = $"fayda, {model.Name.ToLower()}, sağlık, beslenme";
+                existingBenefit.SeoSlug = GenerateSeoSlug(model.Name);
+                existingBenefit.UpdatedDate = DateTime.Now;
 
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
@@ -381,6 +514,20 @@ namespace MyGoldenFood.Controllers
                     }
                 }
 
+                // Alt kategori sistemi için Level ve ParentCategoryId ayarla
+                if (model.ParentCategoryId.HasValue)
+                {
+                    model.Level = 1; // Alt kategori
+                }
+                else
+                {
+                    model.Level = 0; // Ana kategori
+                    model.ParentCategoryId = null;
+                }
+
+                model.CreatedDate = DateTime.Now;
+                model.UpdatedDate = DateTime.Now;
+
                 _context.BenefitCategories.Add(model);
                 await _context.SaveChangesAsync();
 
@@ -389,16 +536,14 @@ namespace MyGoldenFood.Controllers
                 foreach (var lang in languages)
                 {
                     var translatedName = await translationService.TranslateText(model.Name, lang, "tr");
-                    var translatedDescription = await translationService.TranslateText(model.Description, lang, "tr");
 
-                    if (!string.IsNullOrEmpty(translatedName) && !string.IsNullOrEmpty(translatedDescription))
+                    if (!string.IsNullOrEmpty(translatedName))
                     {
                         var newTranslation = new BenefitCategoryTranslation
                         {
                             BenefitCategoryId = model.Id,
                             Language = lang,
-                            Name = translatedName,
-                            Description = translatedDescription
+                            Name = translatedName
                         };
                         _context.BenefitCategoryTranslations.Add(newTranslation);
                     }
@@ -430,7 +575,21 @@ namespace MyGoldenFood.Controllers
                 if (existingCategory == null) return NotFound();
 
                 existingCategory.Name = model.Name;
-                existingCategory.Description = model.Description;
+                existingCategory.ParentCategoryId = model.ParentCategoryId;
+                existingCategory.SortOrder = model.SortOrder;
+
+                // Level'ı güncelle
+                if (model.ParentCategoryId.HasValue)
+                {
+                    existingCategory.Level = 1; // Alt kategori
+                }
+                else
+                {
+                    existingCategory.Level = 0; // Ana kategori
+                    existingCategory.ParentCategoryId = null;
+                }
+
+                existingCategory.UpdatedDate = DateTime.Now;
 
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
@@ -447,7 +606,6 @@ namespace MyGoldenFood.Controllers
                 foreach (var lang in languages)
                 {
                     var translatedName = await translationService.TranslateText(model.Name, lang, "tr");
-                    var translatedDescription = await translationService.TranslateText(model.Description, lang, "tr");
 
                     var translation = await _context.BenefitCategoryTranslations.FirstOrDefaultAsync(t =>
                         t.BenefitCategoryId == model.Id && t.Language == lang);
@@ -455,16 +613,14 @@ namespace MyGoldenFood.Controllers
                     if (translation != null)
                     {
                         translation.Name = !string.IsNullOrEmpty(translatedName) ? translatedName : translation.Name;
-                        translation.Description = !string.IsNullOrEmpty(translatedDescription) ? translatedDescription : translation.Description;
                     }
-                    else if (!string.IsNullOrEmpty(translatedName) && !string.IsNullOrEmpty(translatedDescription))
+                    else if (!string.IsNullOrEmpty(translatedName))
                     {
                         _context.BenefitCategoryTranslations.Add(new BenefitCategoryTranslation
                         {
                             BenefitCategoryId = model.Id,
                             Language = lang,
-                            Name = translatedName,
-                            Description = translatedDescription
+                            Name = translatedName
                         });
                     }
                 }
@@ -516,8 +672,131 @@ namespace MyGoldenFood.Controllers
         {
             var categories = await _context.BenefitCategories
                 .Include(c => c.Benefits)
+                .Include(c => c.ChildCategories)
                 .ToListAsync();
             return PartialView("_BenefitCategoryListPartial", categories);
         }
+
+        // Alt kategori sistemi için yeni metodlar
+        [HttpGet]
+        public async Task<IActionResult> GetParentCategories()
+        {
+            var parentCategories = await _context.BenefitCategories
+                .Where(c => c.Level == 0) // Sadece ana kategoriler
+                .OrderBy(c => c.SortOrder)
+                .ThenBy(c => c.Name)
+                .Select(c => new
+                {
+                    id = c.Id,
+                    name = c.Name
+                })
+                .ToListAsync();
+
+            return Json(parentCategories);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCategoriesWithChildren()
+        {
+            string selectedLanguage = "tr";
+
+            var userCulture = Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
+            if (!string.IsNullOrEmpty(userCulture))
+            {
+                selectedLanguage = userCulture.Split('|')[0].Replace("c=", "");
+            }
+
+            var categories = await _context.BenefitCategories
+                .Include(c => c.Translations)
+                .Include(c => c.Benefits)
+                .Include(c => c.ChildCategories)
+                    .ThenInclude(child => child.Benefits)
+                .Include(c => c.ChildCategories)
+                    .ThenInclude(child => child.Translations)
+                .Include(c => c.ParentCategory)
+                .OrderBy(c => c.Level)
+                .ThenBy(c => c.SortOrder)
+                .ThenBy(c => c.Name)
+                .ToListAsync();
+
+            foreach (var category in categories)
+            {
+                var translation = category.Translations.FirstOrDefault(t => t.Language == selectedLanguage);
+                if (translation != null)
+                {
+                    category.Name = translation.Name;
+                }
+
+                // Alt kategorilerin çevirilerini de güncelle
+                foreach (var child in category.ChildCategories)
+                {
+                    var childTranslation = child.Translations.FirstOrDefault(t => t.Language == selectedLanguage);
+                    if (childTranslation != null)
+                    {
+                        child.Name = childTranslation.Name;
+                    }
+                }
+            }
+
+            var result = categories.Select(c => new
+            {
+                id = c.Id,
+                name = c.Name,
+                imagePath = c.ImagePath,
+                level = c.Level,
+                parentCategoryId = c.ParentCategoryId,
+                sortOrder = c.SortOrder,
+                benefitsCount = c.Benefits?.Count ?? 0,
+                childCategories = c.ChildCategories.Select(child => new
+                {
+                    id = child.Id,
+                    name = child.Name,
+                    imagePath = child.ImagePath,
+                    benefitsCount = child.Benefits?.Count ?? 0
+                }).ToList()
+            }).ToList();
+
+            return Json(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSubCategories(int parentId)
+        {
+            string selectedLanguage = "tr";
+
+            var userCulture = Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
+            if (!string.IsNullOrEmpty(userCulture))
+            {
+                selectedLanguage = userCulture.Split('|')[0].Replace("c=", "");
+            }
+
+            var subCategories = await _context.BenefitCategories
+                .Include(c => c.Translations)
+                .Include(c => c.Benefits)
+                .Where(c => c.ParentCategoryId == parentId)
+                .OrderBy(c => c.SortOrder)
+                .ThenBy(c => c.Name)
+                .ToListAsync();
+
+            foreach (var category in subCategories)
+            {
+                var translation = category.Translations.FirstOrDefault(t => t.Language == selectedLanguage);
+                if (translation != null)
+                {
+                    category.Name = translation.Name;
+                }
+            }
+
+            var result = subCategories.Select(c => new
+            {
+                id = c.Id,
+                name = c.Name,
+                imagePath = c.ImagePath,
+                benefitsCount = c.Benefits?.Count ?? 0
+            }).ToList();
+
+            return Json(result);
+        }
+
     }
 }

@@ -13,24 +13,87 @@
         
         <div class="mb-3">
             <label for="Content" class="form-label">Fayda İçeriği *</label>
-            <textarea class="form-control" id="Content" name="Content" rows="5" required></textarea>
+            <textarea class="form-control" id="Content" name="Content" rows="8" required placeholder="Fayda açıklamasını yazın..."></textarea>
         </div>
         
         <div class="mb-3">
-            <label for="BenefitCategoryId" class="form-label">Kategori</label>
-            <select class="form-control" id="BenefitCategoryId" name="BenefitCategoryId">
-                <option value="">Kategori Seçin</option>
-                @foreach (var category in ViewBag.Categories)
-                {
-                    <option value="@category.Id">@category.Name</option>
-                }
+            <label for="MainCategoryId" class="form-label">Ana Kategori *</label>
+            <select class="form-control" id="MainCategoryId" name="MainCategoryId" required>
+                <option value="">Ana Kategori Seçin</option>
             </select>
         </div>
+        
+        <div class="mb-3">
+            <label for="SubCategoryId" class="form-label">Alt Kategori</label>
+            <select class="form-control" id="SubCategoryId" name="SubCategoryId">
+                <option value="">Alt Kategori Seçin (İsteğe Bağlı)</option>
+            </select>
+            <small class="form-text text-muted">Ana kategori seçtikten sonra alt kategoriler yüklenecek</small>
+        </div>
+        
+        <!-- Gizli alan - seçilen kategori ID'sini tutar -->
+        <input type="hidden" id="BenefitCategoryId" name="BenefitCategoryId" value="" />
         
         <div class="mb-3">
             <label for="ImageFile" class="form-label">Fayda Görseli</label>
             <input type="file" class="form-control" id="ImageFile" name="ImageFile" accept="image/*">
             <small class="form-text text-muted">Desteklenen formatlar: JPG, PNG, GIF. Maksimum boyut: 5MB</small>
+        </div>
+
+        <!-- SEO Alanları -->
+        <!-- SEO Bilgisi -->
+        <div class="alert alert-info mt-4">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>SEO Otomatik Oluşturulacak:</strong> Fayda başlığından otomatik olarak SEO başlığı, açıklaması, anahtar kelimeleri ve URL oluşturulacaktır.
+        </div>
+
+        <!-- Fayda Detayları -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="card-title mb-0">
+                    <i class="fas fa-clock me-2"></i>
+                    Fayda Detayları (İsteğe Bağlı)
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="PreparationTime" class="form-label">Hazırlık Süresi</label>
+                            <input type="text" class="form-control" id="PreparationTime" name="PreparationTime" 
+                                   placeholder="Örnek: 15 dakika, PT15M">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="CookingTime" class="form-label">Pişirme Süresi</label>
+                            <input type="text" class="form-control" id="CookingTime" name="CookingTime" 
+                                   placeholder="Örnek: 30 dakika, PT30M">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="Servings" class="form-label">Porsiyon Sayısı</label>
+                            <input type="number" class="form-control" id="Servings" name="Servings" 
+                                   placeholder="Örnek: 4" min="1" max="20">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="Difficulty" class="form-label">Zorluk Seviyesi</label>
+                            <select class="form-control" id="Difficulty" name="Difficulty">
+                                <option value="">Seçin</option>
+                                <option value="Kolay">Kolay</option>
+                                <option value="Orta">Orta</option>
+                                <option value="Zor">Zor</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <div class="modal-footer">
@@ -42,8 +105,26 @@
 
 <script>
     $(document).ready(function() {
+        // Ana kategorileri yükle
+        loadMainCategories();
+        
+        // Ana kategori değiştiğinde alt kategorileri yükle
+        $('#MainCategoryId').on('change', function() {
+            var mainCategoryId = $(this).val();
+            loadSubCategories(mainCategoryId);
+            updateBenefitCategoryId();
+        });
+        
+        // Alt kategori değiştiğinde gizli alanı güncelle
+        $('#SubCategoryId').on('change', function() {
+            updateBenefitCategoryId();
+        });
+        
         $('#createBenefitForm').on('submit', function(e) {
             e.preventDefault();
+            
+            // Form gönderilmeden önce kategori ID'sini güncelle
+            updateBenefitCategoryId();
             
             var formData = new FormData(this);
             
@@ -68,4 +149,56 @@
             });
         });
     });
+    
+    function loadMainCategories() {
+        $.ajax({
+            url: '/Faydalari/GetParentCategories',
+            type: 'GET',
+            success: function(categories) {
+                var select = $('#MainCategoryId');
+                select.empty();
+                select.append('<option value="">Ana Kategori Seçin</option>');
+                
+                categories.forEach(function(category) {
+                    select.append('<option value="' + category.id + '">' + category.name + '</option>');
+                });
+            },
+            error: function() {
+                console.log('Ana kategoriler yüklenemedi');
+            }
+        });
+    }
+    
+    function loadSubCategories(mainCategoryId) {
+        var subSelect = $('#SubCategoryId');
+        subSelect.empty();
+        subSelect.append('<option value="">Alt Kategori Seçin (İsteğe Bağlı)</option>');
+        
+        if (!mainCategoryId) {
+            return;
+        }
+        
+        $.ajax({
+            url: '/Faydalari/GetSubCategories',
+            type: 'GET',
+            data: { parentId: mainCategoryId },
+            success: function(subCategories) {
+                subCategories.forEach(function(subCategory) {
+                    subSelect.append('<option value="' + subCategory.id + '">' + subCategory.name + '</option>');
+                });
+            },
+            error: function() {
+                console.log('Alt kategoriler yüklenemedi');
+            }
+        });
+    }
+    
+    function updateBenefitCategoryId() {
+        var subCategoryId = $('#SubCategoryId').val();
+        var mainCategoryId = $('#MainCategoryId').val();
+        
+        // Alt kategori seçilmişse onu kullan, yoksa ana kategoriyi kullan
+        var selectedCategoryId = subCategoryId || mainCategoryId;
+        $('#BenefitCategoryId').val(selectedCategoryId);
+    }
 </script>
