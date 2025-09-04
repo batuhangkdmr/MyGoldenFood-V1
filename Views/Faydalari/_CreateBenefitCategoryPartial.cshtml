@@ -12,8 +12,17 @@
         </div>
         
         <div class="mb-3">
-            <label for="Description" class="form-label">Açıklama</label>
-            <textarea class="form-control" id="Description" name="Description" rows="3"></textarea>
+            <label for="ParentCategoryId" class="form-label">Ana Kategori</label>
+            <select class="form-control" id="ParentCategoryId" name="ParentCategoryId">
+                <option value="">Ana Kategori (Seçiniz)</option>
+            </select>
+            <small class="form-text text-muted">Boş bırakırsanız ana kategori olarak eklenir</small>
+        </div>
+        
+        <div class="mb-3">
+            <label for="SortOrder" class="form-label">Sıralama</label>
+            <input type="number" class="form-control" id="SortOrder" name="SortOrder" value="0" min="0">
+            <small class="form-text text-muted">Küçük sayılar önce görünür (0, 1, 2...)</small>
         </div>
         
         <div class="mb-3">
@@ -31,6 +40,9 @@
 
 <script>
     $(document).ready(function() {
+        // Ana kategorileri yükle
+        loadParentCategories();
+        
         $('#createBenefitCategoryForm').on('submit', function(e) {
             e.preventDefault();
             
@@ -57,4 +69,23 @@
             });
         });
     });
+    
+    function loadParentCategories() {
+        $.ajax({
+            url: '/Faydalari/GetParentCategories',
+            type: 'GET',
+            success: function(categories) {
+                var select = $('#ParentCategoryId');
+                select.empty();
+                select.append('<option value="">Ana Kategori (Seçiniz)</option>');
+                
+                categories.forEach(function(category) {
+                    select.append('<option value="' + category.id + '">' + category.name + '</option>');
+                });
+            },
+            error: function() {
+                console.log('Ana kategoriler yüklenemedi');
+            }
+        });
+    }
 </script>
