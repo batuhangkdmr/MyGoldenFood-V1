@@ -80,6 +80,8 @@ namespace MyGoldenFood.Controllers
                 .Include(c => c.Recipes)
                 .Include(c => c.ChildCategories)
                     .ThenInclude(child => child.Recipes)
+                .Include(c => c.ChildCategories)
+                    .ThenInclude(child => child.Translations)
                 .Include(c => c.ParentCategory)
                 .OrderBy(c => c.Level)
                 .ThenBy(c => c.SortOrder)
@@ -144,7 +146,11 @@ namespace MyGoldenFood.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            ViewBag.Categories = _context.RecipeCategories.ToList();
+            ViewBag.Categories = _context.RecipeCategories
+                .Include(c => c.Translations)
+                .Include(c => c.ChildCategories)
+                    .ThenInclude(child => child.Translations)
+                .ToList();
             return PartialView("_CreateRecipePartial");
         }
 
@@ -201,7 +207,11 @@ namespace MyGoldenFood.Controllers
                 return Json(new { success = true, message = "Tarif başarıyla eklendi!" });
             }
 
-            ViewBag.Categories = _context.RecipeCategories.ToList();
+            ViewBag.Categories = _context.RecipeCategories
+                .Include(c => c.Translations)
+                .Include(c => c.ChildCategories)
+                    .ThenInclude(child => child.Translations)
+                .ToList();
             return PartialView("_CreateRecipePartial", model);
         }
 
@@ -473,7 +483,11 @@ namespace MyGoldenFood.Controllers
             var recipe = await _context.Recipes.FindAsync(id);
             if (recipe == null) return NotFound();
 
-            ViewBag.Categories = _context.RecipeCategories.ToList();
+            ViewBag.Categories = _context.RecipeCategories
+                .Include(c => c.Translations)
+                .Include(c => c.ChildCategories)
+                    .ThenInclude(child => child.Translations)
+                .ToList();
             return PartialView("_EditRecipePartial", recipe);
         }
 
@@ -542,7 +556,11 @@ namespace MyGoldenFood.Controllers
                 return Json(new { success = true, message = "Tarif başarıyla güncellendi!" });
             }
 
-            ViewBag.Categories = _context.RecipeCategories.ToList();
+            ViewBag.Categories = _context.RecipeCategories
+                .Include(c => c.Translations)
+                .Include(c => c.ChildCategories)
+                    .ThenInclude(child => child.Translations)
+                .ToList();
             return PartialView("_EditRecipePartial", model);
         }
 
@@ -640,6 +658,8 @@ namespace MyGoldenFood.Controllers
             {
                 var category = await _context.RecipeCategories
                     .Include(c => c.ChildCategories)
+                        .ThenInclude(child => child.Translations)
+                    .Include(c => c.Translations)
                     .FirstOrDefaultAsync(c => c.Id == id);
                 
                 if (category != null)
@@ -663,6 +683,7 @@ namespace MyGoldenFood.Controllers
 
             var recipes = await _context.Recipes
                 .Include(r => r.RecipeCategory)
+                    .ThenInclude(c => c.Translations)
                 .Include(r => r.RecipeTranslations)
                 .Where(r => id == 0 || categoryIds.Contains(r.RecipeCategoryId))
                 .ToListAsync();
@@ -674,6 +695,16 @@ namespace MyGoldenFood.Controllers
                 {
                     recipe.Name = translation.Name;
                     recipe.Content = translation.Content;
+                }
+
+                // Kategori çevirisini uygula
+                if (recipe.RecipeCategory != null)
+                {
+                    var categoryTranslation = recipe.RecipeCategory.Translations.FirstOrDefault(t => t.Language == selectedLanguage);
+                    if (categoryTranslation != null)
+                    {
+                        recipe.RecipeCategory.Name = categoryTranslation.Name;
+                    }
                 }
             }
 
