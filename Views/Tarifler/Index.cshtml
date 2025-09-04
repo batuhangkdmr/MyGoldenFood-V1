@@ -1250,7 +1250,7 @@
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        // 🚀 Responsive resim URL helper fonksiyonu
+        // 🚀 HIZ ODAKLI Responsive resim URL helper fonksiyonu (Mobil-First)
         function getResponsiveImageUrl(imagePath, width, height = 0) {
             if (!imagePath) return '';
 
@@ -1260,21 +1260,23 @@
 
             let transformation = `w_${width}`;
             if (height > 0) transformation += `,h_${height}`;
-            transformation += ',c_fit,q_auto:good,f_auto,fl_progressive,fl_immutable_cache';
+            // 🎯 HIZ ODAKLI: q_70, f_auto, fl_immutable_cache
+            transformation += ',c_fit,q_70,f_auto,fl_immutable_cache';
 
             return `${baseUrl}${transformation}/${publicId}`;
         }
 
+        // 📱 Mobil-First Optimizasyon (Mobil trafik %90)
         function getMobileImageUrl(imagePath) {
-            return getResponsiveImageUrl(imagePath, 400, 300);
+            return getResponsiveImageUrl(imagePath, 200, 150); // Ultra hızlı mobil
         }
 
         function getTabletImageUrl(imagePath) {
-            return getResponsiveImageUrl(imagePath, 600, 450);
+            return getResponsiveImageUrl(imagePath, 400, 300); // Tablet için optimal
         }
 
         function getDesktopImageUrl(imagePath) {
-            return getResponsiveImageUrl(imagePath, 800, 600);
+            return getResponsiveImageUrl(imagePath, 600, 450); // Desktop için yeterli
         }
     </script>
 }

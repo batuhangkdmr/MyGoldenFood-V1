@@ -25,12 +25,11 @@ namespace MyGoldenFood.Services
                 {
                     File = new FileDescription(imageFile.FileName, imageFile.OpenReadStream()),
                     Folder = folder,
-                    // 🚀 WebP + Responsive + Optimizasyon
+                    // 🚀 HIZ ODAKLI Optimizasyon (Mobil-First)
                     Transformation = new Transformation()
-                        .Width(800).Height(600).Crop("fit")
-                        .Quality("auto:good")
+                        .Width(600).Height(450).Crop("fit") // Desktop için yeterli boyut
+                        .Quality("70") // Hız odaklı kalite
                         .FetchFormat("auto") // WebP'yi destekleyen tarayıcılara WebP, diğerlerine JPEG
-                        .Flags("progressive") // Progressive JPEG
                         .Flags("immutable_cache") // Cache optimizasyonu
                 };
                 var uploadResult = await _cloudinary.UploadAsync(uploadParams);
@@ -59,7 +58,7 @@ namespace MyGoldenFood.Services
             }
         }
 
-        // 🆕 Responsive resim URL'leri için yeni metodlar
+        // 🚀 HIZ ODAKLI Responsive resim URL'leri (Mobil-First)
         public string GetResponsiveImageUrl(string imagePath, int width, int height = 0)
         {
             if (string.IsNullOrEmpty(imagePath)) return string.Empty;
@@ -70,30 +69,87 @@ namespace MyGoldenFood.Services
             
             var transformation = $"w_{width}";
             if (height > 0) transformation += $",h_{height}";
-            transformation += ",c_fit,q_auto:good,f_auto,fl_progressive,fl_immutable_cache";
+            // 🎯 HIZ ODAKLI: q_70, f_auto, fl_immutable_cache
+            transformation += ",c_fit,q_70,f_auto,fl_immutable_cache";
             
             return $"{baseUrl}{transformation}/{publicId}";
         }
 
-        // 🎯 Farklı ekran boyutları için optimize edilmiş URL'ler
+        // 📱 Mobil-First Optimizasyon (Mobil trafik %90)
         public string GetMobileImageUrl(string imagePath)
         {
-            return GetResponsiveImageUrl(imagePath, 400, 300);
+            return GetResponsiveImageUrl(imagePath, 200, 150); // Ultra hızlı mobil
         }
 
         public string GetTabletImageUrl(string imagePath)
         {
-            return GetResponsiveImageUrl(imagePath, 600, 450);
+            return GetResponsiveImageUrl(imagePath, 400, 300); // Tablet için optimal
         }
 
         public string GetDesktopImageUrl(string imagePath)
         {
-            return GetResponsiveImageUrl(imagePath, 800, 600);
+            return GetResponsiveImageUrl(imagePath, 600, 450); // Desktop için yeterli
         }
 
         public string GetLargeImageUrl(string imagePath)
         {
             return GetResponsiveImageUrl(imagePath, 1200, 900);
+        }
+
+        // 🎯 Aşama 2: Responsive Srcset için metodlar
+        public string GetUltraMobileImageUrl(string imagePath)
+        {
+            return GetResponsiveImageUrl(imagePath, 150, 113); // Ultra küçük ekranlar
+        }
+
+        public string GetSmallMobileImageUrl(string imagePath)
+        {
+            return GetResponsiveImageUrl(imagePath, 200, 150); // Küçük mobil
+        }
+
+        public string GetMediumMobileImageUrl(string imagePath)
+        {
+            return GetResponsiveImageUrl(imagePath, 300, 225); // Orta mobil
+        }
+
+        // 📊 Responsive Srcset HTML oluşturucu
+        public string GenerateResponsiveSrcset(string imagePath)
+        {
+            if (string.IsNullOrEmpty(imagePath)) return string.Empty;
+
+            var ultraMobile = GetUltraMobileImageUrl(imagePath);
+            var smallMobile = GetSmallMobileImageUrl(imagePath);
+            var mediumMobile = GetMediumMobileImageUrl(imagePath);
+            var tablet = GetTabletImageUrl(imagePath);
+            var desktop = GetDesktopImageUrl(imagePath);
+
+            return $"{ultraMobile} 150w, {smallMobile} 200w, {mediumMobile} 300w, {tablet} 400w, {desktop} 600w";
+        }
+
+        // 🖼️ Picture element HTML oluşturucu
+        public string GeneratePictureElement(string imagePath, string altText = "", string cssClass = "")
+        {
+            if (string.IsNullOrEmpty(imagePath)) return string.Empty;
+
+            var ultraMobile = GetUltraMobileImageUrl(imagePath);
+            var smallMobile = GetSmallMobileImageUrl(imagePath);
+            var mediumMobile = GetMediumMobileImageUrl(imagePath);
+            var tablet = GetTabletImageUrl(imagePath);
+            var desktop = GetDesktopImageUrl(imagePath);
+
+            return $@"
+                <picture>
+                    <source media=""(max-width: 320px)"" srcset=""{ultraMobile}"">
+                    <source media=""(max-width: 480px)"" srcset=""{smallMobile}"">
+                    <source media=""(max-width: 768px)"" srcset=""{mediumMobile}"">
+                    <source media=""(max-width: 1024px)"" srcset=""{tablet}"">
+                    <img src=""{desktop}"" 
+                         srcset=""{GenerateResponsiveSrcset(imagePath)}""
+                         sizes=""(max-width: 320px) 150px, (max-width: 480px) 200px, (max-width: 768px) 300px, (max-width: 1024px) 400px, 600px""
+                         alt=""{altText}""
+                         class=""{cssClass}""
+                         loading=""lazy"">
+                </picture>";
         }
 
         // 🚀 Batch upload için toplu yükleme

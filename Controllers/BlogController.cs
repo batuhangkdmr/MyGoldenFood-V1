@@ -30,6 +30,7 @@ namespace MyGoldenFood.Controllers
                 .OrderByDescending(b => b.CreatedDate)
                 .ToListAsync();
 
+            ViewBag.CloudinaryService = _cloudinaryService; // 🚀 Responsive resimler için
             return View(blogs);
         }
 
@@ -79,6 +80,7 @@ namespace MyGoldenFood.Controllers
                 }
             }
 
+            ViewBag.CloudinaryService = _cloudinaryService; // 🚀 Responsive resimler için
             return View(blog);
         }
 
