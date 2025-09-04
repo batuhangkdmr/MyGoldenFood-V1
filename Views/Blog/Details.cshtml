@@ -14,7 +14,7 @@
     <meta property="og:description" content="@(string.IsNullOrEmpty(Model.SeoDescription) ? Model.Summary : Model.SeoDescription)">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://mygoldenfood.com/Blog/Details/@Model.Id">
-    <meta property="og:image" content="@(string.IsNullOrEmpty(Model.ImagePath) ? "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png" : Model.ImagePath)">
+    <meta property="og:image" content="@(string.IsNullOrEmpty(Model.ImagePath) ? "https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_1200,fl_immutable_cache/v1743859767/mygolden_foood_a25y69.png" : Model.ImagePath)">
     <meta property="article:published_time" content="@Model.CreatedDate.ToString("yyyy-MM-ddTHH:mm:ssZ")">
     @if (Model.UpdatedDate.HasValue)
     {
@@ -31,7 +31,7 @@
         "@@type": "Article",
         "name": "@Model.Title",
         "description": "@(string.IsNullOrEmpty(Model.SeoDescription) ? Model.Summary : Model.SeoDescription)",
-        "image": "@(string.IsNullOrEmpty(Model.ImagePath) ? "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png" : Model.ImagePath)",
+        "image": "@(string.IsNullOrEmpty(Model.ImagePath) ? "https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_70,w_1200,fl_immutable_cache/v1743859767/mygolden_foood_a25y69.png" : Model.ImagePath)",
         "articleSection": "Donuk Gıda Blog",
         "articleBody": "@Html.Raw(Model.Content.Replace("\"", "\\\"").Replace("\n", " ").Replace("\r", ""))",
         "author": {
@@ -145,8 +145,17 @@
             <!-- Blog Resmi -->
             @if (!string.IsNullOrEmpty(Model.ImagePath))
             {
+                var cloudinaryService = ViewBag.CloudinaryService as MyGoldenFood.Services.CloudinaryService;
                 <div class="blog-details-image">
-                    <img src="@Model.ImagePath" alt="@Model.Title - Donuk Gıda Blog Yazısı">
+                    <picture>
+                        <source media="(max-width: 768px)" 
+                                srcset="@cloudinaryService?.GetMobileImageUrl(Model.ImagePath)">
+                        <source media="(max-width: 1200px)" 
+                                srcset="@cloudinaryService?.GetTabletImageUrl(Model.ImagePath)">
+                        <img src="@cloudinaryService?.GetDesktopImageUrl(Model.ImagePath)" 
+                             alt="@Model.Title - Donuk Gıda Blog Yazısı"
+                             loading="lazy" />
+                    </picture>
                 </div>
             }
 
