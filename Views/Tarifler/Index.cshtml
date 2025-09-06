@@ -180,6 +180,13 @@
                                 </div>
                             }
                         </div>
+                        
+                        <!-- Sayfalama Butonları -->
+                        <div class="pagination">
+                            <button id="prevPage" class="btn btn-primary" disabled>@Html.T("Back")</button>
+                            <span id="pageNumber">@Html.T("Page")</span>
+                            <button id="nextPage" class="btn btn-primary">@Html.T("Next")</button>
+                        </div>
                     }
                     else
                     {
@@ -473,6 +480,12 @@
         justify-content: flex-start;
         align-items: start;
     }
+    
+    /* Placeholder tarifler için şeffaf bir görünüm */
+    .recipe-placeholder {
+        visibility: hidden; /* Görünmez olacak */
+        height: 250px;
+    }
 
         /* Eğer tarif sayısı 3'ten azsa, ortalama yap */
         .recipe-grid:has(.recipe-card:nth-child(1):nth-last-child(1)),
@@ -660,10 +673,15 @@
         .recipe-name {
             font-size: 1rem;
         }
+        
+
+        
         /* Mobilde sidebar'ın tam görünmesi için */
         .col-lg-3.col-md-4 {
             margin-bottom: 20px;
         }
+
+
         /* Mobilde yatay scroll için özel stiller */
         .categories-list::-webkit-scrollbar {
             height: 6px;
@@ -951,6 +969,7 @@
                         `;
                     });
                     html += '</div>';
+                    
                 } else {
                     html = `
                         <div class="text-center text-muted py-5">
@@ -964,12 +983,16 @@
                 document.getElementById('recipesContent').innerHTML = html;
                 document.getElementById('loadingSpinner').style.display = 'none';
                 document.getElementById('recipesContent').style.display = 'block';
+                
+                // Pagination'ı yeniden başlat
+                initPagination();
 
                 // Fade-in animasyonu ekle
                 document.getElementById('recipesContent').classList.add('fade-in');
 
                 // Event listener'ları yeniden ekle
                 attachRecipeCardEvents();
+                
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -1053,6 +1076,7 @@
                         `;
                     });
                     html += '</div>';
+                    
                 } else {
                     html = `
                         <div class="text-center text-muted py-5">
@@ -1066,12 +1090,16 @@
                 document.getElementById('recipesContent').innerHTML = html;
                 document.getElementById('loadingSpinner').style.display = 'none';
                 document.getElementById('recipesContent').style.display = 'block';
+                
+                // Pagination'ı yeniden başlat
+                initPagination();
 
                 // Fade-in animasyonu ekle
                 document.getElementById('recipesContent').classList.add('fade-in');
 
                 // Event listener'ları yeniden ekle
                 attachRecipeCardEvents();
+                
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -1238,6 +1266,7 @@
         // Sayfa yüklendiğinde event listener'ları ekle
         document.addEventListener('DOMContentLoaded', function() {
             attachRecipeCardEvents();
+            initPagination();
 
             // İlk kategoriyi (Tüm Kategoriler) aktif yap
             const firstCategory = document.querySelector('[data-category-id="0"]');
@@ -1245,7 +1274,249 @@
                 firstCategory.classList.add('active');
             }
         });
+
+        // Pagination Sistemi - Products ile aynı
+        let allRecipes = [];
+        const pageSize = 15; // Sayfa başına tarif sayısı
+        let currentPage = 1;
+
+        function initPagination() {
+            allRecipes = document.querySelectorAll(".recipe-card");
+            showPage(currentPage);
+        }
+
+        function showPage(page) {
+            let totalRecipes = allRecipes.length;
+            let start = (page - 1) * pageSize;
+            let end = page * pageSize;
+            let visibleRecipes = [];
+
+            // Mevcut tarifleri göster
+            allRecipes.forEach((recipe, index) => {
+                if (index >= start && index < end) {
+                    recipe.style.display = "block";
+                    visibleRecipes.push(recipe);
+                } else {
+                    recipe.style.display = "none";
+                }
+            });
+
+            // Eksik tarifleri placeholder ile tamamla
+            let missingCount = pageSize - visibleRecipes.length;
+            document.querySelectorAll(".recipe-placeholder").forEach(e => e.remove()); // Önceki placeholder'ları temizle
+
+            for (let i = 0; i < missingCount; i++) {
+                let placeholder = document.createElement("div");
+                placeholder.classList.add("recipe-card", "recipe-placeholder");
+                document.getElementById('recipeGrid').appendChild(placeholder);
+            }
+
+            // Sayfa numarasını güncelle
+            document.getElementById("pageNumber").textContent = `@Html.T("Page") ${page}`;
+            document.getElementById("prevPage").disabled = (page === 1);
+            document.getElementById("nextPage").disabled = (page * pageSize >= totalRecipes);
+        }
+
+        // Pagination event listeners
+        document.getElementById("prevPage").addEventListener("click", function () {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+                // Sayfa değişiminde en üste scroll yap
+                scrollToTop();
+            }
+        });
+
+        document.getElementById("nextPage").addEventListener("click", function () {
+            if (currentPage * pageSize < allRecipes.length) {
+                currentPage++;
+                showPage(currentPage);
+                // Sayfa değişiminde en üste scroll yap
+                scrollToTop();
+            }
+        });
+
+        // Sayfanın en üstüne scroll yapma fonksiyonu
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth' // Smooth scroll animasyonu
+            });
+        }
 </script>
+
+<style>
+    /* Sayfalama Butonları - Bootstrap CDN'den sonra yüklenir */
+    .pagination {
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        padding: 20px 0;
+        list-style: none;
+        border-radius: 0;
+    }
+
+    .pagination button {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 2px solid rgba(255, 215, 0, 0.3) !important;
+        color: #FFD700 !important;
+        padding: 12px 24px !important;
+        border-radius: 25px !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
+        transition: all 0.3s ease !important;
+        backdrop-filter: blur(10px) !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+        position: relative !important;
+        overflow: hidden !important;
+        outline: none !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+    }
+
+    .pagination button:hover:not(:disabled) {
+        background: rgba(255, 215, 0, 0.2) !important;
+        border-color: #FFD700 !important;
+        color: #fff !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3) !important;
+    }
+
+    .pagination button:active:not(:disabled) {
+        transform: translateY(0) !important;
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2) !important;
+    }
+
+    .pagination button:disabled {
+        background: rgba(128, 128, 128, 0.2) !important;
+        border-color: rgba(128, 128, 128, 0.3) !important;
+        color: rgba(128, 128, 128, 0.7) !important;
+        cursor: not-allowed !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    .pagination button:disabled:hover {
+        background: rgba(128, 128, 128, 0.2) !important;
+        border-color: rgba(128, 128, 128, 0.3) !important;
+        color: rgba(128, 128, 128, 0.7) !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Focus ve Active durumları için altın tema - !important ile Bootstrap override */
+    .pagination button:focus {
+        background: rgba(255, 215, 0, 0.2) !important;
+        border-color: #FFD700 !important;
+        color: #FFD700 !important;
+        box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25) !important;
+        outline: none !important;
+    }
+
+    .pagination button:active {
+        background: rgba(255, 215, 0, 0.3) !important;
+        border-color: #FFD700 !important;
+        color: #fff !important;
+        transform: translateY(0) !important;
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3) !important;
+    }
+
+    .pagination button:focus:not(:disabled) {
+        background: rgba(255, 215, 0, 0.2) !important;
+        border-color: #FFD700 !important;
+        color: #FFD700 !important;
+        box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25) !important;
+    }
+
+    .pagination #pageNumber {
+        color: #fbdb66;
+        font-weight: 600;
+        font-size: 16px;
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        backdrop-filter: blur(5px);
+        min-width: 100px;
+        text-align: center;
+        display: inline-block;
+    }
+
+    /* Mobilde pagination butonları */
+    @@media (max-width: 950px) {
+        .pagination {
+            margin-top: 20px;
+            gap: 10px;
+            padding: 15px 0;
+        }
+
+        .pagination button {
+            padding: 10px 18px;
+            font-size: 12px;
+            border-radius: 20px;
+        }
+
+        .pagination #pageNumber {
+            padding: 8px 15px;
+            font-size: 14px;
+            min-width: 80px;
+        }
+    }
+
+    /* Küçük mobil cihazlar için */
+    @@media (max-width: 480px) {
+        .pagination {
+            flex-direction: row;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pagination button {
+            padding: 8px 16px;
+            font-size: 11px;
+            min-width: 60px;
+        }
+
+        .pagination #pageNumber {
+            padding: 6px 12px;
+            font-size: 13px;
+            min-width: 70px;
+            order: 2;
+        }
+
+        .pagination #prevPage {
+            order: 1;
+        }
+
+        .pagination #nextPage {
+            order: 3;
+        }
+    }
+
+    /* Çok küçük ekranlar için (320px ve altı) */
+    @@media (max-width: 320px) {
+        .pagination {
+            gap: 5px;
+        }
+
+        .pagination button {
+            padding: 6px 12px;
+            font-size: 10px;
+            min-width: 50px;
+        }
+
+        .pagination #pageNumber {
+            padding: 5px 10px;
+            font-size: 12px;
+            min-width: 60px;
+        }
+    }
+</style>
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
