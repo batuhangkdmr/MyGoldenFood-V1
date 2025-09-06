@@ -178,6 +178,19 @@
                                 </div>
                             }
                         </div>
+
+                        <!-- Pagination Controls -->
+                        <div class="pagination" id="pagination">
+                            <button id="prevPage" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                                <span>Geri</span>
+                            </button>
+                            <span id="pageNumber">1 / 1</span>
+                            <button id="nextPage" disabled>
+                                <span>İleri</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
                     }
                     else
                     {
@@ -878,7 +891,185 @@
     }
 </style>
 
+<style>
+    /* Sayfalama Butonları - Bootstrap CDN'den sonra yüklenir */
+    .pagination {
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        padding: 20px 0;
+        list-style: none;
+        border-radius: 0;
+    }
+
+    .pagination button {
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 215, 0, 0.3);
+        color: #FFD700;
+        padding: 12px 24px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+        outline: none;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .pagination button:hover:not(:disabled) {
+        background: rgba(255, 215, 0, 0.2);
+        border-color: #FFD700;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+    }
+
+    .pagination button:active:not(:disabled) {
+        transform: translateY(0);
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    }
+
+    .pagination button:disabled {
+        background: rgba(128, 128, 128, 0.2);
+        border-color: rgba(128, 128, 128, 0.3);
+        color: rgba(128, 128, 128, 0.7);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .pagination button:disabled:hover {
+        background: rgba(128, 128, 128, 0.2);
+        border-color: rgba(128, 128, 128, 0.3);
+        color: rgba(128, 128, 128, 0.7);
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* Focus ve Active durumları için altın tema */
+    .pagination button:focus {
+        background: rgba(255, 215, 0, 0.2);
+        border-color: #FFD700;
+        color: #FFD700;
+        box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+        outline: none;
+    }
+
+    .pagination button:active {
+        background: rgba(255, 215, 0, 0.3);
+        border-color: #FFD700;
+        color: #fff;
+        transform: translateY(0);
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    }
+
+    .pagination button:focus:not(:disabled) {
+        background: rgba(255, 215, 0, 0.2);
+        border-color: #FFD700;
+        color: #FFD700;
+        box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+    }
+
+    .pagination #pageNumber {
+        color: #fbdb66;
+        font-weight: 600;
+        font-size: 16px;
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        backdrop-filter: blur(5px);
+        min-width: 100px;
+        text-align: center;
+        display: inline-block;
+    }
+
+    /* Mobilde pagination butonları */
+    @@media (max-width: 950px) {
+        .pagination {
+            margin-top: 20px;
+            gap: 10px;
+            padding: 15px 0;
+        }
+
+        .pagination button {
+            padding: 10px 18px;
+            font-size: 12px;
+            border-radius: 20px;
+        }
+
+        .pagination #pageNumber {
+            padding: 8px 15px;
+            font-size: 14px;
+            min-width: 80px;
+        }
+    }
+
+    /* Küçük mobil cihazlar için */
+    @@media (max-width: 480px) {
+        .pagination {
+            flex-direction: row;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pagination button {
+            padding: 8px 16px;
+            font-size: 11px;
+            min-width: 60px;
+        }
+
+        .pagination #pageNumber {
+            padding: 6px 12px;
+            font-size: 13px;
+            min-width: 70px;
+            order: 2;
+        }
+
+        .pagination #prevPage {
+            order: 1;
+        }
+
+        .pagination #nextPage {
+            order: 3;
+        }
+    }
+
+    /* Çok küçük ekranlar için (320px ve altı) */
+    @@media (max-width: 320px) {
+        .pagination {
+            gap: 5px;
+        }
+
+        .pagination button {
+            padding: 6px 12px;
+            font-size: 10px;
+            min-width: 50px;
+        }
+
+        .pagination #pageNumber {
+            padding: 5px 10px;
+            font-size: 12px;
+            min-width: 60px;
+        }
+    }
+</style>
+
 <script>
+    // Pagination değişkenleri
+    let allBenefits = [];
+    let currentPage = 1;
+    const pageSize = 15; // Sayfa başına fayda sayısı
+
     // Tüm faydaları yükle
     function loadAllBenefits() {
         console.log('loadAllBenefits çağrıldı');
@@ -907,59 +1098,12 @@
                 console.log('API Response:', data);
                 console.log('Fayda sayısı:', data.length);
                 
-                // HTML'i manuel olarak oluştur
-                let html = '';
-                if (data && data.length > 0) {
-                    html = '<div class="benefit-grid" id="benefitGrid">';
-                    data.forEach(benefit => {
-                        html += `
-                            <div class="benefit-card"
-                                 data-name="${benefit.name}"
-                                 data-content="${benefit.content}">
-                                <div class="image-container"
-                                     data-name="${benefit.name}"
-                                     data-description="${benefit.content}">
-                                    ${benefit.imagePath ?
-                                        `<picture>
-                                            <source media="(max-width: 768px)" srcset="${getMobileImageUrl(benefit.imagePath)}">
-                                            <source media="(max-width: 1200px)" srcset="${getTabletImageUrl(benefit.imagePath)}">
-                                            <img src="${getDesktopImageUrl(benefit.imagePath)}"
-                                                 alt="${benefit.name} | Donuk Gıda Faydaları | Dondurulmuş Gıda Sağlık Avantajları"
-                                                 class="benefit-image"
-                                                 title="${benefit.name} - Donuk Gıda Faydaları"
-                                                 loading="lazy" />
-                                         </picture>` :
-                                        `<div class="bg-secondary text-white d-flex align-items-center justify-content-center benefit-image">
-                                             <i class="fas fa-heart fa-3x"></i>
-                                         </div>`
-                                    }
-                                </div>
-                                <div class="benefit-name-container">
-                                    <h3 class="benefit-name">${benefit.name}</h3>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    html += '</div>';
-                } else {
-                    html = `
-                        <div class="text-center text-muted py-5">
-                            <i class="fas fa-info-circle fa-3x mb-3"></i>
-                            <h4>Henüz fayda bulunmuyor</h4>
-                            <p>Yakında sağlık faydaları eklenecek!</p>
-                        </div>
-                    `;
-                }
+                // Tüm faydaları sakla
+                allBenefits = data;
+                currentPage = 1;
                 
-                document.getElementById('benefitsContent').innerHTML = html;
-                document.getElementById('loadingSpinner').style.display = 'none';
-                document.getElementById('benefitsContent').style.display = 'block';
-                
-                // Fade-in animasyonu ekle
-                document.getElementById('benefitsContent').classList.add('fade-in');
-                
-                // Event listener'ları yeniden ekle
-                attachBenefitCardEvents();
+                // İlk sayfayı göster
+                showPage(1);
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -1018,59 +1162,12 @@
                 console.log('API Response:', data);
                 console.log('Fayda sayısı:', data.length);
                 
-                // HTML'i manuel olarak oluştur
-                let html = '';
-                if (data && data.length > 0) {
-                    html = '<div class="benefit-grid" id="benefitGrid">';
-                    data.forEach(benefit => {
-                        html += `
-                            <div class="benefit-card"
-                                 data-name="${benefit.name}"
-                                 data-content="${benefit.content}">
-                                <div class="image-container"
-                                     data-name="${benefit.name}"
-                                     data-description="${benefit.content}">
-                                    ${benefit.imagePath ?
-                                        `<picture>
-                                            <source media="(max-width: 768px)" srcset="${getMobileImageUrl(benefit.imagePath)}">
-                                            <source media="(max-width: 1200px)" srcset="${getTabletImageUrl(benefit.imagePath)}">
-                                            <img src="${getDesktopImageUrl(benefit.imagePath)}"
-                                                 alt="${benefit.name} | Donuk Gıda Faydaları | Dondurulmuş Gıda Sağlık Avantajları"
-                                                 class="benefit-image"
-                                                 title="${benefit.name} - Donuk Gıda Faydaları"
-                                                 loading="lazy" />
-                                         </picture>` :
-                                        `<div class="bg-secondary text-white d-flex align-items-center justify-content-center benefit-image">
-                                             <i class="fas fa-heart fa-3x"></i>
-                                         </div>`
-                                    }
-                                </div>
-                                <div class="benefit-name-container">
-                                    <h3 class="benefit-name">${benefit.name}</h3>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    html += '</div>';
-                } else {
-                    html = `
-                        <div class="text-center text-muted py-5">
-                            <i class="fas fa-info-circle fa-3x mb-3"></i>
-                            <h4>Bu kategoride henüz fayda bulunmuyor</h4>
-                            <p>Yakında sağlık faydaları eklenecek!</p>
-                        </div>
-                    `;
-                }
+                // Tüm faydaları sakla
+                allBenefits = data;
+                currentPage = 1;
                 
-                document.getElementById('benefitsContent').innerHTML = html;
-                document.getElementById('loadingSpinner').style.display = 'none';
-                document.getElementById('benefitsContent').style.display = 'block';
-                
-                // Fade-in animasyonu ekle
-                document.getElementById('benefitsContent').classList.add('fade-in');
-                
-                // Event listener'ları yeniden ekle
-                attachBenefitCardEvents();
+                // İlk sayfayı göster
+                showPage(1);
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -1094,6 +1191,124 @@
                 // Custom modal'ı aç
                 openCustomModal(name, description);
             });
+        });
+    }
+
+    // Pagination fonksiyonları
+    function showPage(page) {
+        const startIndex = (page - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        const pageBenefits = allBenefits.slice(startIndex, endIndex);
+        const totalPages = Math.ceil(allBenefits.length / pageSize);
+
+        // HTML oluştur
+        let html = '';
+        if (pageBenefits.length > 0) {
+            html = '<div class="benefit-grid" id="benefitGrid">';
+            pageBenefits.forEach(benefit => {
+                html += `
+                    <div class="benefit-card"
+                         data-name="${benefit.name}"
+                         data-content="${benefit.content}">
+                        <div class="image-container"
+                             data-name="${benefit.name}"
+                             data-description="${benefit.content}">
+                            ${benefit.imagePath ?
+                                `<picture>
+                                    <source media="(max-width: 768px)" srcset="${getMobileImageUrl(benefit.imagePath)}">
+                                    <source media="(max-width: 1200px)" srcset="${getTabletImageUrl(benefit.imagePath)}">
+                                    <img src="${getDesktopImageUrl(benefit.imagePath)}"
+                                         alt="${benefit.name} | Donuk Gıda Faydaları | Dondurulmuş Gıda Sağlık Avantajları"
+                                         class="benefit-image"
+                                         title="${benefit.name} - Donuk Gıda Faydaları"
+                                         loading="lazy" />
+                                 </picture>` :
+                                `<div class="bg-secondary text-white d-flex align-items-center justify-content-center benefit-image">
+                                     <i class="fas fa-heart fa-3x"></i>
+                                 </div>`
+                            }
+                        </div>
+                        <div class="benefit-name-container">
+                            <h3 class="benefit-name">${benefit.name}</h3>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+
+            // Pagination kontrollerini ekle
+            if (totalPages > 1) {
+                html += `
+                    <div class="pagination" id="pagination">
+                        <button id="prevPage" ${page === 1 ? 'disabled' : ''}>
+                            <i class="fas fa-chevron-left"></i>
+                            <span>Geri</span>
+                        </button>
+                        <span id="pageNumber">${page} / ${totalPages}</span>
+                        <button id="nextPage" ${page === totalPages ? 'disabled' : ''}>
+                            <span>İleri</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                `;
+            }
+        } else {
+            html = `
+                <div class="text-center text-muted py-5">
+                    <i class="fas fa-info-circle fa-3x mb-3"></i>
+                    <h4>Bu kategoride henüz fayda bulunmuyor</h4>
+                    <p>Yakında sağlık faydaları eklenecek!</p>
+                </div>
+            `;
+        }
+
+        // HTML'i güncelle
+        document.getElementById('benefitsContent').innerHTML = html;
+        document.getElementById('loadingSpinner').style.display = 'none';
+        document.getElementById('benefitsContent').style.display = 'block';
+
+        // Event listener'ları ekle
+        attachBenefitCardEvents();
+        attachPaginationEvents();
+
+        // Fade-in animasyonu
+        document.getElementById('benefitsContent').classList.add('fade-in');
+    }
+
+    // Pagination event listener'ları
+    function attachPaginationEvents() {
+        const prevButton = document.getElementById('prevPage');
+        const nextButton = document.getElementById('nextPage');
+
+        if (prevButton) {
+            prevButton.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    showPage(currentPage);
+                    // Sayfa değişiminde en üste scroll yap
+                    scrollToTop();
+                }
+            });
+        }
+
+        if (nextButton) {
+            nextButton.addEventListener('click', () => {
+                const totalPages = Math.ceil(allBenefits.length / pageSize);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    showPage(currentPage);
+                    // Sayfa değişiminde en üste scroll yap
+                    scrollToTop();
+                }
+            });
+        }
+    }
+
+    // Sayfanın en üstüne scroll yapma fonksiyonu
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // Smooth scroll animasyonu
         });
     }
 
@@ -1244,7 +1459,52 @@
         if (firstCategory) {
             firstCategory.classList.add('active');
         }
+
+        // Sayfa yüklendiğinde pagination'ı başlat
+        initializePagination();
     });
+
+    // Pagination'ı başlat
+    function initializePagination() {
+        // Server-side'dan gelen faydaları al
+        const benefitCards = document.querySelectorAll('.benefit-card');
+        if (benefitCards.length > 0) {
+            // Server-side faydaları allBenefits array'ine aktar
+            allBenefits = Array.from(benefitCards).map(card => {
+                const img = card.querySelector('img');
+                let imagePath = null;
+                
+                if (img) {
+                    // Orijinal Cloudinary URL'ini al (transformation olmadan)
+                    const src = img.src;
+                    if (src.includes('cloudinary.com')) {
+                        // Cloudinary URL'ini orijinal haline çevir
+                        const parts = src.split('/upload/');
+                        if (parts.length === 2) {
+                            const baseUrl = parts[0] + '/upload/';
+                            const pathParts = parts[1].split('/');
+                            // İlk kısım transformation parametreleri, sonrası gerçek path
+                            const realPath = pathParts.slice(1).join('/');
+                            imagePath = baseUrl + realPath;
+                        } else {
+                            imagePath = src;
+                        }
+                    } else {
+                        imagePath = src;
+                    }
+                }
+
+                return {
+                    name: card.getAttribute('data-name'),
+                    content: card.getAttribute('data-content'),
+                    imagePath: imagePath
+                };
+            });
+
+            // İlk sayfayı göster
+            showPage(1);
+        }
+    }
 </script>
 
 @section Scripts {
