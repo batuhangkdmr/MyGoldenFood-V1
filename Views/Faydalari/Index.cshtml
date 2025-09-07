@@ -28,7 +28,7 @@
 <!-- Bottom Sheet Toggle Button -->
 <button class="sidebar-toggle d-md-none" onclick="openBottomSheet()">
     <i class="fas fa-bars"></i>
-    <span>Kategoriler</span>
+    <span>@Html.T("Categories")</span>
 </button>
 
 <div class="container-fluid" style="margin-top: 100px;">
@@ -37,7 +37,7 @@
         <div class="col-lg-3 col-md-4">
             <div class="modern-desktop-sidebar">
                 <div class="sidebar-header">
-                    <h3>Kategoriler</h3>
+                    <h3>@Html.T("Categories")</h3>
                 </div>
                 <div class="desktop-categories-container">
                     <!-- Tüm Kategoriler -->
@@ -49,7 +49,7 @@
                                 <i class="fas fa-th-large"></i>
                             </div>
                             <div class="desktop-category-details">
-                                <h4>Tüm Kategoriler</h4>
+                                <h4>@Html.T("AllCategories")</h4>
                                 <span>@(ViewBag.DefaultBenefits?.Count ?? 0) fayda</span>
                             </div>
                         </div>
@@ -127,6 +127,10 @@
                         {
                             @ViewBag.FirstCategoryName
                         }
+                        else
+                        {
+                            @Html.T("AllCategories")
+                        }
                     </h2>
                 </div>
 
@@ -183,11 +187,11 @@
                         <div class="pagination" id="pagination">
                             <button id="prevPage" disabled>
                                 <i class="fas fa-chevron-left"></i>
-                                <span>Geri</span>
+                                <span>@Html.T("Back")</span>
                             </button>
                             <span id="pageNumber">1 / 1</span>
                             <button id="nextPage" disabled>
-                                <span>İleri</span>
+                                <span>@Html.T("Next")</span>
                                 <i class="fas fa-chevron-right"></i>
                             </button>
                         </div>
@@ -225,17 +229,17 @@
 <div id="bottomSheet" class="bottom-sheet">
     <div class="bottom-sheet-handle" onclick="closeBottomSheet()"></div>
     <div class="bottom-sheet-header">
-        <h3 class="bottom-sheet-title">Kategoriler</h3>
+        <h3 class="bottom-sheet-title">@Html.T("Categories")</h3>
     </div>
     <div class="modern-categories-container">
         <!-- Tüm Kategoriler -->
         <div class="category-section">
-            <div class="category-main" onclick="selectCategoryFromBottomSheet(0, 'Tüm Kategoriler')">
+            <div class="category-main" onclick="selectCategoryFromBottomSheet(0, '@Html.T("AllCategories")')">
                 <div class="category-icon">
                     <i class="fas fa-th-large"></i>
                 </div>
                 <div class="category-details">
-                    <h4>Tüm Kategoriler</h4>
+                    <h4>@Html.T("AllCategories")</h4>
                     <span>@(ViewBag.DefaultBenefits?.Count ?? 0) fayda</span>
                 </div>
             </div>
@@ -1089,7 +1093,7 @@
         }
 
         // Kategori başlığını güncelle
-        document.getElementById('categoryTitle').textContent = 'Tüm Kategoriler';
+        document.getElementById('categoryTitle').textContent = '@Html.T("AllCategories")';
 
         // AJAX ile tüm faydaları yükle
         fetch('/Faydalari/GetAllBenefits')
@@ -1242,11 +1246,11 @@
                     <div class="pagination" id="pagination">
                         <button id="prevPage" ${page === 1 ? 'disabled' : ''}>
                             <i class="fas fa-chevron-left"></i>
-                            <span>Geri</span>
+                            <span>@Html.T("Back")</span>
                         </button>
                         <span id="pageNumber">${page} / ${totalPages}</span>
                         <button id="nextPage" ${page === totalPages ? 'disabled' : ''}>
-                            <span>İleri</span>
+                            <span>@Html.T("Next")</span>
                             <i class="fas fa-chevron-right"></i>
                         </button>
                     </div>
@@ -1454,7 +1458,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         attachBenefitCardEvents();
 
-        // İlk kategoriyi (Tüm Kategoriler) aktif yap
+        // İlk kategoriyi (@Html.T("AllCategories")) aktif yap
         const firstCategory = document.querySelector('[data-category-id="0"]');
         if (firstCategory) {
             firstCategory.classList.add('active');

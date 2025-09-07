@@ -21,12 +21,14 @@ namespace MyGoldenFood.Controllers
         private readonly AppDbContext _context;
         private readonly CloudinaryService _cloudinaryService;
         private readonly IHubContext<FaydalariHub> _faydalariHubContext;
+        private readonly IJsonTranslationService _translationService;
 
-        public FaydalariController(AppDbContext context, CloudinaryService cloudinaryService, IHubContext<FaydalariHub> faydalariHubContext)
+        public FaydalariController(AppDbContext context, CloudinaryService cloudinaryService, IHubContext<FaydalariHub> faydalariHubContext, IJsonTranslationService translationService)
         {
             _context = context;
             _cloudinaryService = cloudinaryService;
             _faydalariHubContext = faydalariHubContext;
+            _translationService = translationService;
         }
 
         // SEO Slug oluşturma helper metodu
@@ -128,7 +130,7 @@ namespace MyGoldenFood.Controllers
             ViewBag.SelectedCategoryId = 0; // 0 = Tüm Kategoriler
             ViewBag.SelectedLanguage = selectedLanguage;
             ViewBag.HasCategories = categories.Any();
-            ViewBag.FirstCategoryName = "Tüm Kategoriler";
+            ViewBag.FirstCategoryName = _translationService.GetTranslation("AllCategories", selectedLanguage);
             ViewBag.CloudinaryService = _cloudinaryService; // 🚀 Responsive resimler için
 
             return View();

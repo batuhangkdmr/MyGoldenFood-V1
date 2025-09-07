@@ -195,12 +195,12 @@
             </li>
             <li class="nav-item">
                 <a href="/Blog" class="nav-link">
-                    Blog
+                    @Html.T("Blog").ToUpper(System.Globalization.CultureInfo.CurrentCulture)
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/iletisim">
-                    İLETİŞİM
+                    @Html.T("Contact").ToUpper(System.Globalization.CultureInfo.CurrentCulture)
                 </a>
             </li>
 
