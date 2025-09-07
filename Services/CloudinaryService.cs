@@ -25,10 +25,10 @@ namespace MyGoldenFood.Services
                 {
                     File = new FileDescription(imageFile.FileName, imageFile.OpenReadStream()),
                     Folder = folder,
-                    // 🚀 HIZ ODAKLI Optimizasyon (Mobil-First)
+                    // 🚀 KALİTE ODAKLI Optimizasyon (Mobil-First)
                     Transformation = new Transformation()
-                        .Width(600).Height(450).Crop("fit") // Desktop için yeterli boyut
-                        .Quality("70") // Hız odaklı kalite
+                        .Width(800).Height(600).Crop("fit") // Desktop için daha büyük boyut
+                        .Quality("90") // Yüksek kalite
                         .FetchFormat("auto") // WebP'yi destekleyen tarayıcılara WebP, diğerlerine JPEG
                         .Flags("immutable_cache") // Cache optimizasyonu
                 };
@@ -69,26 +69,26 @@ namespace MyGoldenFood.Services
             
             var transformation = $"w_{width}";
             if (height > 0) transformation += $",h_{height}";
-            // 🎯 HIZ ODAKLI: q_70, f_auto, fl_immutable_cache
-            transformation += ",c_fit,q_70,f_auto,fl_immutable_cache";
+            // 🎯 KALİTE ODAKLI: q_90, f_auto, fl_immutable_cache
+            transformation += ",c_fit,q_90,f_auto,fl_immutable_cache";
             
             return $"{baseUrl}{transformation}/{publicId}";
         }
 
-        // 📱 Mobil-First Optimizasyon (Mobil trafik %90)
+        // 📱 KALİTE ODAKLI Optimizasyon (Mobil trafik %90)
         public string GetMobileImageUrl(string imagePath)
         {
-            return GetResponsiveImageUrl(imagePath, 200, 150); // Ultra hızlı mobil
+            return GetResponsiveImageUrl(imagePath, 300, 225); // Yüksek kalite mobil
         }
 
         public string GetTabletImageUrl(string imagePath)
         {
-            return GetResponsiveImageUrl(imagePath, 400, 300); // Tablet için optimal
+            return GetResponsiveImageUrl(imagePath, 500, 375); // Yüksek kalite tablet
         }
 
         public string GetDesktopImageUrl(string imagePath)
         {
-            return GetResponsiveImageUrl(imagePath, 600, 450); // Desktop için yeterli
+            return GetResponsiveImageUrl(imagePath, 800, 600); // Yüksek kalite desktop
         }
 
         public string GetLargeImageUrl(string imagePath)
@@ -96,23 +96,39 @@ namespace MyGoldenFood.Services
             return GetResponsiveImageUrl(imagePath, 1200, 900);
         }
 
-        // 🎯 Aşama 2: Responsive Srcset için metodlar
+        // 🎯 Retina Display Desteği için metodlar
         public string GetUltraMobileImageUrl(string imagePath)
         {
-            return GetResponsiveImageUrl(imagePath, 150, 113); // Ultra küçük ekranlar
+            return GetResponsiveImageUrl(imagePath, 200, 150); // Ultra küçük ekranlar
         }
 
         public string GetSmallMobileImageUrl(string imagePath)
         {
-            return GetResponsiveImageUrl(imagePath, 200, 150); // Küçük mobil
+            return GetResponsiveImageUrl(imagePath, 300, 225); // Küçük mobil
         }
 
         public string GetMediumMobileImageUrl(string imagePath)
         {
-            return GetResponsiveImageUrl(imagePath, 300, 225); // Orta mobil
+            return GetResponsiveImageUrl(imagePath, 400, 300); // Orta mobil
         }
 
-        // 📊 Responsive Srcset HTML oluşturucu
+        // 🖼️ Retina Display Desteği (2x ve 3x)
+        public string GetMobileImageUrl2x(string imagePath)
+        {
+            return GetResponsiveImageUrl(imagePath, 600, 450); // Mobil 2x
+        }
+
+        public string GetTabletImageUrl2x(string imagePath)
+        {
+            return GetResponsiveImageUrl(imagePath, 1000, 750); // Tablet 2x
+        }
+
+        public string GetDesktopImageUrl2x(string imagePath)
+        {
+            return GetResponsiveImageUrl(imagePath, 1600, 1200); // Desktop 2x
+        }
+
+        // 📊 Responsive Srcset HTML oluşturucu (Retina Desteği ile)
         public string GenerateResponsiveSrcset(string imagePath)
         {
             if (string.IsNullOrEmpty(imagePath)) return string.Empty;
@@ -123,10 +139,25 @@ namespace MyGoldenFood.Services
             var tablet = GetTabletImageUrl(imagePath);
             var desktop = GetDesktopImageUrl(imagePath);
 
-            return $"{ultraMobile} 150w, {smallMobile} 200w, {mediumMobile} 300w, {tablet} 400w, {desktop} 600w";
+            return $"{ultraMobile} 200w, {smallMobile} 300w, {mediumMobile} 400w, {tablet} 500w, {desktop} 800w";
         }
 
-        // 🖼️ Picture element HTML oluşturucu
+        // 🖼️ Retina Srcset HTML oluşturucu
+        public string GenerateRetinaSrcset(string imagePath)
+        {
+            if (string.IsNullOrEmpty(imagePath)) return string.Empty;
+
+            var mobile = GetMobileImageUrl(imagePath);
+            var mobile2x = GetMobileImageUrl2x(imagePath);
+            var tablet = GetTabletImageUrl(imagePath);
+            var tablet2x = GetTabletImageUrl2x(imagePath);
+            var desktop = GetDesktopImageUrl(imagePath);
+            var desktop2x = GetDesktopImageUrl2x(imagePath);
+
+            return $"{mobile} 300w, {mobile2x} 600w, {tablet} 500w, {tablet2x} 1000w, {desktop} 800w, {desktop2x} 1600w";
+        }
+
+        // 🖼️ Picture element HTML oluşturucu (Retina Desteği ile)
         public string GeneratePictureElement(string imagePath, string altText = "", string cssClass = "")
         {
             if (string.IsNullOrEmpty(imagePath)) return string.Empty;
@@ -144,8 +175,8 @@ namespace MyGoldenFood.Services
                     <source media=""(max-width: 768px)"" srcset=""{mediumMobile}"">
                     <source media=""(max-width: 1024px)"" srcset=""{tablet}"">
                     <img src=""{desktop}"" 
-                         srcset=""{GenerateResponsiveSrcset(imagePath)}""
-                         sizes=""(max-width: 320px) 150px, (max-width: 480px) 200px, (max-width: 768px) 300px, (max-width: 1024px) 400px, 600px""
+                         srcset=""{GenerateRetinaSrcset(imagePath)}""
+                         sizes=""(max-width: 320px) 200px, (max-width: 480px) 300px, (max-width: 768px) 400px, (max-width: 1024px) 500px, 800px""
                          alt=""{altText}""
                          class=""{cssClass}""
                          loading=""lazy"">
