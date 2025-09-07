@@ -166,6 +166,20 @@
     <button id="nextPage" class="btn btn-primary">@Html.T("Next")</button>
 </div>
 
+<!-- Custom Popup Modal -->
+<div id="customModal" class="custom-modal">
+    <div class="custom-modal-content">
+        <div class="custom-modal-header">
+            <h4 id="customModalTitle"></h4>
+            <span class="custom-modal-close" onclick="closeCustomModal()">&times;</span>
+        </div>
+        <div class="custom-modal-body">
+            <h5 class="custom-modal-title-with-line">@Html.T("ProductDetails")</h5>
+            <p id="customModalDescription"></p>
+        </div>
+    </div>
+</div>
+
 <!-- Modal -->
 <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -569,6 +583,152 @@
         margin-bottom: 10px;
     }
 
+    /* Custom Modal Styling */
+    .custom-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(5px);
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    .custom-modal-content {
+        background: rgba(0, 0, 0, 0.95);
+        color: white;
+        border: 2px solid rgba(102, 126, 234, 0.3);
+        border-radius: 20px;
+        margin: 5% auto;
+        padding: 0;
+        width: 80%;
+        max-width: 600px;
+        transform: scale(0.8);
+        animation: scaleIn 0.3s ease-out forwards;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    }
+
+    .custom-modal-header {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+        padding: 20px 25px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 18px 18px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .custom-modal-header h4 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+    .custom-modal-close {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 2rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .custom-modal-close:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.1);
+        }
+
+    .custom-modal-body {
+        padding: 25px;
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+
+    .custom-modal-title-with-line {
+        position: relative;
+        display: inline-block;
+        padding-bottom: 10px;
+        font-size: 1.3rem;
+        color: #FFD700;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+        .custom-modal-title-with-line::after {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            border-radius: 2px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+    /* Custom Modal Animations */
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @@keyframes scaleIn {
+        from {
+            transform: scale(0.8);
+        }
+        to {
+            transform: scale(1);
+        }
+    }
+
+    /* Custom Modal Responsive */
+    @@media (max-width: 768px) {
+        .custom-modal-content {
+            width: 95%;
+            margin: 20% auto;
+        }
+
+        .custom-modal-header {
+            padding: 15px 20px;
+        }
+
+            .custom-modal-header h4 {
+                font-size: 1.3rem;
+            }
+
+        .custom-modal-body {
+            padding: 20px;
+        }
+    }
+
+    /* Samsung SE ve çok küçük ekranlar için */
+    @@media (max-width: 375px) {
+        .custom-modal-content {
+            margin: 15% auto;
+            max-height: 70vh;
+        }
+
+        .custom-modal-body {
+            max-height: 50vh;
+            padding: 15px;
+        }
+    }
+
 </style>
 
 <script>
@@ -603,7 +763,7 @@
 
         showPage(currentPage);
 
-        // Modal Açma
+        // Modal Açma - Custom Modal
         document.querySelectorAll(".image-container").forEach(item => {
             item.addEventListener("click", function () {
                 let name = this.getAttribute("data-name");
@@ -614,11 +774,8 @@
                     return;
                 }
 
-                document.getElementById('detailsModalLabel').textContent = name;
-               document.getElementById('detailsModalDescription').innerHTML = description.replace(/\n/g, "<br>");
-
-                var modal = new bootstrap.Modal(document.getElementById('detailsModal'));
-                modal.show();
+                // Custom modal'ı aç
+                openCustomModal(name, description);
             });
         });
     });
@@ -684,11 +841,8 @@
                     return;
                 }
 
-                document.getElementById('detailsModalLabel').textContent = name;
-                document.getElementById('detailsModalDescription').innerHTML = description.replace(/\n/g, "<br>"); // Yeni satırları koru
-
-                var modal = new bootstrap.Modal(document.getElementById('detailsModal'));
-                modal.show();
+                // Custom modal'ı aç
+                openCustomModal(name, description);
             });
         });
     });
@@ -750,6 +904,38 @@
     // Sayfa yüklendiğinde lazy loading'i başlat
     document.addEventListener('DOMContentLoaded', function() {
         initLazyLoading();
+    });
+
+    // Custom modal fonksiyonları
+    function openCustomModal(name, description) {
+        document.getElementById('customModalTitle').textContent = name;
+        document.getElementById('customModalDescription').innerHTML = description.replace(/\n/g, "<br>");
+        document.getElementById('customModal').style.display = 'block';
+
+        // Body scroll'unu engelle
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeCustomModal() {
+        document.getElementById('customModal').style.display = 'none';
+
+        // Body scroll'unu geri yükle
+        document.body.style.overflow = 'auto';
+    }
+
+    // Modal dışına tıklandığında kapat
+    document.addEventListener('click', function(event) {
+        const modal = document.getElementById('customModal');
+        if (event.target === modal) {
+            closeCustomModal();
+        }
+    });
+
+    // ESC tuşu ile modal'ı kapat
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeCustomModal();
+        }
     });
 
     const connection = new signalR.HubConnectionBuilder()
