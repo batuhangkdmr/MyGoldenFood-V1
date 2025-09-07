@@ -178,6 +178,20 @@
         padding: 100px 0;
         background: #1a1a1a;
         color: white;
+        position: relative;
+    }
+
+    .about-section::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        max-width: 600px;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #D8A43A, transparent);
+        box-shadow: 0 0 20px rgba(216, 164, 58, 0.5);
     }
 
     .container {
@@ -256,6 +270,20 @@
         padding: 100px 0;
         background: #1a1a1a;
         color: white;
+        position: relative;
+    }
+
+    .features-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        max-width: 600px;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #D8A43A, transparent);
+        box-shadow: 0 0 20px rgba(216, 164, 58, 0.5);
     }
 
     .features-grid {
@@ -486,7 +514,7 @@
 </section>
 
 <!-- Stats Section -->
-<section class="stats-section">
+@* <section class="stats-section">
     <div class="container">
         <h3 class="section-title">Rakamlarla My Golden Food</h3>
         <div class="stats-grid">
@@ -509,7 +537,7 @@
         </div>
     </div>
 </section>
-
+ *@
 <!-- Features Section -->
 <section class="features-section">
     <div class="container">

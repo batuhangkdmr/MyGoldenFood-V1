@@ -916,17 +916,23 @@
 </style>
 
 <script>
-    // Tüm tarifleri yükle
+    // Tüm tarifleri yükle - Faydalari ile aynı
     function loadAllRecipes() {
+        console.log('loadAllRecipes çağrıldı');
+        
         // Loading spinner'ı göster
         document.getElementById('loadingSpinner').style.display = 'block';
         document.getElementById('recipesContent').style.display = 'none';
 
         // Aktif kategoriyi güncelle
-        document.querySelectorAll('.glass-card').forEach(item => {
+        document.querySelectorAll('.category-item').forEach(item => {
             item.classList.remove('active');
         });
-        document.querySelector('[data-category-id="0"]').classList.add('active');
+        
+        const firstCategory = document.querySelector('[data-category-id="0"]');
+        if (firstCategory) {
+            firstCategory.classList.add('active');
+        }
 
         // Kategori başlığını güncelle
         document.getElementById('categoryTitle').textContent = 'Tüm Kategoriler';
@@ -935,64 +941,15 @@
         fetch('/Tarifler/GetAllRecipes')
             .then(response => response.json())
             .then(data => {
-                // HTML'i manuel olarak oluştur
-                let html = '';
-                if (data && data.length > 0) {
-                    html = '<div class="recipe-grid" id="recipeGrid">';
-                    data.forEach(recipe => {
-                        html += `
-                            <div class="recipe-card"
-                                 data-name="${recipe.name}"
-                                 data-content="${recipe.content}">
-                                <div class="image-container"
-                                     data-name="${recipe.name}"
-                                     data-description="${recipe.content}">
-                                    ${recipe.imagePath ?
-                                        `<picture>
-                                            <source media="(max-width: 768px)" srcset="${getMobileImageUrl(recipe.imagePath)}">
-                                            <source media="(max-width: 1200px)" srcset="${getTabletImageUrl(recipe.imagePath)}">
-                                            <img src="${getDesktopImageUrl(recipe.imagePath)}"
-                                                 alt="${recipe.name} | Donuk Gıda Tarifi | Dondurulmuş Gıda ile Hazırlanan Tarif"
-                                                 class="recipe-image"
-                                                 title="${recipe.name} - Donuk Gıda Tarifi"
-                                                 loading="lazy" />
-                                         </picture>` :
-                                        `<div class="bg-secondary text-white d-flex align-items-center justify-content-center recipe-image">
-                                             <i class="fas fa-utensils fa-3x"></i>
-                                         </div>`
-                                    }
-                                </div>
-                                <div class="recipe-name-container">
-                                    <h3 class="recipe-name">${recipe.name}</h3>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    html += '</div>';
-                    
-                } else {
-                    html = `
-                        <div class="text-center text-muted py-5">
-                            <i class="fas fa-info-circle fa-3x mb-3"></i>
-                            <h4>Henüz tarif bulunmuyor</h4>
-                            <p>Yakında lezzetli tarifler eklenecek!</p>
-                        </div>
-                    `;
-                }
-
-                document.getElementById('recipesContent').innerHTML = html;
-                document.getElementById('loadingSpinner').style.display = 'none';
-                document.getElementById('recipesContent').style.display = 'block';
+                console.log('API Response:', data);
+                console.log('Tarif sayısı:', data.length);
                 
-                // Pagination'ı yeniden başlat
-                initPagination();
-
-                // Fade-in animasyonu ekle
-                document.getElementById('recipesContent').classList.add('fade-in');
-
-                // Event listener'ları yeniden ekle
-                attachRecipeCardEvents();
+                // Tüm tarifleri sakla
+                allRecipes = data;
+                currentPage = 1;
                 
+                // İlk sayfayı göster
+                showPage(1);
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -1001,19 +958,19 @@
             });
     }
 
-    // Kategori seçiminde tarifleri yükle
+    // Kategori seçiminde tarifleri yükle - Faydalari ile aynı
     function loadRecipesByCategory(categoryId, categoryName) {
-        console.log('loadRecipesByCategory çağrıldı:', { categoryId, categoryName });
-
+        console.log('loadRecipesByCategory çağrıldı:', {categoryId, categoryName});
+        
         // Loading spinner'ı göster
         document.getElementById('loadingSpinner').style.display = 'block';
         document.getElementById('recipesContent').style.display = 'none';
 
         // Aktif kategoriyi güncelle
-        document.querySelectorAll('.desktop-category-main').forEach(item => {
+        document.querySelectorAll('.category-item').forEach(item => {
             item.classList.remove('active');
         });
-
+        
         const activeCategory = document.querySelector(`[data-category-id="${categoryId}"]`);
         if (activeCategory) {
             activeCategory.classList.add('active');
@@ -1022,84 +979,21 @@
         // Kategori başlığını güncelle
         document.getElementById('categoryTitle').textContent = categoryName;
 
-
-
         // AJAX ile tarifleri yükle
         console.log('AJAX çağrısı yapılıyor:', `/Tarifler/GetRecipesByCategory/${categoryId}`);
 
-        // Alt kategori mi kontrol et (ParentCategoryId'si olan kategoriler)
-        let apiUrl = `/Tarifler/GetRecipesByCategory/${categoryId}`;
-
-        // Alt kategoriler: ID 19 (Frambuzlı Tarifler), ID 20 (Çilekli Tarifler)
-        if (categoryId === 19 || categoryId === 20) {
-            apiUrl = `/Tarifler/GetRecipesBySubcategory?recipeCategoryId=${categoryId}`;
-            console.log('Alt kategori için özel metot kullanılıyor:', apiUrl);
-        }
-
-        fetch(apiUrl)
+        fetch(`/Tarifler/GetRecipesByCategory/${categoryId}`)
             .then(response => response.json())
             .then(data => {
                 console.log('API Response:', data);
                 console.log('Tarif sayısı:', data.length);
-
-                // HTML'i manuel olarak oluştur
-                let html = '';
-                if (data && data.length > 0) {
-                    html = '<div class="recipe-grid" id="recipeGrid">';
-                    data.forEach(recipe => {
-                        html += `
-                            <div class="recipe-card"
-                                 data-name="${recipe.name}"
-                                 data-content="${recipe.content}">
-                                <div class="image-container"
-                                     data-name="${recipe.name}"
-                                     data-description="${recipe.content}">
-                                    ${recipe.imagePath ?
-                                        `<picture>
-                                            <source media="(max-width: 768px)" srcset="${getMobileImageUrl(recipe.imagePath)}">
-                                            <source media="(max-width: 1200px)" srcset="${getTabletImageUrl(recipe.imagePath)}">
-                                            <img src="${getDesktopImageUrl(recipe.imagePath)}"
-                                                 alt="${recipe.name} | Donuk Gıda Tarifi | Dondurulmuş Gıda ile Hazırlanan Tarif"
-                                                 class="recipe-image"
-                                                 title="${recipe.name} - Donuk Gıda Tarifi"
-                                                 loading="lazy" />
-                                         </picture>` :
-                                        `<div class="bg-secondary text-white d-flex align-items-center justify-content-center recipe-image">
-                                             <i class="fas fa-utensils fa-3x"></i>
-                                         </div>`
-                                    }
-                                </div>
-                                <div class="recipe-name-container">
-                                    <h3 class="recipe-name">${recipe.name}</h3>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    html += '</div>';
-                    
-                } else {
-                    html = `
-                        <div class="text-center text-muted py-5">
-                            <i class="fas fa-info-circle fa-3x mb-3"></i>
-                            <h4>Bu kategoride henüz tarif bulunmuyor</h4>
-                            <p>Yakında lezzetli tarifler eklenecek!</p>
-                        </div>
-                    `;
-                }
-
-                document.getElementById('recipesContent').innerHTML = html;
-                document.getElementById('loadingSpinner').style.display = 'none';
-                document.getElementById('recipesContent').style.display = 'block';
                 
-                // Pagination'ı yeniden başlat
-                initPagination();
-
-                // Fade-in animasyonu ekle
-                document.getElementById('recipesContent').classList.add('fade-in');
-
-                // Event listener'ları yeniden ekle
-                attachRecipeCardEvents();
+                // Tarifleri sakla
+                allRecipes = data;
+                currentPage = 1;
                 
+                // İlk sayfayı göster
+                showPage(1);
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -1275,66 +1169,94 @@
             }
         });
 
-        // Pagination Sistemi - Products ile aynı
+        // Pagination değişkenleri - Faydalari ile aynı
         let allRecipes = [];
-        const pageSize = 15; // Sayfa başına tarif sayısı
         let currentPage = 1;
+        const pageSize = 15; // Sayfa başına tarif sayısı
 
-        function initPagination() {
-            allRecipes = document.querySelectorAll(".recipe-card");
-            showPage(currentPage);
-        }
-
+        // Sayfa göster - Faydalari ile aynı
         function showPage(page) {
-            let totalRecipes = allRecipes.length;
-            let start = (page - 1) * pageSize;
-            let end = page * pageSize;
-            let visibleRecipes = [];
+            const startIndex = (page - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+            const pageRecipes = allRecipes.slice(startIndex, endIndex);
+            const totalPages = Math.ceil(allRecipes.length / pageSize);
 
-            // Mevcut tarifleri göster
-            allRecipes.forEach((recipe, index) => {
-                if (index >= start && index < end) {
-                    recipe.style.display = "block";
-                    visibleRecipes.push(recipe);
-                } else {
-                    recipe.style.display = "none";
+            // HTML oluştur
+            let html = '';
+            if (pageRecipes.length > 0) {
+                html = '<div class="recipe-grid" id="recipeGrid">';
+                pageRecipes.forEach(recipe => {
+                    html += createRecipeCard(recipe);
+                });
+                html += '</div>';
+
+                // Pagination kontrollerini ekle
+                if (totalPages > 1) {
+                    html += `
+                        <div class="pagination" id="pagination">
+                            <button id="prevPage" ${page === 1 ? 'disabled' : ''}>
+                                <i class="fas fa-chevron-left"></i>
+                                <span>Geri</span>
+                            </button>
+                            <span id="pageNumber">${page} / ${totalPages}</span>
+                            <button id="nextPage" ${page === totalPages ? 'disabled' : ''}>
+                                <span>İleri</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    `;
                 }
-            });
-
-            // Eksik tarifleri placeholder ile tamamla
-            let missingCount = pageSize - visibleRecipes.length;
-            document.querySelectorAll(".recipe-placeholder").forEach(e => e.remove()); // Önceki placeholder'ları temizle
-
-            for (let i = 0; i < missingCount; i++) {
-                let placeholder = document.createElement("div");
-                placeholder.classList.add("recipe-card", "recipe-placeholder");
-                document.getElementById('recipeGrid').appendChild(placeholder);
+            } else {
+                html = `
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-info-circle fa-3x mb-3"></i>
+                        <h4>Bu kategoride henüz tarif bulunmuyor</h4>
+                        <p>Yakında lezzetli tarifler eklenecek!</p>
+                    </div>
+                `;
             }
 
-            // Sayfa numarasını güncelle
-            document.getElementById("pageNumber").textContent = `@Html.T("Page") ${page}`;
-            document.getElementById("prevPage").disabled = (page === 1);
-            document.getElementById("nextPage").disabled = (page * pageSize >= totalRecipes);
+            // HTML'i güncelle
+            document.getElementById('recipesContent').innerHTML = html;
+            document.getElementById('loadingSpinner').style.display = 'none';
+            document.getElementById('recipesContent').style.display = 'block';
+
+            // Event listener'ları ekle
+            attachRecipeCardEvents();
+            attachPaginationEvents();
+
+            // Fade-in animasyonu
+            document.getElementById('recipesContent').classList.add('fade-in');
         }
 
-        // Pagination event listeners
-        document.getElementById("prevPage").addEventListener("click", function () {
-            if (currentPage > 1) {
-                currentPage--;
-                showPage(currentPage);
-                // Sayfa değişiminde en üste scroll yap
-                scrollToTop();
-            }
-        });
+        // Pagination event listener'ları - Faydalari ile aynı
+        function attachPaginationEvents() {
+            const prevButton = document.getElementById('prevPage');
+            const nextButton = document.getElementById('nextPage');
 
-        document.getElementById("nextPage").addEventListener("click", function () {
-            if (currentPage * pageSize < allRecipes.length) {
-                currentPage++;
-                showPage(currentPage);
-                // Sayfa değişiminde en üste scroll yap
-                scrollToTop();
+            if (prevButton) {
+                prevButton.addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        showPage(currentPage);
+                        // Sayfa değişiminde en üste scroll yap
+                        scrollToTop();
+                    }
+                });
             }
-        });
+
+            if (nextButton) {
+                nextButton.addEventListener('click', () => {
+                    const totalPages = Math.ceil(allRecipes.length / pageSize);
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        showPage(currentPage);
+                        // Sayfa değişiminde en üste scroll yap
+                        scrollToTop();
+                    }
+                });
+            }
+        }
 
         // Sayfanın en üstüne scroll yapma fonksiyonu
         function scrollToTop() {
@@ -1343,6 +1265,68 @@
                 behavior: 'smooth' // Smooth scroll animasyonu
             });
         }
+
+        // Tarif kartı oluştur - Faydalari ile aynı
+        function createRecipeCard(recipe) {
+            return `
+                <div class="recipe-card"
+                     data-name="${recipe.name}"
+                     data-content="${recipe.content}">
+                    <div class="image-container"
+                         data-name="${recipe.name}"
+                         data-description="${recipe.content}">
+                        ${recipe.imagePath ?
+                            `<picture>
+                                <source media="(max-width: 768px)" srcset="${getMobileImageUrl(recipe.imagePath)}">
+                                <source media="(max-width: 1200px)" srcset="${getTabletImageUrl(recipe.imagePath)}">
+                                <img src="${getDesktopImageUrl(recipe.imagePath)}"
+                                     alt="${recipe.name} | Donuk Gıda Tarifi | Dondurulmuş Gıda ile Hazırlanan Tarif"
+                                     class="recipe-image"
+                                     title="${recipe.name} - Donuk Gıda Tarifi"
+                                     loading="lazy" />
+                             </picture>` :
+                            `<div class="bg-secondary text-white d-flex align-items-center justify-content-center recipe-image">
+                                 <i class="fas fa-utensils fa-3x"></i>
+                             </div>`
+                        }
+                    </div>
+                    <div class="recipe-name-container">
+                        <h3 class="recipe-name">${recipe.name}</h3>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Tarif kartı event listener'larını ekle - Faydalari ile aynı
+        function attachRecipeCardEvents() {
+            document.querySelectorAll('.image-container').forEach(item => {
+                item.addEventListener('click', function() {
+                    const name = this.getAttribute('data-name');
+                    const description = this.getAttribute('data-description');
+                    
+                    // Modal'ı aç
+                    openCustomModal(name, description);
+                });
+            });
+        }
+
+        // Modal açma fonksiyonu - Faydalari ile aynı
+        function openCustomModal(name, description) {
+            document.getElementById('customModalTitle').textContent = name;
+            document.getElementById('customModalDescription').textContent = description;
+            document.getElementById('customModal').style.display = 'block';
+        }
+
+        // Modal kapatma fonksiyonu - Faydalari ile aynı
+        function closeCustomModal() {
+            document.getElementById('customModal').style.display = 'none';
+        }
+
+        // Sayfa yüklendiğinde çalışacak fonksiyon - Faydalari ile aynı
+        document.addEventListener('DOMContentLoaded', function() {
+            // İlk yüklemede tüm tarifleri yükle
+            loadAllRecipes();
+        });
 </script>
 
 <style>

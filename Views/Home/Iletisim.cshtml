@@ -146,6 +146,10 @@
         .contact-info i {
             margin-right: 10px;
         }
+
+        .contact-info strong {
+            margin-right: 8px;
+        }
     /* 📱 Mobil Uyumlu Görünüm */
     @@media (max-width: 768px) {
         .contact-container {
@@ -235,10 +239,10 @@
 
         <!-- Şeffaf İletişim Bilgileri -->
         <div class="contact-info">
-                            <h2>@Html.T("ContactInformation")</h2> <!-- SEO İçin H2 Kullanıldı -->
-                <p><i class="fas fa-map-marker-alt"></i> <strong> @Html.T("Address")</strong> MY GOLDEN FOOD GIDA SAN.TİC A.Ş. Türkiye/Ankara</p>
-                <p><i class="fas fa-phone"></i> <strong> @Html.T("Phone")</strong>  <a href="tel:+905336352458" class="text-white">+90 533 635 24 58</a></p>
-                <p><i class="fas fa-envelope"></i> <strong> @Html.T("Email")</strong>  <a href="mailto:gokhangokdemir@mygoldenfood.com" class="text-white">gokhangokdemir@mygoldenfood.com</a></p>
+            <h2>@Html.T("ContactInformation")</h2> <!-- SEO İçin H2 Kullanıldı -->
+            <p><i class="fas fa-map-marker-alt"></i> <strong>@Html.T("Address"):</strong> <span>MY GOLDEN FOOD GIDA SAN.TİC A.Ş. Türkiye/Ankara</span></p>
+            <p><i class="fas fa-phone"></i> <strong>@Html.T("Phone"):</strong> <a href="tel:+905336352458" class="text-white">+90 533 635 24 58</a></p>
+            <p><i class="fas fa-envelope"></i> <strong>@Html.T("Email"):</strong> <a href="mailto:gokhangokdemir@mygoldenfood.com" class="text-white">gokhangokdemir@mygoldenfood.com</a></p>
         </div>
     </div>
 </div>
