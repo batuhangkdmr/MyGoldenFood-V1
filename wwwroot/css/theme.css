@@ -182,7 +182,7 @@ a {
     bottom: 5px;
     left: 5px;
     right: 5px;
-    background: linear-gradient(135deg, rgba(20, 20, 30, 0.95), rgba(30, 30, 45, 0.95));
+    background: black;
     backdrop-filter: blur(20px);
     border-radius: 24px 24px 0 0;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -376,7 +376,7 @@ a {
 }
 
 .category-main:hover {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    background: black;
 }
 
 .category-main.expanded {
@@ -589,7 +589,7 @@ a {
 
 /* DESKTOP SIDEBAR TASARIMI */
 .modern-desktop-sidebar {
-    background: rgba(255, 255, 255, 0.05);
+    background: black;
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
@@ -605,7 +605,7 @@ a {
 .sidebar-header {
     padding: 20px 20px 15px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    background: black;
 }
 
 .sidebar-header h3 {
@@ -668,10 +668,10 @@ a {
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
 }
 
-.desktop-category-main.active {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
-    border-color: rgba(102, 126, 234, 0.4);
-}
+    .desktop-category-main.active {
+        background: black;
+        border-color: rgba(102, 126, 234, 0.4);
+    }
 
 .desktop-category-main.expanded {
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);

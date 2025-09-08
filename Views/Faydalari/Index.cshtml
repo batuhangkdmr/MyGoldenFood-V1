@@ -38,7 +38,7 @@
             <div class="modern-desktop-sidebar">
                 <div class="sidebar-header">
                     <h3>@Html.T("Categories")</h3>
-                </div>
+                        </div>
                 <div class="desktop-categories-container">
                     <!-- Tüm Kategoriler -->
                     <div class="desktop-category-section">
@@ -47,14 +47,14 @@
                              data-category-id="0">
                             <div class="desktop-category-icon">
                                 <i class="fas fa-th-large"></i>
-                            </div>
+                    </div>
                             <div class="desktop-category-details">
                                 <h4>@Html.T("AllCategories")</h4>
                                 <span>@(ViewBag.DefaultBenefits?.Count ?? 0) fayda</span>
                             </div>
                         </div>
                     </div>
-
+                    
                     @foreach (var category in (IEnumerable<MyGoldenFood.Models.BenefitCategory>)ViewBag.Categories)
                     {
                         @if (category.Level == 0)
@@ -62,8 +62,8 @@
                             <div class="desktop-category-section">
                                 <!-- Ana Kategori -->
                                 <div class="desktop-category-main @(ViewBag.SelectedCategoryId == category.Id ? "active" : "")"
-                                     onclick="loadBenefitsByCategory(@category.Id, '@category.Name')"
-                                     data-category-id="@category.Id">
+                                 onclick="loadBenefitsByCategory(@category.Id, '@category.Name')" 
+                                 data-category-id="@category.Id">
                                     <div class="desktop-category-icon">
                                         @if (!string.IsNullOrEmpty(category.ImagePath))
                                         {
@@ -71,7 +71,7 @@
                                         }
                                         else
                                         {
-                                            <i class="fas fa-heart"></i>
+                                                <i class="fas fa-heart"></i>
                                         }
                                     </div>
                                     <div class="desktop-category-details">
@@ -82,9 +82,9 @@
                                     {
                                         <div class="desktop-expand-btn" onclick="toggleDesktopCategory(this); event.stopPropagation();">
                                             <i class="fas fa-chevron-down"></i>
-                                        </div>
-                                    }
-                                </div>
+                                            </div>
+                                        }
+                                    </div>
 
                                 <!-- Alt Kategoriler -->
                                 @if (category.ChildCategories != null && category.ChildCategories.Any())
@@ -102,16 +102,16 @@
                                                     {
                                                         <i class="fas fa-circle"></i>
                                                     }
-                                                </div>
+                                    </div>
                                                 <div class="desktop-subcategory-details">
                                                     <span>@childCategory.Name</span>
                                                     <small>@(childCategory.Benefits?.Count ?? 0) fayda</small>
-                                                </div>
-                                            </div>
-                                        }
                                     </div>
-                                }
+                                </div>
+                                        }
                             </div>
+                        }
+                    </div>
                         }
                     }
                 </div>
@@ -134,10 +134,10 @@
                     </h2>
                 </div>
 
-                <!-- Loading Spinner -->
+                <!-- Loading Text -->
                 <div id="loadingSpinner" class="text-center" style="display: none;">
-                    <div class="spinner-border text-light" role="status">
-                        <span class="visually-hidden">Yükleniyor...</span>
+                    <div class="loading-text">
+                        <span class="loading-dots">YÜKLENİYOR</span>
                     </div>
                 </div>
 
@@ -148,14 +148,14 @@
                         <div class="benefit-grid" id="benefitGrid">
                             @foreach (var benefit in ViewBag.DefaultBenefits)
                             {
-                                <div class="benefit-card"
-                                     data-name="@benefit.Name"
-                                     data-content="@benefit.Content">
+                                    <div class="benefit-card" 
+                                         data-name="@benefit.Name" 
+                                         data-content="@benefit.Content">
                                     <div class="image-container"
                                          data-name="@benefit.Name"
                                          data-description="@benefit.Content">
-                                        @if (!string.IsNullOrEmpty(benefit.ImagePath))
-                                        {
+                                            @if (!string.IsNullOrEmpty(benefit.ImagePath))
+                                            {
                                             var cloudinaryService = ViewBag.CloudinaryService as MyGoldenFood.Services.CloudinaryService;
                                             <picture>
                                                 <source media="(max-width: 768px)"
@@ -168,14 +168,14 @@
                                                      title="@benefit.Name - Donuk Gıda Faydaları"
                                                      loading="lazy" />
                                             </picture>
-                                        }
-                                        else
-                                        {
-                                            <div class="bg-secondary text-white d-flex align-items-center justify-content-center benefit-image">
-                                                <i class="fas fa-heart fa-3x"></i>
-                                            </div>
-                                        }
-                                    </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="bg-secondary text-white d-flex align-items-center justify-content-center benefit-image">
+                                                    <i class="fas fa-heart fa-3x"></i>
+                                                </div>
+                                            }
+                                        </div>
                                     <div class="benefit-name-container">
                                         <h3 class="benefit-name">@benefit.Name</h3>
                                     </div>
@@ -216,12 +216,12 @@
         <div class="custom-modal-header">
             <h4 id="customModalTitle"></h4>
             <span class="custom-modal-close" onclick="closeCustomModal()">&times;</span>
-        </div>
+            </div>
         <div class="custom-modal-body">
             <h5 class="custom-modal-title-with-line">@Html.T("BenefitDetails")</h5>
             <p id="customModalDescription"></p>
+            </div>
         </div>
-    </div>
 </div>
 
 <!-- Bottom Sheet Categories -->
@@ -339,38 +339,38 @@
         overflow: hidden;
     }
 
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            transform: scaleX(0);
-            transition: transform 0.4s ease;
-        }
+    .glass-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
 
-        .glass-card:hover::before {
-            transform: scaleX(1);
-        }
+    .glass-card:hover::before {
+        transform: scaleX(1);
+    }
 
-        .glass-card:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-            border-color: rgba(102, 126, 234, 0.3);
-        }
+    .glass-card:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        border-color: rgba(102, 126, 234, 0.3);
+    }
 
-        .glass-card.active {
-            background: rgba(102, 126, 234, 0.15);
-            border-color: rgba(102, 126, 234, 0.4);
-            box-shadow: 0 0 25px rgba(102, 126, 234, 0.3);
-        }
+    .glass-card.active {
+        background: rgba(102, 126, 234, 0.15);
+        border-color: rgba(102, 126, 234, 0.4);
+        box-shadow: 0 0 25px rgba(102, 126, 234, 0.3);
+    }
 
-            .glass-card.active::before {
-                transform: scaleX(1);
-            }
+    .glass-card.active::before {
+        transform: scaleX(1);
+    }
 
     .card-content {
         padding: 20px;
@@ -465,17 +465,17 @@
         margin-bottom: 32px;
     }
 
-        .content-header h2 {
-            color: #ffffff;
-            font-size: 3.2rem;
-            font-weight: 700;
-            margin: 0;
+    .content-header h2 {
+        color: #ffffff;
+        font-size: 3.2rem;
+        font-weight: 700;
+        margin: 0;
             background: linear-gradient(135deg, #d9b41b, #e7a400);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
-        }
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+    }
 
     /* Benefit Grid Layout */
     .benefit-grid {
@@ -506,26 +506,26 @@
         cursor: pointer;
     }
 
-        .benefit-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            transform: scaleX(0);
-            transition: transform 0.4s ease;
-        }
+    .benefit-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+            background: linear-gradient(135deg, #d9b41b, #e7a400);
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
 
-        .benefit-card:hover::before {
-            transform: scaleX(1);
-        }
+    .benefit-card:hover::before {
+        transform: scaleX(1);
+    }
 
-        .benefit-card:hover {
+    .benefit-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
+    }
 
     .image-container {
         width: 100%;
@@ -596,7 +596,7 @@
 
             .sidebar-toggle i {
                 font-size: 1.2rem;
-            }
+        }
 
         .glass-sidebar.collapsed {
             max-height: none;
@@ -730,7 +730,7 @@
     .custom-modal-content {
         background: rgba(0, 0, 0, 0.95);
         color: white;
-        border: 2px solid rgba(102, 126, 234, 0.3);
+        border: 2px solid rgba(255, 215, 0, 0.4);
         border-radius: 20px;
         margin: 15% auto;
         padding: 0;
@@ -743,7 +743,7 @@
     }
 
     .custom-modal-header {
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+        background: black;
         padding: 20px 25px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 18px 18px 0 0;
@@ -854,13 +854,36 @@
         }
     }
 
-    /* Loading Spinner */
+    /* Loading Text */
     #loadingSpinner {
         padding: 48px;
     }
 
-    .spinner-border {
-        color: #667eea !important;
+    .loading-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #FFD700;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        letter-spacing: 2px;
+    }
+
+    .loading-dots {
+        animation: loadingDots 1.5s infinite;
+    }
+
+    @@keyframes loadingDots {
+        0%, 20% {
+            content: "YÜKLENİYOR";
+        }
+        40% {
+            content: "YÜKLENİYOR.";
+        }
+        60% {
+            content: "YÜKLENİYOR..";
+        }
+        80%, 100% {
+            content: "YÜKLENİYOR...";
+        }
     }
 
     /* Animation Classes */
@@ -1395,7 +1418,7 @@
         // Kategori seçimini yap
         if (categoryId === 0) {
             loadAllBenefits();
-        } else {
+            } else {
             loadBenefitsByCategory(categoryId, categoryName);
         }
 
@@ -1457,7 +1480,7 @@
     // Sayfa yüklendiğinde event listener'ları ekle
     document.addEventListener('DOMContentLoaded', function() {
         attachBenefitCardEvents();
-
+        
         // İlk kategoriyi (@Html.T("AllCategories")) aktif yap
         const firstCategory = document.querySelector('[data-category-id="0"]');
         if (firstCategory) {

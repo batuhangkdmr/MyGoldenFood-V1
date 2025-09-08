@@ -132,10 +132,10 @@
                     </h2>
                 </div>
 
-                <!-- Loading Spinner -->
+                <!-- Loading Text -->
                 <div id="loadingSpinner" class="text-center" style="display: none;">
-                    <div class="spinner-border text-light" role="status">
-                        <span class="visually-hidden">Yükleniyor...</span>
+                    <div class="loading-text">
+                        <span class="loading-dots">YÜKLENİYOR</span>
                     </div>
                 </div>
 
@@ -282,12 +282,12 @@
                                         {
                                             <i class="fas fa-circle"></i>
                                         }
-                                    </div>
+                    </div>
                                     <div class="subcategory-details">
                                         <span>@childCategory.Name</span>
                                         <small>@(childCategory.Recipes?.Count ?? 0) tarif</small>
-                                    </div>
-                                </div>
+                </div>
+            </div>
                             }
                         </div>
                     }
@@ -513,7 +513,7 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #d9b41b, #e7a400);
             transform: scaleX(0);
             transition: transform 0.4s ease;
         }
@@ -612,8 +612,8 @@
         .categories-list {
             max-height: none;
             overflow: visible;
-            display: flex;
-            flex-direction: column;
+        display: flex;
+        flex-direction: column;
             gap: 8px;
             padding-bottom: 10px;
         }
@@ -738,7 +738,7 @@
     .custom-modal-content {
         background: rgba(0, 0, 0, 0.95);
         color: white;
-        border: 2px solid rgba(102, 126, 234, 0.3);
+        border: 2px solid rgba(255, 215, 0, 0.4);
         border-radius: 20px;
         margin: 15% auto;
         padding: 0;
@@ -751,7 +751,7 @@
     }
 
     .custom-modal-header {
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+        background: black;
         padding: 20px 25px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 18px 18px 0 0;
@@ -872,13 +872,36 @@
         }
     }
 
-    /* Loading Spinner */
+    /* Loading Text */
     #loadingSpinner {
         padding: 48px;
     }
 
-    .spinner-border {
-        color: #667eea !important;
+    .loading-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #FFD700;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        letter-spacing: 2px;
+    }
+
+    .loading-dots {
+        animation: loadingDots 1.5s infinite;
+    }
+
+    @@keyframes loadingDots {
+        0%, 20% {
+            content: "YÜKLENİYOR";
+        }
+        40% {
+            content: "YÜKLENİYOR.";
+        }
+        60% {
+            content: "YÜKLENİYOR..";
+        }
+        80%, 100% {
+            content: "YÜKLENİYOR...";
+        }
     }
 
     /* Animation Classes */
@@ -1313,7 +1336,7 @@
         // Modal açma fonksiyonu - Faydalari ile aynı
         function openCustomModal(name, description) {
             document.getElementById('customModalTitle').textContent = name;
-            document.getElementById('customModalDescription').textContent = description;
+            document.getElementById('customModalDescription').innerHTML = description.replace(/\n/g, "<br>");
             document.getElementById('customModal').style.display = 'block';
         }
 

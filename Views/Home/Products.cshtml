@@ -497,6 +497,33 @@
             min-width: 70px;
             order: 2; /* Sayfa numarası ortada kalsın */
         }
+        
+        /* iPhone SE ve küçük ekranlar için ürün isimlerini daha da yaklaştır */
+        .product-name-container {
+            padding: 1px 4px; /* Minimal padding */
+            margin-top: -22px; /* Resme çok daha yaklaştır */
+        }
+        
+        .product-name {
+            margin: 1px 0; /* Minimal margin */
+            font-size: 0.85rem; /* Daha küçük font */
+            line-height: 0.95; /* Çok sıkı satır yüksekliği */
+        }
+    }
+    
+    /* iPhone 14 Pro Max ve benzer büyük ekranlar için */
+    @@media (max-width: 430px) and (min-width: 390px) {
+        .product-name-container {
+            padding: 2px 5px;
+            margin-top: -20px;
+        }
+        
+        .product-name {
+            margin: 2px 0;
+            font-size: 0.9rem;
+            line-height: 1.0;
+        }
+    }
 
         .pagination #prevPage {
             order: 1; /* Geri butonu solda */
@@ -560,18 +587,18 @@
         }
         /* Ürün adını resme yaklaştır */
         .product-name-container {
-            padding: 8px; /* Daha küçük padding */
-            margin-top: -5px; /* Üst boşluğu azaltarak resme yaklaştır */
+            padding: 2px 6px; /* Çok daha küçük padding - üst/alt 2px, yan 6px */
+            margin-top: -18px; /* Üst boşluğu çok daha fazla azaltarak resme yaklaştır */
             background-color: transparent; /* Arka plan olmadan */
             text-align: center;
         }
         /* Ürün adı yazı tipi ve boyutu */
         .product-name {
-            margin: 13px;
-            font-size: 1.1rem; /* Fontu biraz küçült */
+            margin: 2px 0; /* Üst/alt margin'i 2px'e düşür */
+            font-size: 0.95rem; /* Fontu daha da küçült */
             font-weight: bold;
             color: #fff;
-            line-height: 1.2; /* Satır yüksekliğini sıkılaştır */
+            line-height: 1.0; /* Satır yüksekliğini çok sıkılaştır */
         }
     }
 
@@ -600,7 +627,7 @@
     .custom-modal-content {
         background: rgba(0, 0, 0, 0.95);
         color: white;
-        border: 2px solid rgba(102, 126, 234, 0.3);
+        border: 2px solid rgba(255, 215, 0, 0.4);
         border-radius: 20px;
         margin: 5% auto;
         padding: 0;
@@ -612,7 +639,7 @@
     }
 
     .custom-modal-header {
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+        background: black;
         padding: 20px 25px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 18px 18px 0 0;
