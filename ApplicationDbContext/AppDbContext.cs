@@ -8,12 +8,13 @@ namespace MyGoldenFood.ApplicationDbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        // Lazy Loading Proxy ayarı
+        // Lazy Loading Proxy ayarı - Canlı ortamda devre dışı
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseLazyLoadingProxies(); // Lazy loading özelliğini etkinleştir
+                // Lazy loading sadece development ortamında aktif
+                // optionsBuilder.UseLazyLoadingProxies();
             }
         }
 

@@ -894,6 +894,10 @@ a {
     .category-card-new {
         padding: 12px 8px;
     }
+    
+    .navbar-brand img {
+        width: 170px !important;
+    }
 }
 
 @-webkit-keyframes rotation {
@@ -1000,7 +1004,7 @@ footer {
     }
 
     .section-1 .kahve-1 {
-        width: 18%;
+        width: 33%;
         position: absolute;
         bottom: 0;
         left: 0;
@@ -1009,15 +1013,15 @@ footer {
     .section-1 .yaprak-1 {
         width: 20%;
         position: absolute;
-        top: 12%;
-        left: 0;
+        top: 24%;
+        left: 280px;
     }
 
     .section-1 .pasta-1 {
         width: 24%;
         position: absolute;
         bottom: 0;
-        left: 27%;
+        left: 25%;
     }
 
     .section-1 .pasta-2 {
@@ -1045,8 +1049,8 @@ footer {
     .section-1 .pasta-5 {
         width: 27%;
         position: absolute;
-        bottom: 5%;
-        right: 19%;
+        bottom: 0;
+        right: 25%;
     }
 
 
@@ -1376,11 +1380,11 @@ footer {
 
 .ro-text img {
     -webkit-animation-name: rotate;
-    -webkit-animation-duration: 4s;
+    -webkit-animation-duration: 8s;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-timing-function: linear;
     -moz-animation-name: rotate;
-    -moz-animation-duration: 4s;
+    -moz-animation-duration: 8s;
     -moz-animation-iteration-count: infinite;
     -moz-animation-timing-function: linear;
 }
@@ -1448,7 +1452,7 @@ footer {
     }
 
         .navbar-brand img {
-            width: 100%;
+            width: 170% !important;
         }
     /* Header Mobile */
 }
@@ -1630,9 +1634,9 @@ footer {
     }
 
     .section-1 .pasta-3 {
-        width: 45%;
+        width: 30%;
         position: absolute;
-        bottom: 75%;
+        bottom: 0;
         right: 0;
     }
 
@@ -1918,24 +1922,25 @@ footer {
     }
 
     .section-1 .kahve-1 {
-        width: 35%;
+        width: 95%;
         position: absolute;
         bottom: 0;
         left: 0;
     }
 
     .section-1 .yaprak-1 {
-        width: 40%;
+        width: 46%;
         position: absolute;
-        top: 12%;
+        top: 55%;
         left: 0;
+        display:none;
     }
 
     .section-1 .pasta-1 {
-        width: 60%;
+        width: 50%;
         position: absolute;
         bottom: 0;
-        left:40%;
+        left:50%;
     }
 
     .section-1 .pasta-2 {
@@ -1953,18 +1958,18 @@ footer {
     }
 
     .section-1 .pasta-4 {
-        width: 55%;
+        width: 51%;
         position: absolute;
-        top: 10%;
-        right: 2%;
+        top: 12%;
+        right: 0%;
         animation: rotation 20s infinite linear;
     }
 
     .section-1 .pasta-5 {
         width: 45%;
         position: absolute;
-        bottom: 26%;
-        right: 50%;
+        bottom: 0%;
+        right: 55%;
     }
 
     .section-4 {
