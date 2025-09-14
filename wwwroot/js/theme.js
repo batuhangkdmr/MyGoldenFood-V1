@@ -35,10 +35,26 @@ if (indexPage) {
     const horizontal1 = document.querySelector('.horizontal-section');
     const kup1 = document.querySelector('#slide-1 .kup');
     const kup2 = document.querySelector('#slide-2 .kup');
-    const yaprak1 = document.querySelector('.yaprak1');
-    const yaprak2 = document.querySelector('.yaprak2');
+    const kup3 = document.querySelector('#slide-3 .kup');
+    const kup4 = document.querySelector('#slide-4 .kup');
+    const kup5 = document.querySelector('#slide-5 .kup');
+    const kup6 = document.querySelector('#slide-6 .kup');
+    const yaprak1 = document.querySelectorAll('.yaprak1');
+    const yaprak2 = document.querySelectorAll('.yaprak2');
     spaceHolder1.style.height = `${calcDynamicHeight1(horizontal1)}px`;
     kup2.style.opacity = 0;
+    kup3.style.opacity = 0;
+    kup4.style.opacity = 0;
+    kup5.style.opacity = 0;
+    kup6.style.opacity = 0;
+    
+    // Yaprak elementlerini sabit pozisyonda tut
+    yaprak1.forEach(element => {
+        element.style.left = '20%';
+    });
+    yaprak2.forEach(element => {
+        element.style.left = '70%';
+    });
 
     function calcDynamicHeight1(ref) {
         const vw = window.innerWidth;
@@ -51,14 +67,33 @@ if (indexPage) {
         const sticky1 = document.querySelector('.sticky');
         horizontal1.style.transform = `translateX(-${sticky1.offsetTop}px)`;
         var y = sticky1.offsetTop;
-        kup2.style.opacity = y / 500;
-        kup1.style.opacity = 200 / y;
-        yaprak1.style.left = 10 + y * 100 / 665 + '%';
-        yaprak2.style.left = (y * 100 / 665) + 70 + '%';
+        
+        // Slide opacity kontrolü
+        kup1.style.opacity = Math.max(0, 1 - (y - 0) / 500);
+        kup2.style.opacity = Math.max(0, Math.min(1, (y - 200) / 500));
+        kup3.style.opacity = Math.max(0, Math.min(1, (y - 400) / 500));
+        kup4.style.opacity = Math.max(0, Math.min(1, (y - 600) / 500));
+        kup5.style.opacity = Math.max(0, Math.min(1, (y - 800) / 500));
+        kup6.style.opacity = Math.max(0, Math.min(1, (y - 1000) / 500));
+        
+        // Yaprak hareketi - artık hareket etmesinler, sabit pozisyonda kalsınlar
+        yaprak1.forEach(element => {
+            element.style.left = '20%';
+        });
+        yaprak2.forEach(element => {
+            element.style.left = '70%';
+        });
     });
 
     window.addEventListener('resize', () => {
         spaceHolder1.style.height = `${calcDynamicHeight1(horizontal1)}px`;
+        // Yaprak elementlerini sabit pozisyonda tut
+        yaprak1.forEach(element => {
+            element.style.left = '20%';
+        });
+        yaprak2.forEach(element => {
+            element.style.left = '70%';
+        });
     });
 
 
