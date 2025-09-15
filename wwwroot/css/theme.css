@@ -2262,3 +2262,16 @@ footer {
     background-position: center;
     background-size: cover;
 }
+
+/* 📱 Mobil Görünümde Slider'lar Arası Mesafe Artırma */
+@media (max-width: 768px) {
+    .section-2 .slide {
+        margin-right: 25px; /* Mobilde daha fazla mesafe */
+    }
+}
+
+@media (max-width: 480px) {
+    .section-2 .slide {
+        margin-right: 30px; /* Küçük mobilde en fazla mesafe */
+    }
+}

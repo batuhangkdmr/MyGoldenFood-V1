@@ -211,7 +211,7 @@
     }
 
     .section-subtitle {
-        text-align: center;
+        text-align: start;
         font-size: 1.2rem;
         color: #ccc;
         margin-bottom: 60px;
@@ -288,9 +288,24 @@
 
     .features-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 40px;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
         margin-top: 60px;
+    }
+
+    /* Responsive design for smaller screens */
+    @@media (max-width: 1200px) {
+        .features-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .features-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
     }
 
     .feature-card {
@@ -506,10 +521,9 @@
 <section class="about-section" id="about">
     <div class="container">
         <h3 class="section-title">Hakkımızda</h3>
-        <p class="section-subtitle">
-            My Golden Food, dondurulmuş gıda sektöründe kaliteli ve lezzetli ürünler sunan öncü bir markadır. 
-            Müşterilerimize en iyi hizmeti sağlamak için sürekli yenilikçi çözümler üretmekteyiz.
-        </p>
+        <div class="section-subtitle">
+            @Html.Raw(Html.T("AboutDescription"))
+        </div>
     </div>
 </section>
 
@@ -544,51 +558,35 @@
         <h3 class="section-title">Neden My Golden Food?</h3>
         <div class="features-grid">
             <div class="feature-card animate-on-scroll">
-                <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_auto,c_fill,w_500,h_300/v1742671296/fabrika_zb186p.jpg" 
+                <img src="https://res.cloudinary.com/dbhogeepn/image/upload/v1757883356/hakkimizda-kaliteli-uretim_lqenef.jpg"
                      alt="Kaliteli Ürünler | My Golden Food Dondurulmuş Gıda Üretimi" class="feature-image">
                 <div class="feature-icon">🌟</div>
-                <h4 class="feature-title">Kaliteli Ürünler</h4>
-                <p class="feature-description">En kaliteli ve lezzetli dondurulmuş ürünleri sizlerle buluşturuyoruz. Her ürünümüz titizlikle seçilmiş hammaddelerle üretilir.</p>
+                <h4 class="feature-title">@Html.T("QualityProducts")</h4>
+                <p class="feature-description">@Html.T("QualityProductsDescription")</p>
             </div>
 
             <div class="feature-card animate-on-scroll">
                 <img src="https://res.cloudinary.com/dbhogeepn/image/upload/f_auto,q_auto,c_fill,w_500,h_300/v1740762420/WhatsApp_Image_2025-02-28_at_20.06.44_wrim5k.jpg" 
                      alt="Güvenli Üretim | My Golden Food ISO Sertifikalı Üretim" class="feature-image">
                 <div class="feature-icon">🔒</div>
-                <h4 class="feature-title">Güvenli Üretim</h4>
-                <p class="feature-description">Modern tesislerimizde hijyen ve kalite standartlarına uygun üretim yapıyoruz. ISO sertifikalarımızla kalitemizi garanti ediyoruz.</p>
+                <h4 class="feature-title">@Html.T("SafeProduction")</h4>
+                <p class="feature-description">@Html.T("SafeProductionDescription")</p>
             </div>
 
             <div class="feature-card animate-on-scroll">
-                <img src="https://images.unsplash.com/photo-1506806732259-39c2d0268443?fit=crop&w=500&q=80" 
+                <img src="https://res.cloudinary.com/dbhogeepn/image/upload/v1757883864/musterimemnuniyeti_xhrbho.jpg"
                      alt="Müşteri Memnuniyeti | My Golden Food 7/24 Müşteri Hizmetleri" class="feature-image">
                 <div class="feature-icon">😊</div>
-                <h4 class="feature-title">Müşteri Memnuniyeti</h4>
-                <p class="feature-description">Önceliğimiz her zaman müşterilerimizin memnuniyeti ve güvenidir. 7/24 müşteri hizmetlerimizle yanınızdayız.</p>
+                <h4 class="feature-title">@Html.T("CustomerSatisfaction")</h4>
+                <p class="feature-description">@Html.T("CustomerSatisfactionDescription")</p>
             </div>
 
             <div class="feature-card animate-on-scroll">
-                <img src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?fit=crop&w=500&q=80" 
-                     alt="Sürdürülebilirlik | My Golden Food Çevre Dostu Üretim" class="feature-image">
-                <div class="feature-icon">🌱</div>
-                <h4 class="feature-title">Sürdürülebilirlik</h4>
-                <p class="feature-description">Doğaya saygılı, sürdürülebilir üretim anlayışıyla çalışıyoruz. Çevre dostu ambalajlar kullanıyoruz.</p>
-            </div>
-
-            <div class="feature-card animate-on-scroll">
-                <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?fit=crop&w=500&q=80" 
+                <img src="https://res.cloudinary.com/dbhogeepn/image/upload/v1757884127/arge_s6wgvq.jpg"
                      alt="Ar-Ge ve Yenilik | My Golden Food Teknoloji Odaklı Üretim" class="feature-image">
                 <div class="feature-icon">🔬</div>
-                <h4 class="feature-title">Ar-Ge ve Yenilik</h4>
-                <p class="feature-description">Ar-Ge çalışmalarımızla sürekli gelişiyor, yenilikçi çözümler üretiyoruz. Teknoloji odaklı üretim süreçlerimizle öne çıkıyoruz.</p>
-            </div>
-
-            <div class="feature-card animate-on-scroll">
-                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?fit=crop&w=500&q=80" 
-                     alt="Global Erişim | My Golden Food 25 Ülkede Faaliyet" class="feature-image">
-                <div class="feature-icon">🌍</div>
-                <h4 class="feature-title">Global Erişim</h4>
-                <p class="feature-description">25 ülkede faaliyet gösteriyoruz. Dünya çapında lezzetimizi tanıtıyor, global pazarda güçlü bir marka oluyoruz.</p>
+                <h4 class="feature-title">@Html.T("RDAndInnovation")</h4>
+                <p class="feature-description">@Html.T("RDAndInnovationDescription")</p>
             </div>
         </div>
     </div>
@@ -599,12 +597,12 @@
     <div class="container">
         <div class="mission-content">
             <div class="mission-text">
-                <h3 class="section-title">Vizyonumuz ve Misyonumuz</h3>
+                <h3 class="section-title">@Html.T("VisionAndMission")</h3>
                 <p style="font-size: 1.2rem; line-height: 1.8; margin-bottom: 30px; color: #f0f0f0;">
-                    <strong>Vizyonumuz</strong>, dünya çapında lezzetimizi tanıtmak ve sürdürülebilir üretim anlayışıyla herkese sağlıklı ve lezzetli ürünler sunmaktır.
+                    <strong>@Html.T("OurVision")</strong>, @Html.T("VisionDescription")
                 </p>
                 <p style="font-size: 1.2rem; line-height: 1.8; color: #ccc;">
-                    <strong>Misyonumuz</strong>, müşterilerimize en kaliteli dondurulmuş gıda ürünlerini sunarak, onların günlük yaşamlarını kolaylaştırmak ve lezzetli anlar yaşamalarını sağlamaktır.
+                    <strong>@Html.T("OurMission")</strong>, @Html.T("MissionDescription")
                 </p>
             </div>
             <div class="mission-image">

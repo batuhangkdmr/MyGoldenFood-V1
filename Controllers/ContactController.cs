@@ -42,5 +42,26 @@ namespace MyGoldenFood.Controllers
 
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> SendMessage(string name, string email, string message)
+        {
+            try
+            {
+                var result = await _mailService.SendEmailAsync(name, email, message);
+                if (result)
+                {
+                    return Json(new { success = true, message = "Mesajınız başarıyla gönderildi!" });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Mesaj gönderilirken hata oluştu!" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Mesaj gönderilirken hata oluştu: " + ex.Message });
+            }
+        }
     }
 }
