@@ -33,7 +33,7 @@
 
 <!-- Sidebar Overlay - Artık kullanılmıyor -->
 
-<div class="container-fluid" style="margin-top: 100px;">
+<div class="container-fluid">
     <div class="row">
         <!-- Sol Sidebar - Kategoriler -->
         <div class="col-lg-3 col-md-4">
@@ -453,6 +453,18 @@
     /* Content Container */
     .content-container {
         padding: 0 24px;
+    }
+
+    /* Container-fluid için responsive margin-top */
+    .container-fluid {
+        margin-top: 100px; /* Mobil için varsayılan */
+    }
+
+    /* Sadece desktop görünümünde 70px ekstra */
+    @@media (min-width: 1025px) {
+        .container-fluid {
+            margin-top: 170px; /* 100px + 70px = 170px */
+        }
     }
 
     .content-header {

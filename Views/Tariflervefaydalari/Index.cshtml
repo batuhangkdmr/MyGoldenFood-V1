@@ -18,14 +18,17 @@
             <h1 class="mb-5 colorrenk">@Html.T("RecipesAndBenefits")</h1>
     <div class="row justify-content-center">
         <div class="col-md-6 col-sm-12">
-            <a href="/tarifler">
-                <img src="~/images/tarifler.jpg" alt="Dondurulmuş Gıda Tarifleri" class="img-fluid img-responsive" />
-                <h3 class="title-spacing text-white"><br/></h3>
+            <a href="/tarifler" class="recipe-link">
+                <img src="~/images/tarifler1.jpg" alt="Dondurulmuş Gıda Tarifleri" class="img-fluid img-responsive" />
+                <h3 class="title-spacing text-white">@Html.T("RecipesClickText")</h3>
+                <p class="description-text">@Html.T("RecipesDescription")</p>
             </a>
         </div>
         <div class="col-md-6 col-sm-12">
-            <a href="/faydalari">
-                <img src="~/images/faydalar.jpg" alt="Dondurulmuş Gıdaların Faydaları" class="img-fluid img-responsive" />
+            <a href="/faydalari" class="benefits-link">
+                <img src="~/images/faydalari1.jpg" alt="Dondurulmuş Gıdaların Faydaları" class="img-fluid img-responsive" />
+                <h3 class="title-spacing text-white">@Html.T("BenefitsClickText")</h3>
+                <p class="description-text">@Html.T("BenefitsDescription")</p>
             </a>
         </div>
     </div>
@@ -49,6 +52,7 @@
         padding-top: 10%;
         padding-bottom: 250px; /* Masaüstü için geniş boşluk */
     }
+
     /* h3 başlıklarının arasına boşluk ekle */
     .title-spacing {
         margin-top: 20px;
@@ -60,9 +64,9 @@
         text-transform: uppercase;
     }
 
-    img {
+   /*  img {
         max-width: 250px;
-        transition: transform 0.3s;
+        transition: transform 0.3s; */
     }
 
         img:hover {
@@ -71,24 +75,24 @@
 
     /* 🌟 Mobilde Yan Yana Getirme */
     @@media (max-width: 1000px) {
-        .row
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            overflow: hidden;
+            gap: 10px; /* Mobilde kartlar arası boşluk */
+        }
+        
+        h1 {
+            font-size: 26px;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
 
-    {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        overflow: hidden;
-    }
-    h1{
-       font-size: 26px;
-       text-transform: uppercase;
-       font-weight: 800;
-    }
-
-    .col-sm-6 {
-        width: 50%; /* Mobilde ikiye bölerek yan yana getir */
-        padding: 10px;
-    }
+        .col-sm-6 {
+            width: 50%; /* Mobilde ikiye bölerek yan yana getir */
+            padding: 10px;
+        }
 
     img {
         max-width: 90%; /* Küçük ekranlarda daha iyi sığması için */
@@ -96,6 +100,46 @@
 
     h3 {
         font-size: 1.2rem;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .description-text {
+        color: #ccc;
+        font-size: 0.9rem;
+        margin-top: 5px;
+        line-height: 1.4;
+        max-width: 200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .recipe-link, .benefits-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        transition: all 0.3s ease;
+        padding: 15px;
+        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .recipe-link:hover, .benefits-link:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .recipe-link:hover h3, .benefits-link:hover h3 {
+        color: #fff;
+    }
+
+    .recipe-link:hover .description-text, .benefits-link:hover .description-text {
+        color: #fff;
     }
 
         .container {
@@ -107,5 +151,9 @@
             margin-top: 10px; /* Başlıkları biraz daha yaklaştır */
         }
 
+        /* Daha küçük mobil ekranlar için de gap ekle */
+        .row {
+            gap: 10px;
+        }
     }
 </style>
