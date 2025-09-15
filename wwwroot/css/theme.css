@@ -2,10 +2,59 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+/* Türkçe karakter desteği - Tüm sayfalar için */
+html[lang="tr"] {
+    font-feature-settings: "kern" 1, "liga" 1;
+    -webkit-font-feature-settings: "kern" 1, "liga" 1;
+}
+
+/* Türkçe sayfalarda text-transform sorunlarını çöz */
+html[lang="tr"] .metin-1,
+html[lang="tr"] .metin-2,
+html[lang="tr"] .metin-3,
+html[lang="tr"] .metin-4,
+html[lang="tr"] .baslik,
+html[lang="tr"] .kup-baslik,
+html[lang="tr"] .kup-icerik,
+html[lang="tr"] h1,
+html[lang="tr"] h2,
+html[lang="tr"] h3,
+html[lang="tr"] h4,
+html[lang="tr"] h5,
+html[lang="tr"] h6,
+html[lang="tr"] .text-center,
+html[lang="tr"] .text-white,
+html[lang="tr"] .nav-link,
+html[lang="tr"] .navbar-nav .nav-link {
+    text-transform: none !important;
+    font-feature-settings: "kern" 1, "liga" 1;
+    -webkit-font-feature-settings: "kern" 1, "liga" 1;
+}
+
+/* Türkçe sayfalarda paragraflar için */
+html[lang="tr"] .metin-1 p,
+html[lang="tr"] .metin-2 p,
+html[lang="tr"] .metin-3 p,
+html[lang="tr"] .metin-4 p,
+html[lang="tr"] .baslik p,
+html[lang="tr"] .kup-baslik p,
+html[lang="tr"] .kup-icerik p,
+html[lang="tr"] .text-center p,
+html[lang="tr"] .text-white p {
+    text-transform: none !important;
+    font-feature-settings: "kern" 1, "liga" 1;
+    -webkit-font-feature-settings: "kern" 1, "liga" 1;
+}
+
 body {
     background-color: black;
     font-family: "Montserrat", Sans-serif;
     color: #fff;
+    -webkit-font-feature-settings: "kern" 1;
+    font-feature-settings: "kern" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -979,12 +1028,14 @@ footer {
         font-family: "Montserrat", Sans-serif;
         font-size: 2.8em;
         font-weight: 800;
-        line-height: .6em;
+        line-height: 1.2em;
         letter-spacing: 3px;
         position: absolute;
         top: 35%;
         left: 23%;
         z-index: 1;
+        font-variant-ligatures: none;
+        text-rendering: optimizeLegibility;
     }
 
     .section-1 .pasta-isim-1 {
@@ -1589,12 +1640,14 @@ footer {
         font-family: "Montserrat", Sans-serif;
         font-size: 1.5em;
         font-weight: 800;
-        line-height: .6em;
+        line-height: 1.2em;
         letter-spacing: 3px;
         position: absolute;
         top: 35%;
         left: 5%;
         z-index: 1;
+        font-variant-ligatures: none;
+        text-rendering: optimizeLegibility;
     }
 
     .section-1 .pasta-isim-1 {
@@ -1905,12 +1958,14 @@ footer {
         font-family: "Montserrat", Sans-serif;
         font-size: 1.8em;
         font-weight: 800;
-        line-height: .6em;
+        line-height: 1.2em;
         letter-spacing: 3px;
         position: absolute;
         top: 35%;
         left: 5%;
         z-index: 1;
+        font-variant-ligatures: none;
+        text-rendering: optimizeLegibility;
     }
 
     .section-1 .pasta-isim-1 {
