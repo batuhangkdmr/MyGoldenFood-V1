@@ -369,3 +369,10 @@ appsettings.json
 appsettings.*.json
 secrets.json
 .env
+
+# Publish klasörleri ve zip dosyaları
+publish-*/
+publish-final*/
+publish-folder*/
+*.zip
+mygoldenfood-*.zip
