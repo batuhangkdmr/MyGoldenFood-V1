@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using MyGoldenFood.Services;
 
 namespace MyGoldenFood.Controllers
 {
@@ -28,14 +29,16 @@ namespace MyGoldenFood.Controllers
         private readonly string _recipientEmail2;
         private readonly IHubContext<ProductHub> _hubContext;
         private readonly MyGoldenFood.Services.CloudinaryService _cloudinaryService;
+        private readonly MailService _mailService;
 
-        public HomeController(ILogger<HomeController> logger, AppDbContext context, IConfiguration configuration, IHubContext<ProductHub> hubContext, MyGoldenFood.Services.CloudinaryService cloudinaryService)
+        public HomeController(ILogger<HomeController> logger, AppDbContext context, IConfiguration configuration, IHubContext<ProductHub> hubContext, MyGoldenFood.Services.CloudinaryService cloudinaryService, MailService mailService)
         {
             _logger = logger;
             _context = context;
             _configuration = configuration;
             _hubContext = hubContext;
             _cloudinaryService = cloudinaryService;
+            _mailService = mailService;
 
             var emailSettings = _configuration.GetSection("EmailSettings");
             _smtpServer = emailSettings["SmtpServer"];
@@ -103,42 +106,56 @@ namespace MyGoldenFood.Controllers
         }
 
         [HttpPost]
-        public IActionResult Iletisim(string adsoyad, string email, string konu, string mesaj)
+        public async Task<IActionResult> Iletisim(string adsoyad, string email, string konu, string mesaj)
         {
             try
             {
-                // Türkiye saatini al
-                var turkiyeSaati = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time"));
+                System.Diagnostics.Debug.WriteLine("=== HomeController Iletisim POST DEBUG ===");
+                System.Diagnostics.Debug.WriteLine($"adsoyad: {adsoyad}");
+                System.Diagnostics.Debug.WriteLine($"email: {email}");
+                System.Diagnostics.Debug.WriteLine($"konu: {konu}");
+                System.Diagnostics.Debug.WriteLine($"mesaj length: {mesaj?.Length ?? 0}");
+                Console.WriteLine("=== HomeController Iletisim POST DEBUG ===");
+                Console.WriteLine($"adsoyad: {adsoyad}");
+                Console.WriteLine($"email: {email}");
+                Console.WriteLine($"konu: {konu}");
 
-                var emailMessage = new MimeMessage();
-                emailMessage.From.Add(new MailboxAddress("My Golden Food", _smtpUsername));
-
-                emailMessage.To.Add(new MailboxAddress("Admin", _recipientEmail1));
-                emailMessage.To.Add(new MailboxAddress("Admin", _recipientEmail2));
-
-                emailMessage.Subject = konu;
-                emailMessage.Date = turkiyeSaati;
-
-                emailMessage.Body = new TextPart("html")
+                // Validation
+                if (string.IsNullOrWhiteSpace(adsoyad) ||
+                    string.IsNullOrWhiteSpace(email) ||
+                    string.IsNullOrWhiteSpace(konu) ||
+                    string.IsNullOrWhiteSpace(mesaj))
                 {
-                    Text = $"<strong>Gönderen:</strong> {adsoyad} ({email}) <br><br> " +
-                           $"<strong>Mesaj:</strong> {mesaj}"
-                };
-
-                using (var client = new SmtpClient())
-                {
-                    client.ServerCertificateValidationCallback = (s, c, h, e) => true;
-
-                    client.Connect(_smtpServer, _smtpPort, SecureSocketOptions.Auto);
-                    client.Authenticate(_smtpUsername, _smtpPassword);
-                    client.Send(emailMessage);
-                    client.Disconnect(true);
+                    System.Diagnostics.Debug.WriteLine("=== HomeController Iletisim: Validation failed ===");
+                    ViewBag.Uyari = "Lütfen tüm alanları doldurunuz.";
+                    return View();
                 }
 
-                ViewBag.Uyari = "Mesajınız başarıyla gönderildi!";
+                // Mail gönder
+                System.Diagnostics.Debug.WriteLine("=== HomeController: Calling MailService.SendIletisimFormMessageAsync ===");
+                var result = await _mailService.SendIletisimFormMessageAsync(adsoyad, email, konu, mesaj);
+                System.Diagnostics.Debug.WriteLine($"=== HomeController: MailService result: {result} ===");
+                Console.WriteLine($"=== HomeController: MailService result: {result} ===");
+
+                if (result)
+                {
+                    System.Diagnostics.Debug.WriteLine("=== HomeController Iletisim: SUCCESS ===");
+                    ViewBag.Uyari = "Mesajınız başarıyla gönderildi! En kısa sürede (24 saat içinde) sizlere dönüş sağlayacağız.";
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("=== HomeController Iletisim: MailService returned false ===");
+                    ViewBag.Uyari = "Mesaj gönderilirken bir hata oluştu. Lütfen tekrar deneyiniz.";
+                }
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("=== HomeController Iletisim EXCEPTION ===");
+                System.Diagnostics.Debug.WriteLine($"Message: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
+                Console.WriteLine("=== HomeController Iletisim EXCEPTION ===");
+                Console.WriteLine($"Message: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
                 ViewBag.Uyari = "Mesaj gönderilirken hata oluştu: " + ex.Message;
             }
 

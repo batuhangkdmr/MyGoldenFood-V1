@@ -184,6 +184,21 @@ namespace MyGoldenFood
                     defaults: new { controller = "Home", action = "Iletisim" });
 
                 endpoints.MapControllerRoute(
+                    name: "dealership",
+                    pattern: "Bayilik",
+                    defaults: new { controller = "Dealership", action = "Index" });
+
+                endpoints.MapControllerRoute(
+                    name: "dealership-submit",
+                    pattern: "Bayilik/Submit",
+                    defaults: new { controller = "Dealership", action = "Submit" });
+
+                endpoints.MapControllerRoute(
+                    name: "contact-submit",
+                    pattern: "Contact/Submit",
+                    defaults: new { controller = "Contact", action = "Submit" });
+
+                endpoints.MapControllerRoute(
                     name: "home",
                     pattern: "anasayfa",
                     defaults: new { controller = "Home", action = "Index" });

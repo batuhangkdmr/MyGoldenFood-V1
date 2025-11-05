@@ -42,7 +42,7 @@
         }
 
         .navbar-collapse {
-            background-color: transparent; /* Menü açıldığında arka plan siyah */
+            background-color: black; /* Menü açıldığında arka plan siyah */
             padding: 10px 15px;
             text-align: left;
             position: relative;
@@ -60,7 +60,7 @@
 
         .navbar .nav-link {
             color: #fff !important;
-            font-size: 16px;
+            font-size: 12px;
         }
 
         .navbar-brand img {
@@ -196,6 +196,11 @@
             <li class="nav-item">
                 <a href="/Blog" class="nav-link">
                     @Html.T("Blog").ToUpper(System.Globalization.CultureInfo.CurrentCulture)
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Bayilik">
+                    BÖLGE BAYİLİĞİ
                 </a>
             </li>
             <li class="nav-item">

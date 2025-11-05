@@ -1,0 +1,842 @@
+@using MyGoldenFood.Services
+@{
+    ViewData["Title"] = "Bölge Bayiliği | My Golden Food - Donuk Depo Bayilik Fırsatları";
+}
+
+<!-- SEO Meta Etiketleri -->
+<head>
+    <meta name="description" content="Donuk deposu olan firmalar için bölge bayilik fırsatları. Frambuaz, yaban mersini, çilek, vişne dondurulmuş meyve bayilik başvurusu. My Golden Food ile ortaklık fırsatı.">
+    <meta name="keywords" content="donuk depo bayilik, bölge bayisi, dondurulmuş meyve bayilik, donuk gıda bayilik, my golden food bayilik, donuk depo işletmeleri, bayilik başvurusu, dondurulmuş gıda distribütörü">
+    <meta name="author" content="My Golden Food">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Bölge Bayiliği | My Golden Food - Donuk Depo Bayilik Fırsatları">
+    <meta property="og:description" content="Donuk deposu olan firmalar için bölge bayilik fırsatları. Dondurulmuş meyve bayilik başvurusu yapın.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mygoldenfood.com/Bayilik">
+    <link rel="canonical" href="https://mygoldenfood.com/Bayilik" />
+</head>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    /* Navbar için üst boşluk */
+    .dealership-page-wrapper {
+        margin-top: 80px;
+        min-height: calc(100vh - 80px);
+        background: black;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    /* Animated Grid Background */
+    .grid-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        opacity: 0.03;
+        background-image: 
+            linear-gradient(rgba(150, 60, 148, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(150, 60, 148, 0.1) 1px, transparent 1px);
+        background-size: 50px 50px;
+        animation: gridMove 20s linear infinite;
+    }
+
+    @@keyframes gridMove {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(50px, 50px); }
+    }
+
+    /* Main Container */
+    .main-wrapper {
+        position: relative;
+        z-index: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 80px 40px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        text-align: center;
+        margin-bottom: 80px;
+        animation: fadeIn 1s ease-out;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-section .badge {
+        display: inline-block;
+        padding: 8px 20px;
+        background: rgba(150, 60, 148, 0.1);
+        border: 1px solid rgba(150, 60, 148, 0.3);
+        border-radius: 50px;
+        color: #963c94;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 30px;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    @@keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+    }
+
+    .hero-section h1 {
+        font-size: 56px;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 20px;
+        letter-spacing: -1px;
+        line-height: 1.2;
+    }
+
+    .hero-section p {
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.7);
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.8;
+    }
+
+    /* Content Grid */
+    .content-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin-bottom: 60px;
+    }
+
+    /* Benefits Card */
+    .benefits-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        padding: 40px;
+        backdrop-filter: blur(10px);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: slideInLeft 0.8s ease-out;
+    }
+
+    @@keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .benefits-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(150, 60, 148, 0.4);
+        box-shadow: 0 20px 60px rgba(150, 60, 148, 0.15);
+    }
+
+    .benefits-card h3 {
+        font-size: 24px;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .benefits-card h3 i {
+        font-size: 28px;
+        color: #963c94;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(150, 60, 148, 0.1);
+        border-radius: 12px;
+    }
+
+    .benefits-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .benefits-list li {
+        padding: 15px 0;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .benefits-list li:last-child {
+        border-bottom: none;
+    }
+
+    .benefits-list li i {
+        color: #963c94;
+        font-size: 14px;
+        width: 20px;
+    }
+
+    /* Form Card */
+    .form-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        padding: 50px;
+        backdrop-filter: blur(10px);
+        animation: slideInRight 0.8s ease-out;
+        position: relative;
+        overflow: hidden;
+    }
+
+    @@keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .form-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: #963c94;
+    }
+
+    .form-header {
+        margin-bottom: 40px;
+    }
+
+    .form-header h2 {
+        font-size: 32px;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 12px;
+    }
+
+    .form-header p {
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.6;
+    }
+
+    /* Form Sections */
+    .form-section {
+        margin-bottom: 40px;
+    }
+
+    .section-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(150, 60, 148, 0.3), transparent);
+        margin: 40px 0;
+    }
+
+    /* Input Groups */
+    .input-group-modern {
+        margin-bottom: 25px;
+    }
+
+    .input-label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .input-label .required {
+        color: #ff4757;
+        margin-left: 4px;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 16px 20px;
+        font-size: 15px;
+        color: #ffffff !important;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        outline: none;
+        font-weight: 400;
+    }
+
+    .input-field:focus {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: #963c94;
+        box-shadow: 0 0 0 4px rgba(150, 60, 148, 0.1);
+        color: #ffffff !important;
+    }
+
+    .input-field option {
+        background: #1a1a1a;
+        color: #ffffff;
+    }
+
+    .input-field:hover:not(:focus) {
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .input-field::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    select.input-field {
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%23963c94' d='M8 12L2 6h12z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 20px center;
+        padding-right: 50px;
+        appearance: none;
+        color: #ffffff !important;
+    }
+
+    select.input-field option {
+        background: #1a1a1a;
+        color: #ffffff;
+        padding: 10px;
+    }
+
+    textarea.input-field {
+        min-height: 120px;
+        resize: vertical;
+        font-family: inherit;
+    }
+
+
+    /* Submit Button */
+    .submit-section {
+        margin-top: 50px;
+        text-align: center;
+    }
+
+    .submit-btn {
+        position: relative;
+        padding: 18px 50px;
+        font-size: 16px;
+        font-weight: 700;
+        color: #ffffff;
+        background: #963c94;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(150, 60, 148, 0.3);
+    }
+
+    .submit-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(150, 60, 148, 0.4);
+        background: #a84ca6;
+    }
+
+    .submit-btn:hover::before {
+        left: 100%;
+    }
+
+    .submit-btn:active {
+        transform: translateY(-1px);
+    }
+
+    .submit-btn i {
+        margin-right: 10px;
+    }
+
+    /* Loading Overlay */
+    .loading-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(10px);
+    }
+
+    .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(150, 60, 148, 0.3);
+        border-top: 4px solid #963c94;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @@keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 1024px) {
+        .content-grid {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .main-wrapper {
+            padding: 60px 30px;
+        }
+
+        .form-card {
+            padding: 40px 30px;
+        }
+
+    }
+
+    @@media (max-width: 768px) {
+        .dealership-page-wrapper {
+            margin-top: 70px;
+        }
+
+        .main-wrapper {
+            padding: 40px 20px;
+        }
+
+        .hero-section h1 {
+            font-size: 36px;
+        }
+
+        .hero-section p {
+            font-size: 16px;
+            text-align: start;
+        }
+
+        .form-card {
+            padding: 30px 20px;
+        }
+
+        .benefits-card {
+            padding: 30px 20px;
+        }
+
+        .form-header h2 {
+            font-size: 20px;
+        }
+
+        .benefits-card h3{
+            font-size: 20px;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .main-wrapper {
+            padding: 30px 15px;
+        }
+
+        .hero-section h1 {
+            font-size: 28px;
+        }
+
+        .form-card {
+            padding: 25px 15px;
+        }
+
+        .benefits-card {
+            padding: 25px 15px;
+        }
+    }
+</style>
+
+<!-- Grid Background -->
+<div class="grid-background"></div>
+
+<!-- Page Wrapper -->
+<div class="dealership-page-wrapper">
+    <div class="main-wrapper">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="badge">
+                <i class="fas fa-star"></i> Özel Bayilik Fırsatı
+            </div>
+            <h1>Bölge Bayiliği Başvurusu</h1>
+            <p>Donuk depo işletmeleri için özel bayilik fırsatları. My Golden Food ile büyüyen dondurulmuş gıda pazarında yerinizi alın.</p>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Benefits Card -->
+            <div class="benefits-card">
+                <h3>
+                    <i class="fas fa-handshake"></i>
+                    Neden My Golden Food?
+                </h3>
+                <ul class="benefits-list">
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Özel bayilik programı donuk depo işletmeleri için</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Yüksek kaliteli dondurulmuş meyve ürünleri</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Geniş ürün yelpazesi ve karışık seçenekler</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Rekabetçi fiyatlandırma ve karlılık imkanı</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Profesyonel destek ve pazarlama yardımı</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>24 saat içinde hızlı dönüş garantisi</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Form Card -->
+            <div class="form-card">
+                <div class="form-header">
+                    <h2>Başvuru Formu</h2>
+                    <p>Lütfen aşağıdaki formu doldurarak bölge bayilik başvurunuzu yapın. Tüm bilgileriniz gizlilik içinde saklanacaktır.</p>
+                </div>
+
+                <form id="dealershipForm" novalidate>
+                    <!-- Firma Bilgileri -->
+                    <div class="form-section">
+                        <label class="input-label">
+                            Firma Adı <span class="required">*</span>
+                        </label>
+                        <input type="text" class="input-field" id="firmaAdi" name="firmaAdi" placeholder="Firma adınızı giriniz" required>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 25px;">
+                            <div class="input-group-modern">
+                                <label class="input-label">
+                                    Yetkili Kişi Adı <span class="required">*</span>
+                                </label>
+                                <input type="text" class="input-field" id="yetkiliKisi" name="yetkiliKisi" placeholder="Adınız ve soyadınız" required>
+                            </div>
+                            <div class="input-group-modern">
+                                <label class="input-label">
+                                    E-posta <span class="required">*</span>
+                                </label>
+                                <input type="email" class="input-field" id="email" name="email" placeholder="ornek@email.com" required>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 25px;">
+                            <div class="input-group-modern">
+                                <label class="input-label">
+                                    Telefon
+                                </label>
+                                <input type="tel" class="input-field" id="telefon" name="telefon" placeholder="05XX XXX XX XX">
+                            </div>
+                            <div class="input-group-modern">
+                                <label class="input-label">
+                                    Şehir/Bölge <span class="required">*</span>
+                                </label>
+                                <input type="text" class="input-field" id="sehir" name="sehir" placeholder="Örn: Ankara, İstanbul" required>
+                            </div>
+                        </div>
+
+                        <div class="input-group-modern" style="margin-top: 25px;">
+                            <label class="input-label">
+                                Donuk Depo Durumu <span class="required">*</span>
+                            </label>
+                            <select class="input-field" id="depoDurumu" name="depoDurumu" required>
+                                <option value="">Seçiniz...</option>
+                                <option value="Var">Var</option>
+                                <option value="Yok">Yok</option>
+                                <option value="Planlıyoruz">Planlıyoruz</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <!-- Ürün Seçimi -->
+                    <div class="form-section">
+                        <label class="input-label">
+                            İlgilendiğiniz Ürünler <span class="required">*</span>
+                        </label>
+                        <p style="font-size: 14px; color: rgba(255,255,255,0.5); margin-top: 5px; margin-bottom: 15px;">Birden fazla seçim yapabilirsiniz</p>
+                        
+                        <select class="input-field" id="secilenUrunler" name="secilenUrunler" style="pointer-events: auto;">
+                            <option value="">Seçiniz...</option>
+                            <option value="Diğerleri">Diğerleri</option>
+                            <option value="Frambuaz">Frambuaz</option>
+                            <option value="Yaban Mersini">Yaban Mersini</option>
+                            <option value="Çilek">Çilek</option>
+                            <option value="Vişne">Vişne</option>
+                            <option value="4'lü Karışık">4'lü Karışık</option>
+                            <option value="3'lü Karışık">3'lü Karışık</option>
+                        </select>
+                        
+                        <!-- Seçilen Ürünler Listesi -->
+                        <div id="selectedProductsList" style="margin-top: 15px; display: none;">
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px;" id="selectedProductsTags"></div>
+                        </div>
+                        
+                        <!-- Hidden input for selected products -->
+                        <input type="hidden" id="selectedProductsArray" name="selectedProductsArray" value="">
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <!-- Mesaj/Not -->
+                    <div class="form-section">
+                        <label class="input-label">
+                            Ek Mesaj/Not (Opsiyonel)
+                        </label>
+                        <textarea class="input-field" id="mesaj" name="mesaj" rows="4" placeholder="Eklemek istediğiniz bilgiler, sorularınız veya özel notlarınız..."></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="submit-section">
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane"></i>
+                            Başvuruyu Gönder
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    $(document).ready(function () {
+        // Form submit
+        $("#dealershipForm").submit(function (event) {
+            event.preventDefault();
+
+            // Validation
+            var firmaAdi = $("#firmaAdi").val().trim();
+            var yetkiliKisi = $("#yetkiliKisi").val().trim();
+            var email = $("#email").val().trim();
+            var telefon = $("#telefon").val().trim();
+            var sehir = $("#sehir").val().trim();
+            var depoDurumu = $("#depoDurumu").val();
+            
+            // Get selected products from hidden input
+            var selectedProducts = $('#selectedProductsArray').val();
+            var secilenUrunler = [];
+            if (selectedProducts && selectedProducts !== '') {
+                try {
+                    secilenUrunler = JSON.parse(selectedProducts);
+                } catch(e) {
+                    secilenUrunler = [];
+                }
+            }
+            
+            var mesaj = $("#mesaj").val().trim();
+
+            // Client-side validation
+            if (!firmaAdi || !yetkiliKisi || !email || !sehir || !depoDurumu) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Eksik Bilgi!',
+                    text: 'Lütfen tüm zorunlu alanları doldurunuz.',
+                    confirmButtonColor: '#963c94',
+                    confirmButtonText: 'Tamam'
+                });
+                return;
+            }
+
+            if (secilenUrunler.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Ürün Seçimi!',
+                    text: 'Lütfen en az bir ürün seçiniz.',
+                    confirmButtonColor: '#963c94',
+                    confirmButtonText: 'Tamam'
+                });
+                return;
+            }
+
+            // Email validation
+            var emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+            if (!emailRegex.test(email)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Geçersiz E-posta!',
+                    text: 'Lütfen geçerli bir e-posta adresi giriniz.',
+                    confirmButtonColor: '#963c94',
+                    confirmButtonText: 'Tamam'
+                });
+                return;
+            }
+
+            // Show loading
+            $("#loadingOverlay").css("display", "flex");
+
+            // Prepare form data
+            var formData = {
+                firmaAdi: firmaAdi,
+                yetkiliKisi: yetkiliKisi,
+                email: email,
+                telefon: telefon,
+                sehir: sehir,
+                depoDurumu: depoDurumu,
+                secilenUrunler: secilenUrunler,
+                mesaj: mesaj
+            };
+
+            // AJAX request
+            $.ajax({
+                type: "POST",
+                url: "/Bayilik/Submit",
+                traditional: true, // Array binding için gerekli
+                data: formData,
+                success: function (response) {
+                    $("#loadingOverlay").css("display", "none");
+                    
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Başarılı!',
+                            html: response.message,
+                            confirmButtonColor: '#963c94',
+                            confirmButtonText: 'Harika!',
+                            width: '500px'
+                        }).then(() => {
+                            // Reset form
+                            $("#dealershipForm")[0].reset();
+                            // Reset selected products
+                            window.selectedProducts = [];
+                            $('#selectedProductsArray').val('');
+                            updateSelectedProductsList();
+                            // Scroll to top
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Hata!',
+                            text: response.message,
+                            confirmButtonColor: '#963c94',
+                            confirmButtonText: 'Tamam'
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    $("#loadingOverlay").css("display", "none");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Sunucu Hatası!',
+                        text: 'Bir hata oluştu. Lütfen tekrar deneyiniz.',
+                        confirmButtonColor: '#963c94',
+                        confirmButtonText: 'Tamam'
+                    });
+                    console.error("Error:", error);
+                }
+            });
+        });
+
+        // Phone number formatting
+        $("#telefon").on("input", function() {
+            var value = $(this).val().replace(/\D/g, '');
+            if (value.length > 0) {
+                value = value.substring(0, 11);
+            }
+            $(this).val(value);
+        });
+
+        // Multiple Product Selection Handler - Global scope
+        window.selectedProducts = [];
+        
+        $('#secilenUrunler').on('change', function() {
+            var selectedValue = $(this).val();
+            
+            if (selectedValue && selectedValue !== '') {
+                // Check if product is already selected
+                if (window.selectedProducts.indexOf(selectedValue) === -1) {
+                    window.selectedProducts.push(selectedValue);
+                    updateSelectedProductsList();
+                    updateHiddenInput();
+                }
+                // Reset dropdown to "Seçiniz..."
+                $(this).val('');
+            }
+        });
+
+        function updateSelectedProductsList() {
+            var tagsContainer = $('#selectedProductsTags');
+            tagsContainer.empty();
+            
+            if (window.selectedProducts.length > 0) {
+                $('#selectedProductsList').show();
+                
+                window.selectedProducts.forEach(function(product, index) {
+                    var tag = $('<div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 15px; background: rgba(150, 60, 148, 0.2); border: 1px solid rgba(150, 60, 148, 0.4); border-radius: 20px; font-size: 13px; color: #ffffff;">' +
+                        '<span>' + product + '</span>' +
+                        '<button type="button" class="remove-product" data-index="' + index + '" style="background: none; border: none; color: #ffffff; cursor: pointer; padding: 0; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255, 255, 255, 0.2); font-size: 12px;">×</button>' +
+                        '</div>');
+                    tagsContainer.append(tag);
+                });
+            } else {
+                $('#selectedProductsList').hide();
+            }
+        }
+
+        function updateHiddenInput() {
+            $('#selectedProductsArray').val(JSON.stringify(window.selectedProducts));
+        }
+
+        // Remove product from selection
+        $(document).on('click', '.remove-product', function() {
+            var index = $(this).data('index');
+            window.selectedProducts.splice(index, 1);
+            updateSelectedProductsList();
+            updateHiddenInput();
+        });
+    });
+</script>
