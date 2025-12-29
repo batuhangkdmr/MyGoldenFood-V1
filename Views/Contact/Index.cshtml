@@ -52,37 +52,3 @@
         </div>
     </div>
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
-    $(document).ready(function () {
-        $("#contactForm").submit(function (event) {
-            event.preventDefault();
-
-            var formData = {
-                name: $("#name").val(),
-                email: $("#email").val(),
-                message: $("#message").val()
-            };
-
-            $.ajax({
-                type: "POST",
-                url: "/Contact/SendMessage",
-                data: formData,
-                success: function (response) {
-                    if (response.success) {
-                        Swal.fire("Başarılı!", response.message, "success");
-                        $("#contactForm")[0].reset();
-                    } else {
-                        Swal.fire("Hata!", response.message, "error");
-                    }
-                },
-                error: function () {
-                    Swal.fire("Hata!", "Sunucu hatası oluştu!", "error");
-                }
-            });
-        });
-    });
-</script>

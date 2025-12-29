@@ -3,7 +3,7 @@
 <footer class="text-white about-footer">
     <div class="container-fluid">
         <section class="footer-1">
-            <div class="row align-items-center text-center">
+            <div class="row align-items-start text-center">
                 <!-- Logo Alanı (Ortalanmış ve Mobil Uyumu) -->
                 <div class="col-lg-6 col-md-6 col-12 mb-4 mb-md-0 p-4">
                     <div class="footer-logo d-flex justify-content-center align-items-center flex-wrap">
@@ -17,34 +17,31 @@
                 </div>
 
                 <!-- Adres ve Sosyal Medya Alanı -->
-                <div class="col-lg-3 col-md-6 col-12 mb-4 mb-md-0 p-4">
-                    <h5 class="text-uppercase">@Html.T("Address")</h5>
+                <div class="col-lg-3 col-md-6 col-12 mb-4 mb-md-0 p-4 footer-section">
+                    <h5 class="text-uppercase footer-heading">@Html.T("Address")</h5>
                     <p>MY GOLDEN FOOD GIDA SAN.TİC A.Ş. İlkyerleşim Mah. 1938 Sk. No: 9C Yenimahalle / ANKARA</p>
-
-                    <div class="mb-4">
-                   @*      <a class="btn btn-dark btn-floating m-1" href="https://www.facebook.com/mygoldenfood" target="_blank" role="button" rel="noopener noreferrer">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a class="btn btn-dark btn-floating m-1" href="https://twitter.com/mygoldenfood" target="_blank" role="button" rel="noopener noreferrer">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a class="btn btn-dark btn-floating m-1" href="https://www.linkedin.com/company/mygoldenfood" target="_blank" role="button" rel="noopener noreferrer">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                        <a class="btn btn-dark btn-floating m-1" href="https://www.instagram.com/mygoldenfood" target="_blank" role="button" rel="noopener noreferrer">
-                            <i class="fab fa-instagram"></i>
-                        </a> *@
-                    </div>
                 </div>
 
                 <!-- İletişim Bilgileri -->
-                <div class="col-lg-3 col-md-6 col-12 mb-4 mb-md-5 p-4">
-                    <h5 class="text-uppercase">@Html.T("Contact")</h5>
-                    <ul class="list-unstyled mb-0">
-
-                        <a href="mailto:info@mygoldenfood.com" class="text-white">info@mygoldenfood.com</a>
-                        </li>
-                    </ul>
+                <div class="col-lg-3 col-md-6 col-12 mb-4 mb-md-5 p-4 footer-section">
+                    <h5 class="text-uppercase footer-heading">@Html.T("Contact")</h5>
+                    <div class="contact-info-modern">
+                        <div class="contact-item mb-3">
+                            <a href="mailto:info@mygoldenfood.com" class="text-white d-flex align-items-center justify-content-center justify-content-md-start">
+                                <i class="fas fa-envelope me-2" style="font-size: 18px; color: #ffc107;"></i>
+                                <span>info@mygoldenfood.com</span>
+                            </a>
+                        </div>
+                        <div class="contact-item">
+                            <a href="https://wa.me/905336352458" class="text-white d-flex align-items-center justify-content-center justify-content-md-start" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-whatsapp me-2" style="font-size: 20px; color: #25d366;"></i>
+                                <div class="d-flex flex-column">
+                                    <span style="font-size: 12px; opacity: 0.8;">WhatsApp iletişim hattı</span>
+                                    <span style="font-weight: 500;">+90 533 635 2458</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -59,18 +56,52 @@
 
 <!-- Mobilde Logoları Alt Alta Getiren CSS -->
 <style>
+    .footer-section {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .footer-heading {
+        margin-bottom: 1rem !important;
+        height: 2.5rem;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        line-height: 1.2;
+        text-align: center;
+    }
+
+    .contact-info-modern .contact-item a {
+        transition: all 0.3s ease;
+        padding: 8px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+    }
+
+    .contact-info-modern .contact-item a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: translateX(5px);
+    }
+
+    .contact-info-modern .contact-item a i {
+        min-width: 24px;
+        text-align: center;
+    }
+
     @@media (max-width: 768px) {
-        .footer-logo
+        .footer-logo {
+            flex-direction: column !important; /* Mobilde alt alta gelsin */
+        }
 
-    {
-        flex-direction: column !important; /* Mobilde alt alta gelsin */
-    }
+        .footer-logo img {
+            width: 80% !important; /* Mobilde boyutunu küçült */
+            margin-bottom: 10px; /* Alt boşluk ekleyelim */
+        }
 
-    .footer-logo img {
-        width: 80% !important; /* Mobilde boyutunu küçült */
-        margin-bottom: 10px; /* Alt boşluk ekleyelim */
-    }
-
+        .contact-info-modern .contact-item a {
+            justify-content: center !important;
+        }
     }
 </style>
 
