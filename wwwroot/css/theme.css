@@ -46,6 +46,22 @@ html[lang="tr"] .text-white p {
     -webkit-font-feature-settings: "kern" 1, "liga" 1;
 }
 
+/* Türkçe sayfalarda sample-card ve section-5 için */
+html[lang="tr"] .sample-card h2,
+html[lang="tr"] .sample-card h3,
+html[lang="tr"] .sample-card h4,
+html[lang="tr"] .sample-card h5,
+html[lang="tr"] .sample-card h6,
+html[lang="tr"] .section-5 h2,
+html[lang="tr"] .section-5 h3,
+html[lang="tr"] .section-5 h4,
+html[lang="tr"] .section-5 h5,
+html[lang="tr"] .section-5 h6 {
+    text-transform: none !important;
+    font-feature-settings: "kern" 1, "liga" 1;
+    -webkit-font-feature-settings: "kern" 1, "liga" 1;
+}
+
 body {
     background-color: black;
     font-family: "Montserrat", Sans-serif;
@@ -1055,7 +1071,7 @@ footer {
     }
 
     .section-1 .kahve-1 {
-        width: 33%;
+        width: 42%;
         position: absolute;
         bottom: 0;
         left: 0;
@@ -1069,10 +1085,10 @@ footer {
     }
 
     .section-1 .pasta-1 {
-        width: 24%;
+        width: 15%;
         position: absolute;
         bottom: 0;
-        left: 25%;
+        left: 31%;
     }
 
     .section-1 .pasta-2 {
@@ -1101,7 +1117,7 @@ footer {
         width: 27%;
         position: absolute;
         bottom: 0;
-        right: 25%;
+        right: 27%;
     }
 
 
@@ -2000,10 +2016,10 @@ footer {
     }
 
     .section-1 .pasta-1 {
-        width: 50%;
+        width: 35%;
         position: absolute;
         bottom: 0;
-        left:50%;
+        left:55%;
     }
 
     .section-1 .pasta-2 {
@@ -2029,10 +2045,10 @@ footer {
     }
 
     .section-1 .pasta-5 {
-        width: 45%;
+        width: 61%;
         position: absolute;
         bottom: 0%;
-        right: 55%;
+        right: 41%;
     }
 
     .section-4 {
