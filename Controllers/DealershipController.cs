@@ -31,7 +31,9 @@ namespace MyGoldenFood.Controllers
             string sehir,
             string depoDurumu,
             string[] secilenUrunler,
-            string mesaj)
+            string mesaj,
+            bool kvkkConsent,
+            bool marketingConsent)
         {
             try
             {
@@ -51,6 +53,11 @@ namespace MyGoldenFood.Controllers
                     return Json(new { success = false, message = "Lütfen en az bir ürün seçiniz." });
                 }
 
+                if (!kvkkConsent)
+                {
+                    return Json(new { success = false, message = "KVKK aydınlatma metnini onaylamanız gerekmektedir." });
+                }
+
                 // Mail gönder
                 var result = await _mailService.SendDealershipApplicationAsync(
                     firmaAdi,
@@ -60,7 +67,9 @@ namespace MyGoldenFood.Controllers
                     sehir,
                     depoDurumu,
                     secilenUrunler,
-                    mesaj
+                    mesaj,
+                    kvkkConsent,
+                    marketingConsent
                 );
 
                 if (result)

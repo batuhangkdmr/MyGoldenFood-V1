@@ -79,11 +79,12 @@
         border: 1px solid rgba(150, 60, 148, 0.3);
         border-radius: 50px;
         color: #963c94;
-        font-size: 12px;
+        font-size: 18px;
         font-weight: 600;
-        text-transform: uppercase;
+        /* text-transform: uppercase; - Türkçe karakterler için kaldırıldı, translation'da zaten uppercase */
         letter-spacing: 1px;
         margin-bottom: 30px;
+        box-shadow: 10px 5px 5px #963c94;
         animation: pulse 2s ease-in-out infinite;
     }
 
@@ -102,7 +103,7 @@
     }
 
     .hero-section p {
-        font-size: 18px;
+        font-size: 12px;
         color: rgba(255, 255, 255, 0.7);
         max-width: 600px;
         margin: 0 auto;
@@ -176,7 +177,7 @@
     .benefits-list li {
         padding: 15px 0;
         color: rgba(255, 255, 255, 0.8);
-        font-size: 15px;
+        font-size: 16px;
         display: flex;
         align-items: center;
         gap: 12px;
@@ -238,7 +239,7 @@
     }
 
     .form-header p {
-        font-size: 15px;
+        font-size: 12px;
         color: rgba(255, 255, 255, 0.6);
         line-height: 1.6;
     }
@@ -265,7 +266,7 @@
         font-weight: 600;
         color: rgba(255, 255, 255, 0.9);
         margin-bottom: 10px;
-        text-transform: uppercase;
+        /* text-transform: uppercase; - Türkçe karakterler için kaldırıldı, translation'da zaten uppercase */
         letter-spacing: 0.5px;
     }
 
@@ -277,7 +278,7 @@
     .input-field {
         width: 100%;
         padding: 16px 20px;
-        font-size: 15px;
+        font-size: 12px;
         color: #ffffff !important;
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -297,6 +298,7 @@
     .input-field option {
         background: #1a1a1a;
         color: #ffffff;
+        font-size: 12px;
     }
 
     .input-field:hover:not(:focus) {
@@ -305,6 +307,7 @@
 
     .input-field::placeholder {
         color: rgba(255, 255, 255, 0.4);
+        font-size: 10px;
     }
 
     select.input-field {
@@ -321,6 +324,7 @@
         background: #1a1a1a;
         color: #ffffff;
         padding: 10px;
+        font-size: 12px;
     }
 
     textarea.input-field {
@@ -329,7 +333,102 @@
         font-family: inherit;
     }
 
+    /* Consent Section */
+    .consent-section {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 25px 24px;
+        margin-top: 30px;
+    }
 
+    .consent-section h4 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 10px;
+    }
+
+    .consent-section p {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 15px;
+        line-height: 1.6;
+    }
+
+    .consent-checkbox {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        margin-bottom: 12px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 12px;
+        line-height: 1.6;
+        cursor: pointer;
+    }
+
+    .consent-checkbox input {
+        width: 18px;
+        height: 18px;
+        margin-top: 3px;
+        accent-color: #963c94;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .consent-checkbox span {
+        flex: 1;
+    }
+
+    .consent-link {
+        color: #c77ad0;
+        text-decoration: underline;
+        background: none;
+        border: none;
+        padding: 0;
+        font: inherit;
+        cursor: pointer;
+    }
+
+    .consent-link:hover {
+        color: #ffffff;
+    }
+
+    .kvkk-modal-text {
+        text-align: left;
+        line-height: 1.8;
+    }
+
+    /* KVKK Modal mobil görünüm */
+    @@media (max-width: 768px) {
+        .kvkk-modal {
+            margin: 20px !important;
+            max-width: calc(100% - 40px) !important;
+            width: calc(100% - 40px) !important;
+        }
+
+        .kvkk-modal .swal2-title {
+            font-size: 16px !important;
+        }
+
+        .kvkk-modal-text h4 {
+            font-size: 14px !important;
+        }
+
+        .kvkk-modal-text p {
+            font-size: 12px !important;
+        }
+
+        .kvkk-modal-text ul {
+            font-size: 12px !important;
+        }
+
+        .kvkk-modal-text li {
+            font-size: 12px !important;
+        }
+    }
+
+    
     /* Submit Button */
     .submit-section {
         margin-top: 50px;
@@ -442,8 +541,20 @@
         }
 
         .hero-section p {
-            font-size: 16px;
+            font-size: 12px;
             text-align: start;
+        }
+
+        .benefits-list li {
+            font-size: 12px;
+        }
+
+        .form-header p {
+            font-size: 12px;
+        }
+
+        .input-field {
+            font-size: 12px;
         }
 
         .form-card {
@@ -461,15 +572,35 @@
         .benefits-card h3{
             font-size: 20px;
         }
+
+        .consent-section {
+            padding: 20px;
+        }
     }
 
     @@media (max-width: 480px) {
         .main-wrapper {
-            padding: 30px 15px;
+            padding: 50px 15px;
         }
 
         .hero-section h1 {
             font-size: 28px;
+        }
+
+        .hero-section p {
+            font-size: 12px;
+        }
+
+        .benefits-list li {
+            font-size: 12px;
+        }
+
+        .form-header p {
+            font-size: 12px;
+        }
+
+        .input-field {
+            font-size: 12px;
         }
 
         .form-card {
@@ -478,6 +609,10 @@
 
         .benefits-card {
             padding: 25px 15px;
+        }
+
+        .consent-section {
+            padding: 18px;
         }
     }
 </style>
@@ -491,10 +626,9 @@
         <!-- Hero Section -->
         <div class="hero-section">
             <div class="badge">
-                <i class="fas fa-star"></i> Özel Bayilik Fırsatı
+                <i class="fas fa-star"></i> @Html.T("RegionalDealershipApplication")
             </div>
-            <h1>Bölge Bayiliği Başvurusu</h1>
-            <p>Donuk depo işletmeleri için özel bayilik fırsatları. My Golden Food ile büyüyen dondurulmuş gıda pazarında yerinizi alın.</p>
+            <p>@Html.T("DealershipDescription")</p>
         </div>
 
         <!-- Content Grid -->
@@ -503,32 +637,32 @@
             <div class="benefits-card">
                 <h3>
                     <i class="fas fa-handshake"></i>
-                    Neden My Golden Food?
+                    @Html.T("WhyMyGoldenFood")
                 </h3>
                 <ul class="benefits-list">
                     <li>
                         <i class="fas fa-check-circle"></i>
-                        <span>Özel bayilik programı donuk depo işletmeleri için</span>
+                        <span>@Html.T("SpecialDealershipProgram")</span>
                     </li>
                     <li>
                         <i class="fas fa-check-circle"></i>
-                        <span>Yüksek kaliteli dondurulmuş meyve ürünleri</span>
+                        <span>@Html.T("HighQualityFrozenFruits")</span>
                     </li>
                     <li>
                         <i class="fas fa-check-circle"></i>
-                        <span>Geniş ürün yelpazesi ve karışık seçenekler</span>
+                        <span>@Html.T("WideProductRange")</span>
                     </li>
                     <li>
                         <i class="fas fa-check-circle"></i>
-                        <span>Rekabetçi fiyatlandırma ve karlılık imkanı</span>
+                        <span>@Html.T("CompetitivePricing")</span>
                     </li>
                     <li>
                         <i class="fas fa-check-circle"></i>
-                        <span>Profesyonel destek ve pazarlama yardımı</span>
+                        <span>@Html.T("ProfessionalSupport")</span>
                     </li>
                     <li>
                         <i class="fas fa-check-circle"></i>
-                        <span>24 saat içinde hızlı dönüş garantisi</span>
+                        <span>@Html.T("QuickResponse24h")</span>
                     </li>
                 </ul>
             </div>
@@ -536,28 +670,28 @@
             <!-- Form Card -->
             <div class="form-card">
                 <div class="form-header">
-                    <h2>Başvuru Formu</h2>
-                    <p>Lütfen aşağıdaki formu doldurarak bölge bayilik başvurunuzu yapın. Tüm bilgileriniz gizlilik içinde saklanacaktır.</p>
+                    <h2>@Html.T("ApplicationForm")</h2>
+                    <p>@Html.T("ApplicationFormDescription")</p>
                 </div>
 
                 <form id="dealershipForm" novalidate>
                     <!-- Firma Bilgileri -->
                     <div class="form-section">
                         <label class="input-label">
-                            Firma Adı <span class="required">*</span>
+                            @Html.T("CompanyName") <span class="required">*</span>
                         </label>
-                        <input type="text" class="input-field" id="firmaAdi" name="firmaAdi" placeholder="Firma adınızı giriniz" required>
+                        <input type="text" class="input-field" id="firmaAdi" name="firmaAdi" placeholder="@Html.T("EnterCompanyName")" required>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 25px;">
                             <div class="input-group-modern">
                                 <label class="input-label">
-                                    Yetkili Kişi Adı <span class="required">*</span>
+                                    @Html.T("AuthorizedPersonName") <span class="required">*</span>
                                 </label>
-                                <input type="text" class="input-field" id="yetkiliKisi" name="yetkiliKisi" placeholder="Adınız ve soyadınız" required>
+                                <input type="text" class="input-field" id="yetkiliKisi" name="yetkiliKisi" placeholder="@Html.T("EnterFullName")" required>
                             </div>
                             <div class="input-group-modern">
                                 <label class="input-label">
-                                    E-posta <span class="required">*</span>
+                                    @Html.T("Email") <span class="required">*</span>
                                 </label>
                                 <input type="email" class="input-field" id="email" name="email" placeholder="ornek@email.com" required>
                             </div>
@@ -566,27 +700,27 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 25px;">
                             <div class="input-group-modern">
                                 <label class="input-label">
-                                    Telefon
+                                    @Html.T("Phone")
                                 </label>
-                                <input type="tel" class="input-field" id="telefon" name="telefon" placeholder="05XX XXX XX XX">
+                                <input type="tel" class="input-field" id="telefon" name="telefon" placeholder="@Html.T("PhonePlaceholder")">
                             </div>
                             <div class="input-group-modern">
                                 <label class="input-label">
-                                    Şehir/Bölge <span class="required">*</span>
+                                    @Html.T("CityRegion") <span class="required">*</span>
                                 </label>
-                                <input type="text" class="input-field" id="sehir" name="sehir" placeholder="Örn: Ankara, İstanbul" required>
+                                <input type="text" class="input-field" id="sehir" name="sehir" placeholder="@Html.T("CityPlaceholder")" required>
                             </div>
                         </div>
 
                         <div class="input-group-modern" style="margin-top: 25px;">
                             <label class="input-label">
-                                Donuk Depo Durumu <span class="required">*</span>
+                                @Html.T("ColdStorageStatus") <span class="required">*</span>
                             </label>
                             <select class="input-field" id="depoDurumu" name="depoDurumu" required>
-                                <option value="">Seçiniz...</option>
-                                <option value="Var">Var</option>
-                                <option value="Yok">Yok</option>
-                                <option value="Planlıyoruz">Planlıyoruz</option>
+                                <option value="">@Html.T("Select")</option>
+                                <option value="Var">@Html.T("YesOption")</option>
+                                <option value="Yok">@Html.T("NoOption")</option>
+                                <option value="Planlıyoruz">@Html.T("Planning")</option>
                             </select>
                         </div>
                     </div>
@@ -596,19 +730,19 @@
                     <!-- Ürün Seçimi -->
                     <div class="form-section">
                         <label class="input-label">
-                            İlgilendiğiniz Ürünler <span class="required">*</span>
+                            @Html.T("InterestedProducts") <span class="required">*</span>
                         </label>
-                        <p style="font-size: 14px; color: rgba(255,255,255,0.5); margin-top: 5px; margin-bottom: 15px;">Birden fazla seçim yapabilirsiniz</p>
+                        <p style="font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 5px; margin-bottom: 15px;">@Html.T("MultipleSelectionNote")</p>
                         
                         <select class="input-field" id="secilenUrunler" name="secilenUrunler" style="pointer-events: auto;">
-                            <option value="">Seçiniz...</option>
-                            <option value="Diğerleri">Diğerleri</option>
-                            <option value="Frambuaz">Frambuaz</option>
-                            <option value="Yaban Mersini">Yaban Mersini</option>
-                            <option value="Çilek">Çilek</option>
-                            <option value="Vişne">Vişne</option>
-                            <option value="4'lü Karışık">4'lü Karışık</option>
-                            <option value="3'lü Karışık">3'lü Karışık</option>
+                            <option value="">@Html.T("Select")</option>
+                            <option value="@Html.T("Others")">@Html.T("Others")</option>
+                            <option value="@Html.T("Raspberry")">@Html.T("Raspberry")</option>
+                            <option value="@Html.T("Blueberry")">@Html.T("Blueberry")</option>
+                            <option value="@Html.T("Strawberry")">@Html.T("Strawberry")</option>
+                            <option value="@Html.T("Cherry")">@Html.T("Cherry")</option>
+                            <option value="@Html.T("4Mix")">@Html.T("4Mix")</option>
+                            <option value="@Html.T("3Mix")">@Html.T("3Mix")</option>
                         </select>
                         
                         <!-- Seçilen Ürünler Listesi -->
@@ -625,16 +759,36 @@
                     <!-- Mesaj/Not -->
                     <div class="form-section">
                         <label class="input-label">
-                            Ek Mesaj/Not (Opsiyonel)
+                            @Html.T("AdditionalMessage")
                         </label>
-                        <textarea class="input-field" id="mesaj" name="mesaj" rows="4" placeholder="Eklemek istediğiniz bilgiler, sorularınız veya özel notlarınız..."></textarea>
+                        <textarea class="input-field" id="mesaj" name="mesaj" rows="4" placeholder="@Html.T("AdditionalMessagePlaceholder")"></textarea>
+                    </div>
+
+                    <div class="form-section consent-section">
+                        <h4>@Html.T("ConsentSectionTitle")</h4>
+                        <p>@Html.T("ConsentSectionDescription")</p>
+
+                        <label class="consent-checkbox" for="kvkkConsent">
+                            <input type="checkbox" id="kvkkConsent" name="kvkkConsent" required>
+                            <span>
+                                @Html.Raw(string.Format(
+                                    Html.T("KvkkConsentLabel"),
+                                    $"<button type=\"button\" class=\"consent-link kvkk-trigger\">{Html.T("KvkkTextLink")}</button>"
+                                ))
+                            </span>
+                        </label>
+
+                        <label class="consent-checkbox" for="marketingConsent">
+                            <input type="checkbox" id="marketingConsent" name="marketingConsent">
+                            <span>@Html.T("MarketingConsentLabel")</span>
+                        </label>
                     </div>
 
                     <!-- Submit Button -->
                     <div class="submit-section">
                         <button type="submit" class="submit-btn">
                             <i class="fas fa-paper-plane"></i>
-                            Başvuruyu Gönder
+                            @Html.T("SubmitApplication")
                         </button>
                     </div>
                 </form>
@@ -653,7 +807,45 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+    // Load translations
+    var currentLang = '@System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName';
+    var translations = {};
+    
+    $.getJSON('/translations/' + currentLang + '.json')
+        .done(function(data) {
+            translations = data;
+        })
+        .fail(function() {
+            // Fallback to Turkish
+            $.getJSON('/translations/tr.json')
+                .done(function(data) {
+                    translations = data;
+                });
+        });
+
+    function T(key) {
+        return translations[key] || key;
+    }
+
     $(document).ready(function () {
+        // KVKK popup
+        $(document).on('click', '.kvkk-trigger', function (event) {
+            event.preventDefault();
+            var isMobile = window.innerWidth <= 768;
+            Swal.fire({
+                title: T('KvkkModalTitle'),
+                html: T('KvkkModalContent'),
+                customClass: {
+                    popup: 'kvkk-modal',
+                    htmlContainer: 'kvkk-modal-text'
+                },
+                confirmButtonColor: '#963c94',
+                confirmButtonText: T('OK'),
+                width: isMobile ? '90%' : '650px',
+                focusConfirm: false
+            });
+        });
+
         // Form submit
         $("#dealershipForm").submit(function (event) {
             event.preventDefault();
@@ -678,15 +870,17 @@
             }
             
             var mesaj = $("#mesaj").val().trim();
+            var kvkkConsent = $("#kvkkConsent").is(":checked");
+            var marketingConsent = $("#marketingConsent").is(":checked");
 
             // Client-side validation
             if (!firmaAdi || !yetkiliKisi || !email || !sehir || !depoDurumu) {
                 Swal.fire({
                     icon: 'warning',
-                    title: 'Eksik Bilgi!',
-                    text: 'Lütfen tüm zorunlu alanları doldurunuz.',
+                    title: T('MissingInfo'),
+                    text: T('PleaseFillAllRequiredFields'),
                     confirmButtonColor: '#963c94',
-                    confirmButtonText: 'Tamam'
+                    confirmButtonText: T('OK')
                 });
                 return;
             }
@@ -694,10 +888,21 @@
             if (secilenUrunler.length === 0) {
                 Swal.fire({
                     icon: 'warning',
-                    title: 'Ürün Seçimi!',
-                    text: 'Lütfen en az bir ürün seçiniz.',
+                    title: T('ProductSelection'),
+                    text: T('PleaseSelectAtLeastOneProduct'),
                     confirmButtonColor: '#963c94',
-                    confirmButtonText: 'Tamam'
+                    confirmButtonText: T('OK')
+                });
+                return;
+            }
+
+            if (!kvkkConsent) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: T('ConsentRequired'),
+                    text: T('PleaseAcceptKvkk'),
+                    confirmButtonColor: '#963c94',
+                    confirmButtonText: T('OK')
                 });
                 return;
             }
@@ -707,10 +912,10 @@
             if (!emailRegex.test(email)) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Geçersiz E-posta!',
-                    text: 'Lütfen geçerli bir e-posta adresi giriniz.',
+                    title: T('InvalidEmail'),
+                    text: T('PleaseEnterValidEmail'),
                     confirmButtonColor: '#963c94',
-                    confirmButtonText: 'Tamam'
+                    confirmButtonText: T('OK')
                 });
                 return;
             }
@@ -727,7 +932,9 @@
                 sehir: sehir,
                 depoDurumu: depoDurumu,
                 secilenUrunler: secilenUrunler,
-                mesaj: mesaj
+                mesaj: mesaj,
+                kvkkConsent: kvkkConsent,
+                marketingConsent: marketingConsent
             };
 
             // AJAX request
@@ -742,10 +949,10 @@
                     if (response.success) {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Başarılı!',
+                            title: T('Success'),
                             html: response.message,
                             confirmButtonColor: '#963c94',
-                            confirmButtonText: 'Harika!',
+                            confirmButtonText: T('Great'),
                             width: '500px'
                         }).then(() => {
                             // Reset form
@@ -760,10 +967,10 @@
                     } else {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Hata!',
+                            title: T('Error'),
                             text: response.message,
                             confirmButtonColor: '#963c94',
-                            confirmButtonText: 'Tamam'
+                            confirmButtonText: T('OK')
                         });
                     }
                 },
@@ -771,10 +978,10 @@
                     $("#loadingOverlay").css("display", "none");
                     Swal.fire({
                         icon: 'error',
-                        title: 'Sunucu Hatası!',
-                        text: 'Bir hata oluştu. Lütfen tekrar deneyiniz.',
+                        title: T('ServerError'),
+                        text: T('AnErrorOccurred'),
                         confirmButtonColor: '#963c94',
-                        confirmButtonText: 'Tamam'
+                        confirmButtonText: T('OK')
                     });
                     console.error("Error:", error);
                 }
@@ -816,7 +1023,7 @@
                 $('#selectedProductsList').show();
                 
                 window.selectedProducts.forEach(function(product, index) {
-                    var tag = $('<div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 15px; background: rgba(150, 60, 148, 0.2); border: 1px solid rgba(150, 60, 148, 0.4); border-radius: 20px; font-size: 13px; color: #ffffff;">' +
+                    var tag = $('<div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 15px; background: rgba(150, 60, 148, 0.2); border: 1px solid rgba(150, 60, 148, 0.4); border-radius: 20px; font-size: 12px; color: #ffffff;">' +
                         '<span>' + product + '</span>' +
                         '<button type="button" class="remove-product" data-index="' + index + '" style="background: none; border: none; color: #ffffff; cursor: pointer; padding: 0; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255, 255, 255, 0.2); font-size: 12px;">×</button>' +
                         '</div>');

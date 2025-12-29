@@ -136,7 +136,31 @@ namespace MyGoldenFood
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            
+            // 📦 Static Files Cache Ayarları - Cache-busting için
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    // CSS, JS, ve görsel dosyaları için cache ayarları
+                    var path = ctx.File.Name.ToLower();
+                    if (path.EndsWith(".css") || path.EndsWith(".js") || 
+                        path.EndsWith(".jpg") || path.EndsWith(".jpeg") || 
+                        path.EndsWith(".png") || path.EndsWith(".gif") || 
+                        path.EndsWith(".svg") || path.EndsWith(".webp"))
+                    {
+                        // Cache'i 1 yıl yap ama her güncellemede yenilenmesi için version kullanılacak
+                        ctx.Context.Response.Headers["Cache-Control"] = "public, max-age=31536000";
+                        ctx.Context.Response.Headers["Expires"] = System.DateTime.UtcNow.AddYears(1).ToString("R");
+                    }
+                    else
+                    {
+                        // Diğer dosyalar için kısa cache
+                        ctx.Context.Response.Headers["Cache-Control"] = "public, max-age=3600";
+                    }
+                }
+            });
+            
             app.UseRouting();
             
             // 🌐 Session support for language switching

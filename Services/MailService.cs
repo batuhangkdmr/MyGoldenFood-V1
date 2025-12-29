@@ -172,7 +172,9 @@ namespace MyGoldenFood.Services
             string sehir,
             string depoDurumu,
             string[] secilenUrunler,
-            string mesaj)
+            string mesaj,
+            bool kvkkConsent,
+            bool marketingConsent)
         {
             try
             {
@@ -231,6 +233,9 @@ namespace MyGoldenFood.Services
                     ? "" 
                     : $"<div style=\"background-color: #e3f2fd; padding: 15px; border-left: 4px solid #2196F3; margin: 20px 0;\"><strong>Mesaj/Not:</strong><br>{HtmlEncode(mesaj).Replace("\n", "<br>")}</div>";
 
+                var kvkkStatus = kvkkConsent ? "Onaylandı" : "Onaylanmadı";
+                var marketingStatus = marketingConsent ? "Onaylandı" : "Onaylanmadı";
+
                 // HTML e-posta içeriği - Tüm kullanıcı girdileri HTML encoded
                 var emailBody = "<p><strong>Yeni Bölge Bayilik Başvurusu</strong></p>" +
                     "<table style=\"width: 100%; border-collapse: collapse; margin: 20px 0;\">" +
@@ -252,6 +257,11 @@ namespace MyGoldenFood.Services
                     $"{urunListesi}" +
                     "</div>" +
                     mesajHtml +
+                    "<div style=\"background-color: #fff3cd; padding: 15px; border-left: 4px solid #ff9800; margin: 20px 0;\">" +
+                    "<strong>Onaylar:</strong><br>" +
+                    $"KVKK Onayı: <span style=\"font-weight:600;\">{kvkkStatus}</span><br>" +
+                    $"Pazarlama İzni: <span style=\"font-weight:600;\">{marketingStatus}</span>" +
+                    "</div>" +
                     $"<p style=\"text-align: center; margin-top: 30px; color: #777; font-size: 12px;\">Bu e-posta My Golden Food web sitesinden otomatik olarak gönderilmiştir.<br>Tarih: {DateTime.Now:dd.MM.yyyy HH:mm}</p>";
 
                 emailMessage.Body = new TextPart(TextFormat.Html)
