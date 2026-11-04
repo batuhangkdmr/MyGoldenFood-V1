@@ -73,12 +73,36 @@
         "priceRange": "$$"
     }
     </script>
+    
+    <!-- Schema Markup - WebPage -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "WebPage",
+        "name": "My Golden Food - Premium Dondurulmuş Gıda Çözümleri",
+        "description": "Premium dondurulmuş gıda çözümleri sunuyoruz. Kaliteli donuk gıda ürünleri, flash freezing teknolojisi ile tazelik garantisi.",
+        "url": "https://mygoldenfood.com",
+        "inLanguage": "tr-TR",
+        "isPartOf": {
+            "@@type": "WebSite",
+            "name": "My Golden Food",
+            "url": "https://mygoldenfood.com"
+        },
+        "about": {
+            "@@type": "Organization",
+            "name": "My Golden Food",
+            "description": "Premium dondurulmuş gıda çözümleri"
+        },
+        "primaryImageOfPage": {
+            "@@type": "ImageObject",
+            "url": "https://res.cloudinary.com/dbhogeepn/image/upload/v1757011155/3lu-karisik-ormanmeyvesi_iwmlp2.png"
+        }
+    }
+    </script>
 </head>
 
-<!-- Ana H1 Başlık - SEO için kritik -->
-<h1 class="seo-main-title" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
-    My Golden Food - Türkiye'nin Önde Gelen Dondurulmuş Gıda Tedarikçisi | Donuk Gıda Ürünleri
-</h1>
+<!-- Breadcrumb -->
+@await Html.PartialAsync("_BreadcrumbPartial")
 
 
 <!-- Paylaşılamayan Lezzet - Gizli -->
@@ -101,7 +125,7 @@
 
 <section class="section-1">
     <div class="metin-1 animate__animated animate__fadeInDown animate__slow animate__delay-1s">
-        <p>@Html.T("WelcomeMessage")</p>
+        <h1 style="font-size: inherit; font-weight: inherit; margin: 0; padding: 0; display: block;">@Html.T("WelcomeMessage")</h1>
         <p>@Html.T("WelcomeDescription")</p>
     </div>
 

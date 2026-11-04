@@ -15,7 +15,24 @@
 <meta name="robots" content="index, follow">
 
 <div class="container text-center mt-5">
-        @*     <h1 class="mb-5 colorrenk">@Html.T("RecipesAndBenefits")</h1> *@
+        @using MyGoldenFood.Models
+@{
+    ViewData["BreadcrumbItems"] = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem { Text = "Ana Sayfa", Url = "/" },
+        new BreadcrumbItem { Text = "Tarifler ve Faydaları", Url = "/tariflervefaydalari" }
+    };
+}
+
+<!-- Breadcrumb -->
+@await Html.PartialAsync("_BreadcrumbPartial")
+
+<div class="container" style="padding-top: 20px; padding-bottom: 20px;">
+    <h1 class="text-center text-white mb-5" style="font-size: 2.5rem; font-weight: 700; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+        @Html.T("RecipesAndBenefits")
+    </h1>
+</div>
+
     <div class="row justify-content-center">
         <div class="col-md-6 col-sm-12">
             <a href="/tarifler" class="recipe-link">

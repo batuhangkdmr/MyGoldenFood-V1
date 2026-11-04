@@ -130,6 +130,16 @@ namespace MyGoldenFood.Controllers
             ViewBag.HasCategories = categories.Any();
             ViewBag.FirstCategoryName = "Tüm Kategoriler";
             ViewBag.CloudinaryService = _cloudinaryService; // 🚀 Responsive resimler için
+            
+            // SEO Bilgileri
+            ViewData["SeoTitle"] = "Dondurulmuş Gıda Tarifleri | Lezzetli Yemek Tarifleri | My Golden Food";
+            ViewData["SeoDescription"] = "Dondurulmuş gıda ile lezzetli tarifler. My Golden Food dondurulmuş meyve ve sebzeleri ile hazırlayabileceğiniz pratik ve sağlıklı yemek tarifleri. Kolay, hızlı ve lezzetli tarifler.";
+            ViewData["SeoKeywords"] = "dondurulmuş gıda tarifleri, donuk gıda tarifleri, dondurulmuş meyve tarifleri, dondurulmuş sebze tarifleri, pratik yemek tarifleri, sağlıklı tarifler, my golden food tarifleri";
+            ViewData["CanonicalUrl"] = "https://mygoldenfood.com/tarifler";
+            ViewData["OgTitle"] = "Dondurulmuş Gıda Tarifleri | Lezzetli Yemek Tarifleri";
+            ViewData["OgDescription"] = "Dondurulmuş gıda ile lezzetli tarifler. Pratik ve sağlıklı yemek tarifleri.";
+            ViewData["OgImage"] = "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png";
+            ViewData["OgUrl"] = "https://mygoldenfood.com/tarifler";
 
             return View(categories);
         }

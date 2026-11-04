@@ -1,0 +1,89 @@
+@using MyGoldenFood.Models
+@{
+    var breadcrumbItems = ViewData["BreadcrumbItems"] as List<BreadcrumbItem> ?? new List<BreadcrumbItem>();
+    
+    // Eğer breadcrumb yoksa, varsayılan olarak ana sayfa ekle
+    if (!breadcrumbItems.Any())
+    {
+        breadcrumbItems.Add(new BreadcrumbItem { Text = "Ana Sayfa", Url = "/" });
+    }
+}
+
+@if (breadcrumbItems.Any())
+{
+    <!-- Breadcrumb - SEO için görünmez ama HTML'de mevcut -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+        <div class="container">
+            <ol class="breadcrumb mb-0" style="background: transparent; padding: 0; margin: 0;">
+                @for (int i = 0; i < breadcrumbItems.Count; i++)
+                {
+                    var item = breadcrumbItems[i];
+                    var isLast = i == breadcrumbItems.Count - 1;
+                    
+                    if (isLast)
+                    {
+                        <li class="breadcrumb-item active text-white" aria-current="page" style="color: #ffc107 !important;">
+                            @item.Text
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="breadcrumb-item">
+                            <a href="@item.Url" class="text-white-50" style="text-decoration: none; transition: color 0.3s;">
+                                @item.Text
+                            </a>
+                        </li>
+                    }
+                }
+            </ol>
+        </div>
+    </nav>
+    
+    <!-- Breadcrumb Schema.org -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "BreadcrumbList",
+        "itemListElement": [
+            @for (int i = 0; i < breadcrumbItems.Count; i++)
+            {
+                var item = breadcrumbItems[i];
+                var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
+                var fullUrl = item.Url.StartsWith("http") ? item.Url : $"{baseUrl}{item.Url}";
+                <text>
+                {
+                    "@@type": "ListItem",
+                    "position": @(i + 1),
+                    "name": "@item.Text",
+                    "item": "@fullUrl"
+                }@(i < breadcrumbItems.Count - 1 ? "," : "")
+                </text>
+            }
+        ]
+    }
+    </script>
+}
+
+
+<style>
+    /* Breadcrumb görsel olarak gizlendi ama SEO için HTML'de mevcut */
+    .breadcrumb-nav {
+        position: absolute;
+        left: -9999px;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        font-size: 14px;
+    }
+    
+    .breadcrumb-item a:hover {
+        color: #ffc107 !important;
+    }
+    
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: "›";
+        color: #ffc107;
+        padding: 0 8px;
+    }
+</style>
+

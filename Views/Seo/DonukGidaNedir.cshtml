@@ -1,0 +1,359 @@
+@using MyGoldenFood.Models
+@using MyGoldenFood.Services
+
+@{
+    ViewData["Title"] = ViewData["SeoTitle"] ?? "Donuk Gıda Nedir? | My Golden Food";
+}
+
+<!-- Breadcrumb -->
+@await Html.PartialAsync("_BreadcrumbPartial")
+
+<style>
+    .seo-content-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 160px 20px 40px 20px;
+        color: #ffffff;
+        line-height: 1.8;
+    }
+
+    .seo-content-wrapper h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #ffc107;
+        margin-bottom: 30px;
+        text-align: center;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .seo-content-wrapper h2 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #ffc107;
+        margin-top: 40px;
+        margin-bottom: 20px;
+        border-left: 4px solid #ffc107;
+        padding-left: 15px;
+    }
+
+    .seo-content-wrapper h3 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-top: 30px;
+        margin-bottom: 15px;
+    }
+
+    .seo-content-wrapper p {
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+        text-align: justify;
+        color: #e0e0e0;
+    }
+
+    .seo-content-wrapper ul, .seo-content-wrapper ol {
+        margin-bottom: 20px;
+        padding-left: 30px;
+    }
+
+    .seo-content-wrapper li {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        color: #e0e0e0;
+    }
+
+    .seo-content-wrapper strong {
+        color: #ffc107;
+        font-weight: 600;
+    }
+
+    .seo-content-wrapper a {
+        color: #ffc107;
+        text-decoration: underline;
+        transition: color 0.3s;
+    }
+
+    .seo-content-wrapper a:hover {
+        color: #ffd54f;
+    }
+
+    .highlight-box {
+        background: rgba(255, 193, 7, 0.1);
+        border-left: 4px solid #ffc107;
+        padding: 20px;
+        margin: 30px 0;
+        border-radius: 5px;
+    }
+
+    .info-box {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 20px;
+        margin: 30px 0;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 193, 7, 0.3);
+    }
+
+    .seo-content-wrapper img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin: 20px 0;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .cta-section {
+        background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 193, 7, 0.1) 100%);
+        padding: 40px;
+        margin: 50px 0;
+        border-radius: 10px;
+        text-align: center;
+        border: 2px solid rgba(255, 193, 7, 0.3);
+    }
+
+    .cta-section h3 {
+        color: #ffc107;
+        margin-bottom: 20px;
+    }
+
+    .cta-button {
+        display: inline-block;
+        background: #ffc107 !important;
+        color: #000000 !important;
+        padding: 15px 30px;
+        border-radius: 5px;
+        text-decoration: none !important;
+        font-weight: 700 !important;
+        font-size: 1.1rem;
+        transition: all 0.3s;
+        margin: 10px;
+        text-shadow: none !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        border: 2px solid #000000;
+    }
+    
+    .cta-button * {
+        color: #000000 !important;
+    }
+
+    .cta-button:hover {
+        background: #ffd54f;
+        color: #000000 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(255, 193, 7, 0.4);
+    }
+
+    @@media (max-width: 768px) {
+        .seo-content-wrapper {
+            padding: 130px 15px 20px 15px;
+        }
+
+        .seo-content-wrapper h1 {
+            font-size: 1.8rem;
+        }
+
+        .seo-content-wrapper h2 {
+            font-size: 1.4rem;
+        }
+
+        .seo-content-wrapper h3 {
+            font-size: 1.2rem;
+        }
+
+        .seo-content-wrapper p,
+        .seo-content-wrapper li {
+            font-size: 1rem;
+        }
+
+        .cta-section {
+            padding: 25px 15px;
+        }
+
+        .cta-button {
+            font-size: 1rem;
+            padding: 12px 20px;
+            color: #000000 !important;
+        }
+    }
+</style>
+
+<div class="seo-content-wrapper">
+    <h1>Donuk Gıda Nedir?</h1>
+
+    <div class="info-box">
+        <p><strong>Donuk gıda</strong>, taze ürünlerin hızlı bir şekilde dondurularak besin değerlerinin korunduğu, uzun süre saklanabilen gıda ürünleridir. Modern gıda teknolojisinin en önemli buluşlarından biri olan donuk gıda, tazelik ve kaliteyi koruyarak tüketicilere yıl boyunca mevsimsel ürünlere erişim imkanı sunar.</p>
+    </div>
+
+    <h2>Donuk Gıda Tanımı ve Özellikleri</h2>
+    
+    <p>Donuk gıda, ürünlerin hasat edildikten hemen sonra <strong>flash freezing</strong> (hızlı dondurma) teknolojisi kullanılarak -18°C ve altındaki sıcaklıklarda dondurulması ile elde edilir. Bu işlem sayesinde:</p>
+    
+    <ul>
+        <li><strong>Besin değerleri korunur:</strong> Vitamin, mineral ve antioksidan içeriği maksimum seviyede muhafaza edilir.</li>
+        <li><strong>Mikrobiyolojik aktivite durur:</strong> Bakteri ve mikroorganizma gelişimi engellenir, gıda güvenliği sağlanır.</li>
+        <li><strong>Doku ve lezzet korunur:</strong> Hızlı dondurma sayesinde hücre yapısı bozulmaz, ürün tazeliğini korur.</li>
+        <li><strong>Uzun süre saklanabilir:</strong> Uygun koşullarda 12-24 ay boyunca kalite kaybı olmadan saklanabilir.</li>
+    </ul>
+
+    <h2>Donuk Gıda ile Dondurulmuş Gıda Arasındaki Farklar</h2>
+
+    <p>Çoğu kişi "donuk gıda" ve "dondurulmuş gıda" terimlerini birbirine karıştırır. Ancak aralarında önemli farklar vardır:</p>
+
+    <div class="highlight-box">
+        <h3>Donuk Gıda (Flash Frozen)</h3>
+        <ul>
+            <li>Hızlı dondurma teknolojisi kullanılır (flash freezing)</li>
+            <li>Ürünler -18°C'de çok hızlı dondurulur (dakikalar içinde)</li>
+            <li>Hücre yapısı korunur, kristal oluşumu minimaldir</li>
+            <li>Besin değerleri ve lezzet maksimum korunur</li>
+            <li>Daha yüksek kalite standartları</li>
+        </ul>
+    </div>
+
+    <div class="highlight-box">
+        <h3>Geleneksel Dondurulmuş Gıda</h3>
+        <ul>
+            <li>Yavaş dondurma işlemi kullanılır</li>
+            <li>Dondurma süreci uzun sürer (saatler içinde)</li>
+            <li>Büyük buz kristalleri oluşur, hücre yapısı zarar görebilir</li>
+            <li>Besin kaybı daha fazla olabilir</li>
+            <li>Çözüldükten sonra doku kaybı görülebilir</li>
+        </ul>
+    </div>
+
+    <h2>Flash Freezing Teknolojisi</h2>
+
+    <p><strong>Flash freezing</strong> (hızlı dondurma), My Golden Food'un kullandığı en gelişmiş dondurma teknolojisidir. Bu teknoloji sayesinde:</p>
+
+    <ul>
+        <li>Ürünler hasat edildikten sonraki 2-4 saat içinde dondurulur</li>
+        <li>Sıcaklık -18°C'ye çok hızlı düşürülür (dakikalar içinde)</li>
+        <li>Küçük ve düzenli buz kristalleri oluşur</li>
+        <li>Hücre duvarları korunur, besin değerleri maksimum seviyede kalır</li>
+        <li>Çözüldükten sonra ürün taze hasat edilmiş gibi görünür ve lezzetli olur</li>
+    </ul>
+
+    <h2>Donuk Gıda Üretim Süreci</h2>
+
+    <p>My Golden Food'da donuk gıda üretimi şu aşamalardan geçer:</p>
+
+    <ol>
+        <li><strong>Hasat ve Seçim:</strong> En kaliteli, olgun ürünler seçilir</li>
+        <li><strong>Yıkama ve Temizleme:</strong> Ürünler hijyenik koşullarda temizlenir</li>
+        <li><strong>Kesme ve Hazırlama:</strong> Gerekli durumlarda ürünler uygun boyutlara kesilir</li>
+        <li><strong>Blanşlama (Opsiyonel):</strong> Bazı ürünler için enzim aktivitesini durdurmak için kısa süreli haşlama yapılır</li>
+        <li><strong>Flash Freezing:</strong> Ürünler -18°C'de hızlıca dondurulur</li>
+        <li><strong>Paketleme:</strong> Hava geçirmez ambalajlarda paketlenir</li>
+        <li><strong>Depolama:</strong> -18°C'de soğuk hava deposunda saklanır</li>
+    </ol>
+
+    <h2>Donuk Gıda Saklama Koşulları</h2>
+
+    <p>Donuk gıdaların kalitesini korumak için önemli noktalar:</p>
+
+    <ul>
+        <li><strong>Sıcaklık:</strong> Sürekli -18°C veya daha düşük sıcaklıkta saklanmalıdır</li>
+        <li><strong>Dondurucu:</strong> Ev tipi dondurucularda saklanabilir</li>
+        <li><strong>Paket Bütünlüğü:</strong> Paketler açılmadan saklanmalı, hava geçirmez olmalıdır</li>
+        <li><strong>Çözme:</strong> Buzdolabında yavaşça çözülmeli, oda sıcaklığında çözülmemelidir</li>
+        <li><strong>Tekrar Dondurma:</strong> Çözülen ürünler tekrar dondurulmamalıdır</li>
+    </ul>
+
+    <h2>Donuk Gıdanın Avantajları</h2>
+
+    <div class="info-box">
+        <h3>Beslenme Avantajları</h3>
+        <ul>
+            <li>Vitamin ve mineral içeriği taze ürünlere yakın seviyededir</li>
+            <li>Antioksidan değerleri korunur</li>
+            <li>Mevsimsel ürünlere yıl boyunca erişim sağlar</li>
+            <li>Beslenme planlaması kolaylaşır</li>
+        </ul>
+
+        <h3>Pratik Avantajlar</h3>
+        <ul>
+            <li>Uzun süre saklanabilir, israf azalır</li>
+            <li>Hazırlık süresi kısalır, mutfakta pratiklik sağlar</li>
+            <li>350 gram paketlerde ideal porsiyonlama</li>
+            <li>Yıl boyunca aynı kalite ve lezzet</li>
+        </ul>
+
+        <h3>Ekonomik Avantajlar</h3>
+        <ul>
+            <li>Mevsimsel fiyat dalgalanmalarından etkilenmez</li>
+            <li>İsraf azalır, maliyet düşer</li>
+            <li>Toplu alım avantajları</li>
+        </ul>
+    </div>
+
+    <h2>My Golden Food Donuk Gıda Ürünleri</h2>
+
+    <p>My Golden Food olarak, <strong>flash freezing teknolojisi</strong> ile ürettiğimiz kaliteli donuk gıda ürünlerimiz:</p>
+
+    <ul>
+        <li><strong>Dondurulmuş Meyveler:</strong> <a href="/urunler">Frambuaz, yaban mersini, çilek, vişne</a> ve karışık orman meyveleri</li>
+        <li><strong>350 Gram Paketler:</strong> İdeal porsiyonlama ile tek kullanımlık paketler</li>
+        <li><strong>Kalite Garantisi:</strong> Her paket kalite kontrolünden geçer</li>
+        <li><strong>Hijyen Standartları:</strong> Gıda güvenliği sertifikalarına sahip üretim</li>
+    </ul>
+
+    <h2>Sonuç</h2>
+
+    <p>Donuk gıda, modern yaşamın vazgeçilmez bir parçası haline gelmiştir. <strong>Flash freezing teknolojisi</strong> sayesinde artık taze ürünlerin besin değerlerini ve lezzetlerini koruyarak uzun süre saklayabiliyoruz. My Golden Food olarak, bu teknolojiyi kullanarak size en kaliteli donuk gıda ürünlerini sunuyoruz.</p>
+
+    <p>Donuk gıda hakkında daha fazla bilgi almak için <a href="/hakkimizda">hakkımızda</a> sayfamızı ziyaret edebilir, <a href="/urunler">ürünlerimizi</a> inceleyebilir veya <a href="/tarifler">tariflerimizden</a> ilham alabilirsiniz.</p>
+
+    <div class="cta-section">
+        <h3>Kaliteli Donuk Gıda Ürünlerimizi Keşfedin</h3>
+        <p>My Golden Food'un flash freezing teknolojisi ile ürettiği premium donuk gıda ürünlerimizi keşfedin. 350 gram paketlerde, kaliteli ve lezzetli ürünler.</p>
+        <a href="/urunler" class="cta-button">Ürünlerimizi İnceleyin</a>
+        <a href="/iletisim" class="cta-button">İletişime Geçin</a>
+    </div>
+</div>
+
+<!-- Schema Markup - Article -->
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@@type": "Article",
+    "headline": "Donuk Gıda Nedir? | My Golden Food",
+    "description": "Donuk gıda nedir? Flash freezing teknolojisi, donuk gıda üretim süreçleri ve saklama koşulları hakkında detaylı bilgi.",
+    "image": "https://res.cloudinary.com/dbhogeepn/image/upload/v1757011155/3lu-karisik-ormanmeyvesi_iwmlp2.png",
+    "author": {
+        "@@type": "Organization",
+        "name": "My Golden Food"
+    },
+    "publisher": {
+        "@@type": "Organization",
+        "name": "My Golden Food",
+        "logo": {
+            "@@type": "ImageObject",
+            "url": "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png"
+        }
+    },
+    "datePublished": "2024-01-01",
+    "dateModified": "@DateTime.Now.ToString("yyyy-MM-dd")",
+    "mainEntityOfPage": {
+        "@@type": "WebPage",
+        "@@id": "https://mygoldenfood.com/seo/donuk-gida-nedir"
+    },
+    "inLanguage": "tr-TR"
+}
+</script>
+
+<!-- Schema Markup - WebPage -->
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@@type": "WebPage",
+    "name": "Donuk Gıda Nedir? | My Golden Food",
+    "description": "Donuk gıda nedir? Flash freezing teknolojisi ile üretilen donuk gıdalar hakkında detaylı bilgi.",
+    "url": "https://mygoldenfood.com/seo/donuk-gida-nedir",
+    "inLanguage": "tr-TR",
+    "isPartOf": {
+        "@@type": "WebSite",
+        "name": "My Golden Food",
+        "url": "https://mygoldenfood.com"
+    }
+}
+</script>
+

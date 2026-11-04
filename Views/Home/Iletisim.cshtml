@@ -23,7 +23,13 @@
         "@@type": "ContactPage",
         "name": "My Golden Food İletişim",
         "description": "Donuk gıda üreticisi My Golden Food ile iletişime geçin",
-        "url": "https://mygoldenfood.com/Home/Iletisim",
+        "url": "https://mygoldenfood.com/iletisim",
+        "inLanguage": "tr-TR",
+        "isPartOf": {
+            "@@type": "WebSite",
+            "name": "My Golden Food",
+            "url": "https://mygoldenfood.com"
+        },
         "mainEntity": {
             "@@type": "Organization",
             "name": "My Golden Food",
@@ -32,13 +38,16 @@
             "logo": "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png",
             "address": {
                 "@@type": "PostalAddress",
-                "addressLocality": "Ankara",
+                "streetAddress": "İlkyerleşim Mah. 1938 Sk. No: 9C",
+                "addressLocality": "Yenimahalle",
+                "addressRegion": "Ankara",
                 "addressCountry": "TR",
-                "addressRegion": "Ankara"
+                "postalCode": "06370"
             },
             "contactPoint": {
                 "@@type": "ContactPoint",
                 "telephone": "+90 533 635 24 58",
+                "email": "info@mygoldenfood.com",
                 "contactType": "Customer Service",
                 "areaServed": "TR",
                 "availableLanguage": ["Türkçe", "English"]
@@ -46,12 +55,31 @@
         }
     }
     </script>
+    
+    <!-- Schema Markup - WebPage -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "WebPage",
+        "name": "İletişim | My Golden Food",
+        "description": "My Golden Food ile iletişime geçin. Telefon: +90 533 635 24 58, E-posta: info@mygoldenfood.com",
+        "url": "https://mygoldenfood.com/iletisim",
+        "inLanguage": "tr-TR"
+    }
+    </script>
 </head>
 
-<!-- Ana H1 Başlık - SEO için kritik -->
-<h1 class="seo-main-title" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
-    İletişim | My Golden Food | Donuk Gıda Üreticisi | Dondurulmuş Gıda Tedarikçisi | Flash Freezing Teknolojisi
-</h1>
+@using MyGoldenFood.Models
+@{
+    ViewData["BreadcrumbItems"] = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem { Text = "Ana Sayfa", Url = "/" },
+        new BreadcrumbItem { Text = "İletişim", Url = "/iletisim" }
+    };
+}
+
+<!-- Breadcrumb -->
+@await Html.PartialAsync("_BreadcrumbPartial")
 
 <!-- Donuk Gıda İletişim SEO Açıklaması (Gizli) -->
 <div class="seo-contact-info" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">

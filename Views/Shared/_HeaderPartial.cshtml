@@ -5,15 +5,60 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>My Golden Food - Dondurulmuş Gıda Sektöründe Kalite</title>
-    <meta name="description" content="My Golden Food, dondurulmuş gıda sektöründe kaliteli ve güvenilir ürünler sunar.">
-    <meta name="keywords" content="dondurulmuş gıda, my golden food, kaliteli gıda, güvenilir ürünler">
+    
+    @{
+        // SEO Bilgilerini ViewData'dan al veya varsayılan değerleri kullan
+        var seoTitle = ViewData["SeoTitle"] as string ?? ViewData["Title"] as string ?? "My Golden Food - Premium Dondurulmuş Gıda Çözümleri | Kaliteli Donuk Gıda";
+        var seoDescription = ViewData["SeoDescription"] as string ?? "My Golden Food - Premium dondurulmuş gıda çözümleri sunuyoruz. Kaliteli donuk gıda ürünleri, dondurulmuş meyve ve sebzeler. Flash freezing teknolojisi ile tazelik garantisi.";
+        var seoKeywords = ViewData["SeoKeywords"] as string ?? "donuk gıda, dondurulmuş gıda, dondurulmuş meyve, dondurulmuş sebze, my golden food, ankara donuk gıda, türkiye dondurulmuş gıda, flash freezing";
+        var canonicalUrl = ViewData["CanonicalUrl"] as string ?? MyGoldenFood.Services.SeoHelper.GetCanonicalUrl(Url);
+        var ogTitle = ViewData["OgTitle"] as string ?? seoTitle;
+        var ogDescription = ViewData["OgDescription"] as string ?? MyGoldenFood.Services.SeoHelper.TruncateMetaDescription(seoDescription, 200);
+        var ogImage = ViewData["OgImage"] as string ?? MyGoldenFood.Services.SeoHelper.GetOgImageUrl(Url, "https://res.cloudinary.com/dbhogeepn/image/upload/v1757011155/3lu-karisik-ormanmeyvesi_iwmlp2.png");
+        var ogUrl = ViewData["OgUrl"] as string ?? canonicalUrl;
+        var ogType = ViewData["OgType"] as string ?? "website";
+        var robots = ViewData["Robots"] as string ?? "index, follow";
+        var twitterCard = ViewData["TwitterCard"] as string ?? "summary_large_image";
+        var twitterTitle = ViewData["TwitterTitle"] as string ?? ogTitle;
+        var twitterDescription = ViewData["TwitterDescription"] as string ?? ogDescription;
+        var twitterImage = ViewData["TwitterImage"] as string ?? ogImage;
+        
+        // Meta description'ı optimize et (max 160 karakter)
+        seoDescription = MyGoldenFood.Services.SeoHelper.TruncateMetaDescription(seoDescription, 160);
+    }
+    
+    <!-- Primary Meta Tags -->
+    <title>@seoTitle</title>
+    <meta name="title" content="@seoTitle">
+    <meta name="description" content="@seoDescription">
+    <meta name="keywords" content="@seoKeywords">
     <meta name="author" content="My Golden Food">
-    <meta property="og:title" content="My Golden Food - Dondurulmuş Gıda">
-    <meta property="og:description" content="Dondurulmuş gıda sektöründe kaliteli ve lezzetli ürünler.">
-    <meta property="og:image" content="~/images/mygoldenfood-logo.png">
-    <meta property="og:url" content="https://mygoldenfood.com">
-    <link rel="canonical" href="https://mygoldenfood.com">
+    <meta name="robots" content="@robots">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="@canonicalUrl">
+    
+    <!-- Hreflang Tags (Çoklu Dil) -->
+    @Html.Raw(MyGoldenFood.Services.SeoHelper.GetHreflangTags(Url))
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="@ogType">
+    <meta property="og:url" content="@ogUrl">
+    <meta property="og:title" content="@ogTitle">
+    <meta property="og:description" content="@ogDescription">
+    <meta property="og:image" content="@ogImage">
+    <meta property="og:site_name" content="My Golden Food">
+    <meta property="og:locale" content="tr_TR">
+    <meta property="og:locale:alternate" content="en_US">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="@twitterCard">
+    <meta name="twitter:url" content="@ogUrl">
+    <meta name="twitter:title" content="@twitterTitle">
+    <meta name="twitter:description" content="@twitterDescription">
+    <meta name="twitter:image" content="@twitterImage">
+    <meta name="twitter:site" content="@@mygoldenfood">
+    <meta name="twitter:creator" content="@@mygoldenfood">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="~/images/logo-moonlife1.png">

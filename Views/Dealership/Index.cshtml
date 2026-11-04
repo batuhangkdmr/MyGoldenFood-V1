@@ -1,6 +1,12 @@
 @using MyGoldenFood.Services
+@using MyGoldenFood.Models
 @{
     ViewData["Title"] = "Bölge Bayiliği | My Golden Food - Donuk Depo Bayilik Fırsatları";
+    ViewData["BreadcrumbItems"] = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem { Text = "Ana Sayfa", Url = "/" },
+        new BreadcrumbItem { Text = "Bayilik Başvuru Formu", Url = "/Bayilik" }
+    };
 }
 
 <!-- SEO Meta Etiketleri -->
@@ -617,6 +623,9 @@
     }
 </style>
 
+<!-- Breadcrumb -->
+@await Html.PartialAsync("_BreadcrumbPartial")
+
 <!-- Grid Background -->
 <div class="grid-background"></div>
 
@@ -625,6 +634,9 @@
     <div class="main-wrapper">
         <!-- Hero Section -->
         <div class="hero-section">
+            <h1 style="font-size: 2.5rem; font-weight: 700; color: #ffffff; margin-bottom: 20px; text-align: center;">
+                @Html.T("RegionalDealershipApplication")
+            </h1>
             <div class="badge">
                 <i class="fas fa-star"></i> @Html.T("RegionalDealershipApplication")
             </div>

@@ -79,26 +79,46 @@
         }
     }
     </script>
+    
+    <!-- Schema Markup - WebPage -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "WebPage",
+        "name": "Dondurulmuş Gıda Ürünlerimiz | Donuk Gıda Kataloğu",
+        "description": "My Golden Food dondurulmuş gıda ürün kataloğu. 350 gram paketlerde taze ve kaliteli donuk gıda ürünleri.",
+        "url": "https://mygoldenfood.com/urunler",
+        "inLanguage": "tr-TR",
+        "isPartOf": {
+            "@@type": "WebSite",
+            "name": "My Golden Food",
+            "url": "https://mygoldenfood.com"
+        },
+        "about": {
+            "@@type": "ItemList",
+            "name": "My Golden Food Dondurulmuş Gıda Ürünleri",
+            "numberOfItems": "@Model.Count()"
+        }
+    }
+    </script>
 </head>
 
-<!-- Ana H1 Başlık - SEO için kritik -->
-<h1 class="seo-main-title" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
-    My Golden Food Dondurulmuş Gıda Ürünleri | Donuk Gıda Kataloğu | 350 Gram Paketlerde Taze Ürünler
-</h1>
+@{
+    ViewData["BreadcrumbItems"] = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem { Text = "Ana Sayfa", Url = "/" },
+        new BreadcrumbItem { Text = "Ürünler", Url = "/urunler" }
+    };
+}
 
-<!-- Ürün Kategorisi Açıklaması - SEO için önemli (Gizli) -->
-<div class="seo-description" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
-    <h2>Dondurulmuş Gıda Ürünlerimiz</h2>
-    <p>
-        <strong>Flash Freezing Teknolojisi</strong> ile korunan taze ve kaliteli dondurulmuş gıda ürünlerimizi keşfedin. 
-        Dondurulmuş meyve, sebze ve hazır gıdalarımız <strong>350 gram paketlerde</strong> sunulmaktadır. 
-        Ankara'da <strong>donuk gıda</strong> sektöründe güvenilir ve kaliteli ürünler için My Golden Food'u tercih edin.
-    </p>
-</div>
+<!-- Breadcrumb -->
+@await Html.PartialAsync("_BreadcrumbPartial")
+
+@using MyGoldenFood.Models
 
 <div class="container">
     <div class="title-container">
-        <h2 class="text-center text-white">@Html.T("OurProducts")</h2>
+        <h1 class="text-center text-white">@Html.T("OurProducts")</h1>
     </div>
 
     <div class="product-grid" id="productGrid">

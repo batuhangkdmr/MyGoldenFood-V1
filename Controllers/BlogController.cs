@@ -31,6 +31,17 @@ namespace MyGoldenFood.Controllers
                 .ToListAsync();
 
             ViewBag.CloudinaryService = _cloudinaryService; // 🚀 Responsive resimler için
+            
+            // SEO Bilgileri
+            ViewData["SeoTitle"] = "Blog | Dondurulmuş Gıda Blog Yazıları | My Golden Food | Flash Freezing Teknolojisi";
+            ViewData["SeoDescription"] = "My Golden Food blog. Dondurulmuş gıda sektörü hakkında bilgilendirici yazılar, flash freezing teknolojisi, sağlık faydaları, kullanım rehberleri ve sektör güncellemeleri. Donuk gıda hakkında kapsamlı içerikler.";
+            ViewData["SeoKeywords"] = "dondurulmuş gıda blog, donuk gıda yazıları, flash freezing teknolojisi, dondurulmuş gıda sektörü, donuk gıda bilgileri, my golden food blog";
+            ViewData["CanonicalUrl"] = "https://mygoldenfood.com/Blog";
+            ViewData["OgTitle"] = "Blog | Dondurulmuş Gıda Blog Yazıları | My Golden Food";
+            ViewData["OgDescription"] = "Dondurulmuş gıda sektörü hakkında bilgilendirici yazılar, flash freezing teknolojisi ve sektör güncellemeleri.";
+            ViewData["OgImage"] = "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png";
+            ViewData["OgUrl"] = "https://mygoldenfood.com/Blog";
+            
             return View(blogs);
         }
 
