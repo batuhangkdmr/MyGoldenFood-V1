@@ -103,6 +103,9 @@ namespace MyGoldenFood
 
             // MVC
             services.AddControllersWithViews();
+            
+            // 🔍 SEO için HttpContextAccessor
+            services.AddHttpContextAccessor();
 
             // 📏 Request Boyut Limitleri
             services.Configure<IISServerOptions>(options =>

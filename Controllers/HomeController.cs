@@ -51,11 +51,32 @@ namespace MyGoldenFood.Controllers
 
         public IActionResult Index()
         {
+            // SEO Bilgileri
+            ViewData["SeoTitle"] = "My Golden Food | Premium Dondurulmuş Gıda | Ankara | Flash Freezing Teknolojisi";
+            ViewData["SeoDescription"] = "My Golden Food - Premium dondurulmuş gıda çözümleri sunuyoruz. Kaliteli donuk gıda ürünleri, dondurulmuş meyve ve sebzeler. Flash freezing teknolojisi ile tazelik garantisi. Ankara'da güvenilir dondurulmuş gıda tedarikçisi.";
+            ViewData["SeoKeywords"] = "donuk gıda, dondurulmuş gıda, dondurulmuş meyve, dondurulmuş sebze, my golden food, ankara donuk gıda, türkiye dondurulmuş gıda, flash freezing, dondurulmuş çilek, dondurulmuş böğürtlen, dondurulmuş mantar, dondurulmuş brokoli, premium donuk gıda";
+            ViewData["CanonicalUrl"] = "https://mygoldenfood.com";
+            ViewData["OgTitle"] = "My Golden Food - Premium Dondurulmuş Gıda Çözümleri";
+            ViewData["OgDescription"] = "Premium dondurulmuş gıda çözümleri sunuyoruz. Kaliteli donuk gıda ürünleri, flash freezing teknolojisi ile tazelik garantisi.";
+            ViewData["OgImage"] = "https://res.cloudinary.com/dbhogeepn/image/upload/v1757011155/3lu-karisik-ormanmeyvesi_iwmlp2.png";
+            ViewData["OgUrl"] = "https://mygoldenfood.com";
+            ViewData["OgType"] = "website";
+            
             return View();
         }
 
         public IActionResult About()
         {
+            // SEO Bilgileri
+            ViewData["SeoTitle"] = "Hakkımızda | My Golden Food | 15 Yıllık Deneyim | Flash Freezing Teknolojisi";
+            ViewData["SeoDescription"] = "My Golden Food hakkında bilgiler. 15 yıllık deneyim, 50.000+ mutlu müşteri, 100+ ürün çeşidi ile dondurulmuş gıda sektöründe öncü marka. Flash freezing teknolojisi ile kaliteli üretim.";
+            ViewData["SeoKeywords"] = "my golden food hakkında, dondurulmuş gıda şirketi, ankara donuk gıda üreticisi, flash freezing teknolojisi, 15 yıllık deneyim, kaliteli dondurulmuş gıda";
+            ViewData["CanonicalUrl"] = "https://mygoldenfood.com/hakkimizda";
+            ViewData["OgTitle"] = "Hakkımızda | My Golden Food | 15 Yıllık Deneyim";
+            ViewData["OgDescription"] = "15 yıllık deneyim, 50.000+ mutlu müşteri, 100+ ürün çeşidi ile dondurulmuş gıda sektöründe öncü marka.";
+            ViewData["OgImage"] = "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png";
+            ViewData["OgUrl"] = "https://mygoldenfood.com/hakkimizda";
+            
             return View();
         }
 
@@ -96,12 +117,33 @@ namespace MyGoldenFood.Controllers
             }
 
             ViewBag.CloudinaryService = _cloudinaryService; // 🚀 Responsive resimler için
+            
+            // SEO Bilgileri
+            ViewData["SeoTitle"] = "Dondurulmuş Gıda Ürünlerimiz | Donuk Gıda Kataloğu | My Golden Food | 350g Paketler";
+            ViewData["SeoDescription"] = "My Golden Food dondurulmuş gıda ürün kataloğu. Dondurulmuş meyve, sebze ve hazır gıdalar. 350 gram paketlerde taze donuk gıda ürünleri. Flash freezing teknolojisi ile korunan besin değeri. Ankara'da kaliteli dondurulmuş gıda tedarikçisi.";
+            ViewData["SeoKeywords"] = "dondurulmuş gıda ürünleri, donuk gıda kataloğu, dondurulmuş meyve, dondurulmuş sebze, my golden food ürünleri, 350 gram paket, flash freezing, ankara dondurulmuş gıda, türkiye donuk gıda tedarikçisi, dondurulmuş çilek, dondurulmuş böğürtlen";
+            ViewData["CanonicalUrl"] = "https://mygoldenfood.com/urunler";
+            ViewData["OgTitle"] = "Dondurulmuş Gıda Ürünlerimiz | Donuk Gıda Kataloğu";
+            ViewData["OgDescription"] = "My Golden Food dondurulmuş gıda ürün kataloğu. 350 gram paketlerde taze ve kaliteli donuk gıda ürünleri.";
+            ViewData["OgImage"] = "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png";
+            ViewData["OgUrl"] = "https://mygoldenfood.com/urunler";
+            
             return View(products);
         }
 
         [HttpGet]
         public IActionResult Iletisim()
         {
+            // SEO Bilgileri
+            ViewData["SeoTitle"] = "İletişim | My Golden Food | Ankara Dondurulmuş Gıda | +90 533 635 24 58";
+            ViewData["SeoDescription"] = "My Golden Food ile iletişime geçin. Ankara'da dondurulmuş gıda tedarikçisi. Telefon: +90 533 635 24 58, E-posta: info@mygoldenfood.com. Bayilik başvuruları ve ürün bilgileri için bizimle iletişime geçin.";
+            ViewData["SeoKeywords"] = "my golden food iletişim, ankara dondurulmuş gıda iletişim, donuk gıda telefon, my golden food telefon, dondurulmuş gıda bayilik başvurusu";
+            ViewData["CanonicalUrl"] = "https://mygoldenfood.com/iletisim";
+            ViewData["OgTitle"] = "İletişim | My Golden Food | Ankara Dondurulmuş Gıda";
+            ViewData["OgDescription"] = "My Golden Food ile iletişime geçin. Telefon: +90 533 635 24 58, E-posta: info@mygoldenfood.com";
+            ViewData["OgImage"] = "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png";
+            ViewData["OgUrl"] = "https://mygoldenfood.com/iletisim";
+            
             return View();
         }
 

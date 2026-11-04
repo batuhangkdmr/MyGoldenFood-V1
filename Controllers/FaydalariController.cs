@@ -132,6 +132,16 @@ namespace MyGoldenFood.Controllers
             ViewBag.HasCategories = categories.Any();
             ViewBag.FirstCategoryName = _translationService.GetTranslation("AllCategories", selectedLanguage);
             ViewBag.CloudinaryService = _cloudinaryService; // 🚀 Responsive resimler için
+            
+            // SEO Bilgileri
+            ViewData["SeoTitle"] = "Dondurulmuş Gıda Faydaları | Sağlık ve Beslenme | My Golden Food";
+            ViewData["SeoDescription"] = "Dondurulmuş gıdanın sağlığa faydaları. Flash freezing teknolojisi ile korunan besin değerleri. Dondurulmuş meyve ve sebzelerin vitamin, mineral ve antioksidan içerikleri. Sağlıklı beslenme için dondurulmuş gıda tercihleri.";
+            ViewData["SeoKeywords"] = "dondurulmuş gıda faydaları, donuk gıda sağlık, flash freezing faydaları, dondurulmuş meyve vitamin, dondurulmuş sebze besin değeri, sağlıklı dondurulmuş gıda";
+            ViewData["CanonicalUrl"] = "https://mygoldenfood.com/faydalari";
+            ViewData["OgTitle"] = "Dondurulmuş Gıda Faydaları | Sağlık ve Beslenme";
+            ViewData["OgDescription"] = "Dondurulmuş gıdanın sağlığa faydaları. Flash freezing teknolojisi ile korunan besin değerleri.";
+            ViewData["OgImage"] = "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png";
+            ViewData["OgUrl"] = "https://mygoldenfood.com/faydalari";
 
             return View();
         }

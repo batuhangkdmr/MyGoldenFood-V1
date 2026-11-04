@@ -51,7 +51,13 @@
         "@@type": "AboutPage",
         "name": "My Golden Food Hakkımızda",
         "description": "15 yıllık deneyim, 50.000+ mutlu müşteri, 100+ ürün çeşidi ile dondurulmuş gıda sektöründe öncü marka",
-        "url": "https://mygoldenfood.com/Home/About",
+        "url": "https://mygoldenfood.com/hakkimizda",
+        "inLanguage": "tr-TR",
+        "isPartOf": {
+            "@@type": "WebSite",
+            "name": "My Golden Food",
+            "url": "https://mygoldenfood.com"
+        },
         "mainEntity": {
             "@@type": "Organization",
             "name": "My Golden Food",
@@ -62,30 +68,32 @@
         }
     }
     </script>
+    
+    <!-- Schema Markup - WebPage -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "WebPage",
+        "name": "Hakkımızda | My Golden Food",
+        "description": "My Golden Food hakkında bilgiler. 15 yıllık deneyim, flash freezing teknolojisi ile kaliteli üretim.",
+        "url": "https://mygoldenfood.com/hakkimizda",
+        "inLanguage": "tr-TR"
+    }
+    </script>
 </head>
 
-<!-- Ana H1 Başlık - SEO için kritik -->
-<h1 class="seo-main-title" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
-    My Golden Food Hakkımızda | Dondurulmuş Gıda Üretimi | Flash Freezing Teknolojisi | 15 Yıllık Deneyim
-</h1>
+@using MyGoldenFood.Models
+@{
+    ViewData["BreadcrumbItems"] = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem { Text = "Ana Sayfa", Url = "/" },
+        new BreadcrumbItem { Text = "Hakkımızda", Url = "/hakkimizda" }
+    };
+}
 
-<!-- Şirket Hakkında SEO Açıklaması (Gizli) -->
-<div class="seo-company-info" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
-    <h2>My Golden Food Şirket Profili</h2>
-    <p>
-        <strong>My Golden Food</strong>, 2009 yılından bu yana <strong>dondurulmuş gıda</strong> sektöründe faaliyet gösteren, 
-        <strong>Flash Freezing Teknolojisi</strong> kullanarak kaliteli ürünler üreten öncü bir markadır. 
-        Ankara'da kurulan şirketimiz, <strong>donuk gıda</strong> sektöründe 15 yıllık deneyimi ile 
-        Türkiye'nin önde gelen dondurulmuş gıda üreticileri arasında yer almaktadır.
-    </p>
-    <h3>Üretim Kapasitesi ve Teknoloji</h3>
-    <p>
-        Modern üretim tesislerimizde <strong>Flash Freezing Teknolojisi</strong> kullanarak, 
-        meyve ve sebzelerin besin değerini koruyarak donduruyoruz. 
-        <strong>350 gram paketlerde</strong> sunulan ürünlerimiz, 
-        hijyen ve kalite standartlarına uygun olarak üretilmektedir.
-    </p>
-</div>
+<!-- Breadcrumb -->
+@await Html.PartialAsync("_BreadcrumbPartial")
+
 
 <!-- Modern Animated About Page - TemplateMonster Style -->
 <style>
@@ -511,7 +519,7 @@
 <section class="hero-section" id="hero">
     <div class="hero-bg" id="heroBg"></div>
     <div class="hero-content">
-        <h2 class="hero-title">My Golden Food</h2>
+        <h1 class="hero-title">My Golden Food</h1>
         <p class="hero-subtitle">Kaliteli ve Lezzetli Dondurulmuş Gıda Ürünleri</p>
         <a href="#about" class="hero-btn">Hakkımızda</a>
     </div>

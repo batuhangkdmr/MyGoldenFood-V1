@@ -20,10 +20,26 @@
     <link rel="canonical" href="https://mygoldenfood.com/faydalari">
 </head>
 
-<!-- Ana H1 Başlık - SEO için kritik -->
-<h1 class="seo-main-title" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
-    Donuk Gıda Faydaları | Dondurulmuş Gıdaların Sağlık Avantajları | Flash Freezing Teknolojisi ile Besin Değeri Korunumu
-</h1>
+@using MyGoldenFood.Models
+@{
+    ViewData["BreadcrumbItems"] = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem { Text = "Ana Sayfa", Url = "/" },
+        new BreadcrumbItem { Text = "Faydaları", Url = "/faydalari" }
+    };
+}
+
+<!-- Breadcrumb -->
+@await Html.PartialAsync("_BreadcrumbPartial")
+
+<div class="container" style="padding-top: 20px; padding-bottom: 20px;">
+    <h1 class="text-center text-white" style="font-size: 2.5rem; font-weight: 700; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+        Dondurulmuş Gıda Faydaları
+    </h1>
+    <p class="text-center text-white-50" style="font-size: 1.1rem; max-width: 800px; margin: 0 auto;">
+        Dondurulmuş gıdanın sağlığa faydaları. Flash freezing teknolojisi ile korunan besin değerleri. Dondurulmuş meyve ve sebzelerin vitamin, mineral ve antioksidan içerikleri.
+    </p>
+</div>
 
 <!-- Bottom Sheet Toggle Button -->
 <button class="sidebar-toggle d-md-none" onclick="openBottomSheet()">

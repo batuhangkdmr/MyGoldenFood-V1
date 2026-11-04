@@ -18,6 +18,16 @@ namespace MyGoldenFood.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            // SEO Bilgileri
+            ViewData["SeoTitle"] = "Bayilik Başvuru Formu | My Golden Food | Bölge Bayiliği | Dondurulmuş Gıda Bayiliği";
+            ViewData["SeoDescription"] = "My Golden Food bayilik başvuru formu. Bölge bayiliği fırsatları. Donuk depo işletmeleri için özel bayilik programı. Rekabetçi fiyatlandırma, profesyonel destek ve pazarlama yardımı. 24 saat içinde hızlı dönüş garantisi.";
+            ViewData["SeoKeywords"] = "my golden food bayilik, dondurulmuş gıda bayiliği, bölge bayiliği, donuk gıda bayilik başvurusu, bayilik fırsatları, bayilik programı";
+            ViewData["CanonicalUrl"] = "https://mygoldenfood.com/Bayilik";
+            ViewData["OgTitle"] = "Bayilik Başvuru Formu | My Golden Food | Bölge Bayiliği";
+            ViewData["OgDescription"] = "My Golden Food bayilik başvuru formu. Donuk depo işletmeleri için özel bayilik programı.";
+            ViewData["OgImage"] = "https://res.cloudinary.com/dbhogeepn/image/upload/v1743859767/mygolden_foood_a25y69.png";
+            ViewData["OgUrl"] = "https://mygoldenfood.com/Bayilik";
+            
             return View();
         }
 
